@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">UNI</string>
+    <string name="register">Регистрация</string>
+    <string name="last_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+    <string name="patronymic">Отчество</string>
 </resources>
