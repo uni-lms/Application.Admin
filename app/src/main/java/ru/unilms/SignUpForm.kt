@@ -8,6 +8,7 @@ import ch.benlu.composeform.validators.EmailValidator
 import ch.benlu.composeform.validators.NotEmptyValidator
 import ru.unilms.di.ResourcesProvider
 import ru.unilms.domain.model.user.Gender
+import ru.unilms.domain.model.user.Role
 import java.util.Date
 
 class SignUpForm(resourcesProvider: ResourcesProvider) : Form() {
@@ -36,7 +37,7 @@ class SignUpForm(resourcesProvider: ResourcesProvider) : Form() {
 
     @FormField
     val email = FieldState(
-        state = mutableStateOf<String?>(null),
+        state = mutableStateOf(null),
         validators = mutableListOf(
             EmailValidator()
         )
@@ -51,12 +52,23 @@ class SignUpForm(resourcesProvider: ResourcesProvider) : Form() {
     )
 
     @FormField
-    val gender = FieldState<Gender?>(
-        state = mutableStateOf<Gender?>(null),
+    val gender = FieldState(
+        state = mutableStateOf(null),
         validators = mutableListOf(NotEmptyValidator()),
         options = mutableListOf(
             Gender(resourcesProvider.getString(R.string.gender_male)),
             Gender(resourcesProvider.getString(R.string.gender_female))
+        ),
+        optionItemFormatter = { "${it?.name}" },
+    )
+
+    @FormField
+    val role = FieldState(
+        state = mutableStateOf(null),
+        validators = mutableListOf(NotEmptyValidator()),
+        options = mutableListOf(
+            Role(resourcesProvider.getString(R.string.role_tutor)),
+            Role(resourcesProvider.getString(R.string.role_admin))
         ),
         optionItemFormatter = { "${it?.name}" },
     )
