@@ -13,8 +13,13 @@ class SignUpViewModel @Inject constructor(resourcesProvider: ResourcesProvider) 
     var form = SignUpForm(resourcesProvider)
     val pickedImage = mutableStateOf<Uri?>(null)
 
-    fun validate() {
+    private fun validate() {
         form.validate(true)
         Log.d("MainViewModel", "Validate (form is valid: ${form.isValid})")
+    }
+
+    fun submit() {
+        validate()
+        Log.d("SignUpViewModel", pickedImage.value.toString())
     }
 }
