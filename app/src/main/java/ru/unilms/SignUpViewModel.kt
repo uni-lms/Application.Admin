@@ -7,7 +7,7 @@ import ru.unilms.di.ResourcesProvider
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(resourcesProvider: ResourcesProvider) : ViewModel() {
+class SignUpViewModel @Inject constructor(resourcesProvider: ResourcesProvider) : ViewModel() {
     var form = SignUpForm(resourcesProvider)
 
     fun validate() {

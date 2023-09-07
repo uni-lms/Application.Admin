@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
-import ru.unilms.MainViewModel
+import ru.unilms.SignUpViewModel
 import ru.unilms.R
 import ru.unilms.components.form.M3DateField
 import ru.unilms.components.form.M3PickerField
@@ -25,7 +25,7 @@ import ru.unilms.components.typography.CenteredRegularHeadline
 @Composable
 fun SignUpScreen() {
 
-    val viewModel = hiltViewModel<MainViewModel>()
+    val viewModel = hiltViewModel<SignUpViewModel>()
 
     Surface(
         modifier = Modifier
