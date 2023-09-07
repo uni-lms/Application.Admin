@@ -6,4 +6,9 @@
     <string name="patronymic">Отчество</string>
     <string name="email">Электронная почта</string>
     <string name="birthDate">Дата рождения</string>
+    <string name="gender_male">Мужской</string>
+    <string name="gender_female">Женский</string>
+    <string name="ok">Ок</string>
+    <string name="search_go">Поиск</string>
+    <string name="cancel">Отмена</string>
 </resources>
