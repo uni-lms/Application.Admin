@@ -1,4 +1,4 @@
-package ru.unilms.components
+package ru.unilms.components.form
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker

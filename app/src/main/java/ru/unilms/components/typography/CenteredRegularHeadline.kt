@@ -1,4 +1,4 @@
-package ru.unilms.components
+package ru.unilms.components.typography
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign

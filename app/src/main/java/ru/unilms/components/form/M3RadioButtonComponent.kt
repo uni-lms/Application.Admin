@@ -1,4 +1,4 @@
-package ru.unilms.components
+package ru.unilms.components.form
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

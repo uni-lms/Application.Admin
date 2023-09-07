@@ -1,4 +1,4 @@
-package ru.unilms.components
+package ru.unilms.components.form
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown

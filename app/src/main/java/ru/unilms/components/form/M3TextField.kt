@@ -1,4 +1,4 @@
-package ru.unilms.components
+package ru.unilms.components.form
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.interaction.MutableInteractionSource

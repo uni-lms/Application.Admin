@@ -16,10 +16,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.MainViewModel
 import ru.unilms.R
-import ru.unilms.components.CenteredRegularHeadline
-import ru.unilms.components.M3DateField
-import ru.unilms.components.M3PickerField
-import ru.unilms.components.M3TextField
+import ru.unilms.components.typography.CenteredRegularHeadline
+import ru.unilms.components.form.M3DateField
+import ru.unilms.components.form.M3PickerField
+import ru.unilms.components.form.M3TextField
 
 @Composable
 fun SignUpScreen() {
