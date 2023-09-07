@@ -13,9 +13,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.MainViewModel
 import ru.unilms.R
 import ru.unilms.components.CenteredRegularHeadline
+import ru.unilms.components.M3DateField
 import ru.unilms.components.M3TextField
 
 @Composable
@@ -57,6 +59,13 @@ fun SignUpScreen() {
                 form = viewModel.form,
                 fieldState = viewModel.form.email,
                 keyboardType = KeyboardType.Email,
+                modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            ).Field()
+            M3DateField(
+                label = stringResource(id = R.string.birthDate),
+                form = viewModel.form,
+                fieldState = viewModel.form.dateOfBirth,
+                formatter = ::dateShort,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
         }

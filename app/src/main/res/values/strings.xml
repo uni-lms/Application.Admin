@@ -5,4 +5,5 @@
     <string name="first_name">Имя</string>
     <string name="patronymic">Отчество</string>
     <string name="email">Электронная почта</string>
+    <string name="birthDate">Дата рождения</string>
 </resources>
