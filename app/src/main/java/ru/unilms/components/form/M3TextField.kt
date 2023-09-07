@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -43,12 +44,12 @@ class M3TextField(
     imeAction = imeAction,
     formatter = formatter,
     keyboardType = keyboardType,
-    visualTransformation = visualTransformation
+    visualTransformation = visualTransformation,
 ) {
-    @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("NotConstructor")
     @Composable
     override fun Field() {
+        // TODO: Implement own Field<T> and add keyboardCapitalization property
         this.updateComposableValue()
         if (!isVisible) {
             return
@@ -63,7 +64,8 @@ class M3TextField(
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = imeAction ?: ImeAction.Next,
-                keyboardType = keyboardType
+                keyboardType = keyboardType,
+                capitalization = KeyboardCapitalization.Sentences
             ),
             keyboardActions = KeyboardActions.Default,
             enabled = isEnabled,
