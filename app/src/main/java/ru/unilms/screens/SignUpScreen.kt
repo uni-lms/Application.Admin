@@ -18,6 +18,7 @@ import ru.unilms.MainViewModel
 import ru.unilms.R
 import ru.unilms.components.CenteredRegularHeadline
 import ru.unilms.components.M3DateField
+import ru.unilms.components.M3PickerField
 import ru.unilms.components.M3TextField
 
 @Composable
@@ -67,6 +68,12 @@ fun SignUpScreen() {
                 fieldState = viewModel.form.dateOfBirth,
                 formatter = ::dateShort,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            ).Field()
+            M3PickerField(
+                label = "Пол",
+                form = viewModel.form,
+                fieldState = viewModel.form.gender,
+                isSearchable = false
             ).Field()
         }
     }
