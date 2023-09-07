@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,7 +18,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import ch.benlu.composeform.Field
+import ru.unilms.utils.forms.Field
 import ch.benlu.composeform.FieldState
 import ch.benlu.composeform.Form
 
@@ -33,6 +32,7 @@ class M3TextField(
     imeAction: ImeAction = ImeAction.Next,
     formatter: ((raw: String?) -> String)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardCapitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) : Field<String>(
     label = label,
@@ -44,12 +44,12 @@ class M3TextField(
     imeAction = imeAction,
     formatter = formatter,
     keyboardType = keyboardType,
+    keyboardCapitalization = keyboardCapitalization,
     visualTransformation = visualTransformation,
 ) {
     @SuppressLint("NotConstructor")
     @Composable
     override fun Field() {
-        // TODO: Implement own Field<T> and add keyboardCapitalization property
         this.updateComposableValue()
         if (!isVisible) {
             return
@@ -65,7 +65,7 @@ class M3TextField(
             keyboardOptions = KeyboardOptions(
                 imeAction = imeAction ?: ImeAction.Next,
                 keyboardType = keyboardType,
-                capitalization = KeyboardCapitalization.Sentences
+                capitalization = keyboardCapitalization
             ),
             keyboardActions = KeyboardActions.Default,
             enabled = isEnabled,

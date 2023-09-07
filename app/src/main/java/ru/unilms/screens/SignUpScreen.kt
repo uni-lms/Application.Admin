@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ fun SignUpScreen() {
                 form = viewModel.form,
                 fieldState = viewModel.form.lastName,
                 keyboardType = KeyboardType.Text,
+                keyboardCapitalization = KeyboardCapitalization.Sentences,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
@@ -46,6 +48,7 @@ fun SignUpScreen() {
                 form = viewModel.form,
                 fieldState = viewModel.form.firstName,
                 keyboardType = KeyboardType.Text,
+                keyboardCapitalization = KeyboardCapitalization.Sentences,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
@@ -53,6 +56,7 @@ fun SignUpScreen() {
                 form = viewModel.form,
                 fieldState = viewModel.form.patronymic,
                 keyboardType = KeyboardType.Text,
+                keyboardCapitalization = KeyboardCapitalization.Sentences,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
