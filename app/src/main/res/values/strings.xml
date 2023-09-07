@@ -13,4 +13,5 @@
     <string name="cancel">Отмена</string>
     <string name="role_tutor">Преподаватель</string>
     <string name="role_admin">Администратор</string>
+    <string name="avatar">Аватар</string>
 </resources>

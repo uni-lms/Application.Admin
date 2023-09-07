@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -17,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.SignUpViewModel
 import ru.unilms.R
+import ru.unilms.components.form.ImagePickerField
 import ru.unilms.components.form.M3DateField
 import ru.unilms.components.form.M3PickerField
 import ru.unilms.components.form.M3TextField
@@ -33,8 +37,19 @@ fun SignUpScreen() {
             .background(MaterialTheme.colorScheme.background)
             .padding(28.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             CenteredRegularHeadline(text = stringResource(R.string.register))
+            ImagePickerField(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                lastSelectedImage = viewModel.pickedImage.value,
+                onSelection = {
+                    viewModel.pickedImage.value = it
+                }
+            )
             M3TextField(
                 label = stringResource(id = R.string.last_name),
                 form = viewModel.form,
