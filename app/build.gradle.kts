@@ -56,6 +56,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.appcompat:appcompat:1.6.1")
     val retrofitVersion = "2.9.0"
 
     implementation("androidx.core:core-ktx:1.10.1")
@@ -68,6 +69,8 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.compose.material:material-icons-extended-android:1.5.0")
+
+    implementation("com.github.benjamin-luescher:compose-form:0.2.3")
 
     // Retrofit (http client)
     implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
