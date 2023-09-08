@@ -72,8 +72,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.compose.material:material-icons-extended-android:1.5.0")
 
+    // Forms
     implementation("com.github.benjamin-luescher:compose-form:0.2.3")
 
+    // DI (Hilt)
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -82,8 +84,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     implementation("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
 
+    // Images
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Debug stuff
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
