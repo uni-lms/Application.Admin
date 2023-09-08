@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import ch.benlu.composeform.FieldState
 import ch.benlu.composeform.Form
 import ch.benlu.composeform.FormField
-import ch.benlu.composeform.validators.EmailValidator
-import ch.benlu.composeform.validators.NotEmptyValidator
+import ru.unilms.utils.forms.validators.EmailValidator
+import ru.unilms.utils.forms.validators.NotEmptyValidator
 import ru.unilms.di.ResourcesProvider
 import ru.unilms.domain.model.user.Gender
 import ru.unilms.domain.model.user.Role
@@ -32,13 +32,14 @@ class SignUpForm(resourcesProvider: ResourcesProvider) : Form() {
     @FormField
     val patronymic = FieldState(
         state = mutableStateOf<String?>(null),
-        validators = mutableListOf(NotEmptyValidator())
+        validators = mutableListOf()
     )
 
     @FormField
     val email = FieldState(
         state = mutableStateOf(null),
         validators = mutableListOf(
+            NotEmptyValidator(),
             EmailValidator()
         )
     )
