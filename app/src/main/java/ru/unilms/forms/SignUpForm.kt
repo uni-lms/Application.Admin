@@ -1,4 +1,4 @@
-package ru.unilms
+package ru.unilms.forms
 
 import androidx.compose.runtime.mutableStateOf
 import ch.benlu.composeform.FieldState

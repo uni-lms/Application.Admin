@@ -1,14 +1,16 @@
-package ru.unilms
+package ru.unilms.viewmodels
 
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ru.unilms.R
 import ru.unilms.di.ResourcesProvider
 import ru.unilms.domain.model.auth.SignupRequest
 import ru.unilms.domain.model.user.Gender
 import ru.unilms.domain.model.user.Role
+import ru.unilms.forms.SignUpForm
 import java.util.UUID
 import javax.inject.Inject
 

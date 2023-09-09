@@ -1,4 +1,4 @@
-package ru.unilms
+package ru.unilms.viewmodels
 
 import android.content.Context
 import android.util.Log
@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import ru.unilms.data.PreferencesKeys
 import ru.unilms.extensions.authDataStore
+import ru.unilms.forms.SelectApiUriForm
 import javax.inject.Inject
 
 @HiltViewModel

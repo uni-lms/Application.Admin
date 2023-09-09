@@ -1,4 +1,4 @@
-package ru.unilms
+package ru.unilms.viewmodels
 
 import android.annotation.SuppressLint
 import android.content.Context
