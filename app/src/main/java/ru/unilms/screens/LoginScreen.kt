@@ -1,4 +1,7 @@
 package ru.unilms.screens
 
-fun LoginScreen() {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun LoginScreen(goToFeedScreen: () -> Unit) {
 }

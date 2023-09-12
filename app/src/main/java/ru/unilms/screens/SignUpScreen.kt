@@ -27,7 +27,7 @@ import ru.unilms.components.form.M3TextField
 import ru.unilms.viewmodels.SignUpViewModel
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(goToFeedScreen: () -> Unit) {
 
     val viewModel = hiltViewModel<SignUpViewModel>()
 
@@ -100,7 +100,7 @@ fun SignUpScreen() {
             ).Field()
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { viewModel.submit() }) {
+                Button(onClick = { viewModel.submit { goToFeedScreen() } }) {
                     Text(text = stringResource(R.string.button_register))
                 }
             }
@@ -111,5 +111,5 @@ fun SignUpScreen() {
 @Preview
 @Composable
 fun PreviewSignUpScreen() {
-    SignUpScreen()
+    SignUpScreen {}
 }

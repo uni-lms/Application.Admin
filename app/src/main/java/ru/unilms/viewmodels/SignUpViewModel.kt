@@ -41,7 +41,7 @@ class SignUpViewModel @Inject constructor(private val resourcesProvider: Resourc
         )
     }
 
-    fun submit() {
+    fun submit(goToFeedScreen: () -> Unit) {
         validate()
         if (form.isValid) {
             val signupRequest = SignupRequest(
@@ -54,8 +54,7 @@ class SignUpViewModel @Inject constructor(private val resourcesProvider: Resourc
                 gender = form.gender.state.value!!.id,
                 role = form.role.state.value!!.id
             )
-            Log.d("SignupViewModel", pickedImage.value.toString())
-            Log.d("SignupViewModel", signupRequest.toString())
+            goToFeedScreen()
         }
     }
 }

@@ -73,10 +73,10 @@ fun UniApp(
                     { goToScreen(navController, UniAppScreen.SignUp) })
             }
             composable(UniAppScreen.Login.name) {
-                LoginScreen()
+                LoginScreen { goToScreen(navController, UniAppScreen.Feed) }
             }
             composable(UniAppScreen.SignUp.name) {
-                SignUpScreen()
+                SignUpScreen { goToScreen(navController, UniAppScreen.Feed) }
             }
             composable(UniAppScreen.Feed.name) {
                 FeedScreen()
