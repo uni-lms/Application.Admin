@@ -1,6 +1,5 @@
 package ru.unilms.app
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -25,7 +24,6 @@ import ru.unilms.screens.SelectApiUriScreen
 import ru.unilms.screens.SignUpScreen
 import ru.unilms.viewmodels.UniAppViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun UniApp(
     navController: NavHostController = rememberNavController()
