@@ -22,7 +22,7 @@ import ru.unilms.components.form.M3TextField
 import ru.unilms.viewmodels.SelectApiUriViewModel
 
 @Composable
-fun SelectApiUriScreen() {
+fun SelectApiUriScreen(goToLoginOrSignUpScreen: () -> Unit) {
 
     val viewModel = hiltViewModel<SelectApiUriViewModel>()
 
@@ -49,7 +49,7 @@ fun SelectApiUriScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Button(onClick = { viewModel.submit() }) {
+                Button(onClick = { viewModel.submit(goToLoginOrSignUpScreen) }) {
                     Text(text = stringResource(R.string.button_save))
                 }
             }

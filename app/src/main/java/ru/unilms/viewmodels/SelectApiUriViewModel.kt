@@ -26,13 +26,14 @@ class SelectApiUriViewModel @Inject constructor(
         Log.d("MainViewModel", "Validate (form is valid: ${form.isValid})")
     }
 
-    fun submit() {
+    fun submit(goToLoginOrSignUpScreen: () -> Unit) {
         validate()
         if (form.isValid) {
             viewModelScope.launch {
                 store.updateApiUri(form.apiUri.state.value!!)
                 store.updateToken("")
             }
+            goToLoginOrSignUpScreen()
         }
     }
 }
