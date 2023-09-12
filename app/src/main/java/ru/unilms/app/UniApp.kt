@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.unilms.components.global.UniAppTopBar
+import ru.unilms.screens.FeedScreen
 import ru.unilms.screens.LoginOrSignUpScreen
 import ru.unilms.screens.LoginScreen
 import ru.unilms.screens.SelectApiUriScreen
@@ -36,16 +37,15 @@ fun UniApp(
         backStackEntry?.destination?.route ?: UniAppScreen.SelectApiUri.name
     )
 
-    var startScreen = UniAppScreen.SelectApiUri.name
-
     val token = viewModel.token?.collectAsState(initial = "")?.value!!
     val apiUri = viewModel.apiUri?.collectAsState(initial = "")?.value!!
 
-    if (apiUri == "") {
-        startScreen = UniAppScreen.SelectApiUri.name
-
+    val startScreen = if (apiUri == "") {
+        UniAppScreen.SelectApiUri.name
     } else if (token == "") {
-        startScreen = UniAppScreen.LoginOrRegister.name
+        UniAppScreen.LoginOrRegister.name
+    } else {
+        UniAppScreen.Feed.name
     }
 
     Scaffold(
@@ -79,6 +79,9 @@ fun UniApp(
             }
             composable(UniAppScreen.SignUp.name) {
                 SignUpScreen()
+            }
+            composable(UniAppScreen.Feed.name) {
+                FeedScreen()
             }
         }
     }
