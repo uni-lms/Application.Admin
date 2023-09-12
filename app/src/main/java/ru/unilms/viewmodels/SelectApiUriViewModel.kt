@@ -31,6 +31,7 @@ class SelectApiUriViewModel @Inject constructor(
         if (form.isValid) {
             viewModelScope.launch {
                 store.updateApiUri(form.apiUri.state.value!!)
+                store.updateToken("")
             }
         }
     }
