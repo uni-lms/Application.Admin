@@ -1,6 +1,6 @@
 package ru.unilms.app
 
-enum class UniAppScreens {
+enum class UniAppScreen {
     SelectApiUri,
     LoginOrRegister,
     Login,
