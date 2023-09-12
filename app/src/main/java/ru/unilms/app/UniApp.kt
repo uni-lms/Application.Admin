@@ -18,6 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.unilms.components.global.UniAppTopBar
+import ru.unilms.screens.LoginOrSignUpScreen
+import ru.unilms.screens.LoginScreen
 import ru.unilms.screens.SelectApiUriScreen
 import ru.unilms.screens.SignUpScreen
 import ru.unilms.viewmodels.UniAppViewModel
@@ -44,7 +46,7 @@ fun UniApp(
     }
 
     token.ifEmpty {
-        startScreen = UniAppScreen.SignUp.name
+        startScreen = UniAppScreen.LoginOrRegister.name
     }
 
     Scaffold(
@@ -68,11 +70,27 @@ fun UniApp(
             composable(UniAppScreen.SelectApiUri.name) {
                 SelectApiUriScreen()
             }
+            composable(UniAppScreen.LoginOrRegister.name) {
+                LoginOrSignUpScreen(
+                    { goToLoginScreen(navController) },
+                    { goToSignUpScreen(navController) })
+            }
+            composable(UniAppScreen.Login.name) {
+                LoginScreen()
+            }
             composable(UniAppScreen.SignUp.name) {
                 SignUpScreen()
             }
         }
     }
+}
+
+private fun goToLoginScreen(navController: NavHostController) {
+    navController.navigate(UniAppScreen.Login.name)
+}
+
+private fun goToSignUpScreen(navController: NavHostController) {
+    navController.navigate(UniAppScreen.SignUp.name)
 }
 
 @Preview
