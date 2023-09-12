@@ -41,11 +41,10 @@ fun UniApp(
     val token = viewModel.token?.collectAsState(initial = "")?.value!!
     val apiUri = viewModel.apiUri?.collectAsState(initial = "")?.value!!
 
-    apiUri.ifEmpty {
+    if (apiUri == "") {
         startScreen = UniAppScreen.SelectApiUri.name
-    }
 
-    token.ifEmpty {
+    } else if (token == "") {
         startScreen = UniAppScreen.LoginOrRegister.name
     }
 
@@ -68,12 +67,12 @@ fun UniApp(
                 .verticalScroll(rememberScrollState())
         ) {
             composable(UniAppScreen.SelectApiUri.name) {
-                SelectApiUriScreen()
+                SelectApiUriScreen { goToScreen(navController, UniAppScreen.LoginOrRegister) }
             }
             composable(UniAppScreen.LoginOrRegister.name) {
                 LoginOrSignUpScreen(
-                    { goToLoginScreen(navController) },
-                    { goToSignUpScreen(navController) })
+                    { goToScreen(navController, UniAppScreen.Login) },
+                    { goToScreen(navController, UniAppScreen.SignUp) })
             }
             composable(UniAppScreen.Login.name) {
                 LoginScreen()
@@ -85,12 +84,8 @@ fun UniApp(
     }
 }
 
-private fun goToLoginScreen(navController: NavHostController) {
-    navController.navigate(UniAppScreen.Login.name)
-}
-
-private fun goToSignUpScreen(navController: NavHostController) {
-    navController.navigate(UniAppScreen.SignUp.name)
+private fun goToScreen(navController: NavHostController, screen: UniAppScreen) {
+    navController.navigate(screen.name)
 }
 
 @Preview
