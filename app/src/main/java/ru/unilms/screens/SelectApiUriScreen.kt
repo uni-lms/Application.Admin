@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.components.form.M3TextField
-import ru.unilms.components.typography.CenteredRegularHeadline
 import ru.unilms.viewmodels.SelectApiUriViewModel
 
 @Composable
@@ -37,7 +36,6 @@ fun SelectApiUriScreen() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            CenteredRegularHeadline(text = stringResource(R.string.screen_server_select))
             M3TextField(
                 label = stringResource(id = R.string.api_uri),
                 form = viewModel.form,
