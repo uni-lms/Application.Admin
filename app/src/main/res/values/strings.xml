@@ -20,4 +20,8 @@
     <string name="screen_server_select">Выбор сервера</string>
     <string name="api_uri">Адрес сервера</string>
     <string name="button_save">Сохранить</string>
+    <string name="login">Вход в аккаунт</string>
+    <string name="feed">Главная</string>
+    <string name="calendar">Календарь</string>
+    <string name="back_button">Назад</string>
 </resources>
