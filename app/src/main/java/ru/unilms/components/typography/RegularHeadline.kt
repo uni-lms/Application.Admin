@@ -10,10 +10,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RegularHeadline(text: String, textAlign: TextAlign = TextAlign.Left) {
+fun RegularHeadline(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Left
+) {
     Text(
         text = text,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 80.dp),
         style = MaterialTheme.typography.headlineMedium,
