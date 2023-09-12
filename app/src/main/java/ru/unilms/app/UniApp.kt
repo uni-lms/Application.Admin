@@ -50,7 +50,7 @@ fun UniApp(
         topBar = {
             UniAppTopBar(
                 currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
+                canNavigateBack = navController.previousBackStackEntry != null && currentScreen.canGoBack,
                 navigateUp = { navController.navigateUp() })
         }
     ) { innerPadding ->
