@@ -1,11 +1,16 @@
 package ru.unilms.viewmodels
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
 import ru.unilms.R
+import ru.unilms.data.DataStore
 import ru.unilms.di.ResourcesProvider
 import ru.unilms.domain.model.auth.SignupRequest
 import ru.unilms.domain.model.user.Gender
@@ -15,10 +20,15 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val resourcesProvider: ResourcesProvider) :
+class SignUpViewModel @Inject constructor(
+    private val resourcesProvider: ResourcesProvider,
+    @ApplicationContext context: Context
+) :
     ViewModel() {
     var form = SignUpForm(getGenders(), getRoles())
     val pickedImage = mutableStateOf<Uri?>(null)
+
+    private val store = DataStore(context)
 
     private fun validate() {
         form.validate(true)
@@ -54,6 +64,10 @@ class SignUpViewModel @Inject constructor(private val resourcesProvider: Resourc
                 gender = form.gender.state.value!!.id,
                 role = form.role.state.value!!.id
             )
+            viewModelScope.launch {
+                // TODO: put here value from api response
+                store.updateToken("some-not-empty-value")
+            }
             goToFeedScreen()
         }
     }
