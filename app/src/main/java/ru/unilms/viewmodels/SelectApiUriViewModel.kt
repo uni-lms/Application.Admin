@@ -1,24 +1,25 @@
 package ru.unilms.viewmodels
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import ru.unilms.data.PreferencesKeys
-import ru.unilms.extensions.authDataStore
+import ru.unilms.data.DataStore
 import ru.unilms.forms.SelectApiUriForm
 import javax.inject.Inject
 
 @HiltViewModel
+@SuppressLint("StaticFieldLeak")
 class SelectApiUriViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) :
     ViewModel() {
     val form = SelectApiUriForm()
+    private val store = DataStore(context)
 
     private fun validate() {
         form.validate(true)
@@ -29,9 +30,7 @@ class SelectApiUriViewModel @Inject constructor(
         validate()
         if (form.isValid) {
             viewModelScope.launch {
-                context.authDataStore.edit { preferences ->
-                    preferences[PreferencesKeys.ApiUri] = form.apiUri.state.value!!
-                }
+                store.updateApiUri(form.apiUri.state.value!!)
             }
         }
     }

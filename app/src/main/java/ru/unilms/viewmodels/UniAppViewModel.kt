@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.unilms.data.PreferencesKeys
-import ru.unilms.extensions.authDataStore
+import ru.unilms.data.DataStore
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,21 +16,15 @@ import javax.inject.Inject
 class UniAppViewModel @Inject constructor(@ApplicationContext private val context: Context) :
     ViewModel() {
 
-    var token = ""
-    var apiUri = ""
+    private val store = DataStore(context)
+
+    var token: Flow<String>? = null
+    var apiUri: Flow<String>? = null
 
     init {
         viewModelScope.launch {
-            context.authDataStore.data.map { preferences ->
-                preferences[PreferencesKeys.Token] ?: ""
-            }.collect {
-                token = it
-            }
-            context.authDataStore.data.map { preferences ->
-                preferences[PreferencesKeys.ApiUri] ?: ""
-            }.collect {
-                apiUri = it
-            }
+            token = store.token
+            apiUri = store.apiUri
         }
     }
 }
