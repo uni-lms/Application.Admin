@@ -1,16 +1,23 @@
 package ru.unilms.app
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Feed
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.ui.graphics.vector.ImageVector
 import ru.unilms.R
 
 enum class UniAppScreen(
     val title: Int = R.string.app_name,
     val canGoBack: Boolean = true,
-    val showBottomAppBar: Boolean = false
+    val showBottomAppBar: Boolean = false,
+    val icon: ImageVector? = null
 ) {
     SelectApiUri(R.string.screen_server_select, false),
     LoginOrRegister,
     Login(R.string.login),
     SignUp(R.string.register),
-    Feed(R.string.feed, false, true),
-    Calendar(R.string.calendar, false, true),
+    Feed(R.string.feed, false, true, Icons.Outlined.Feed),
+    Calendar(R.string.calendar, false, true, Icons.Outlined.CalendarMonth),
+    Menu(R.string.menu, true, false, Icons.Outlined.Menu)
 }
