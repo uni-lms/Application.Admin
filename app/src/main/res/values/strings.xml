@@ -27,4 +27,6 @@
     <string name="or">или</string>
     <string name="menu">Меню</string>
     <string name="courses">Курсы</string>
+    <string name="courses_archive">Архив курсов</string>
+    <string name="journal">Журнал</string>
 </resources>

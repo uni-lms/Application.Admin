@@ -23,9 +23,11 @@ import androidx.navigation.compose.rememberNavController
 import ru.unilms.components.global.UniAppTopBar
 import ru.unilms.components.global.UniBottomNavigation
 import ru.unilms.components.global.UniSideBar
+import ru.unilms.screens.ArchiveScreen
 import ru.unilms.screens.CalendarScreen
 import ru.unilms.screens.CoursesScreen
 import ru.unilms.screens.FeedScreen
+import ru.unilms.screens.JournalScreen
 import ru.unilms.screens.LoginOrSignUpScreen
 import ru.unilms.screens.LoginScreen
 import ru.unilms.screens.SelectApiUriScreen
@@ -57,7 +59,7 @@ fun UniApp(
     }
     ModalNavigationDrawer(
         drawerContent = {
-            UniSideBar()
+            UniSideBar(navController, drawerState)
         },
         drawerState = drawerState,
     ) {
@@ -107,6 +109,12 @@ fun UniApp(
                 composable(UniAppScreen.Calendar.name) {
                     CalendarScreen()
                 }
+                composable(UniAppScreen.Archive.name) {
+                    ArchiveScreen()
+                }
+                composable(UniAppScreen.Journal.name) {
+                    JournalScreen()
+                }
             }
         }
     }
@@ -125,7 +133,7 @@ fun goToScreenFromNavBar(
     }
 }
 
-private fun goToScreen(navController: NavHostController, screen: UniAppScreen) {
+fun goToScreen(navController: NavHostController, screen: UniAppScreen) {
     navController.navigate(screen.name)
 }
 

@@ -21,5 +21,7 @@ enum class UniAppScreen(
     Feed(R.string.feed, false, true, Icons.Outlined.Feed),
     Courses(R.string.courses, false, true, Icons.Outlined.LibraryBooks),
     Calendar(R.string.calendar, false, true, Icons.Outlined.CalendarMonth),
-    Menu(R.string.menu, true, false, Icons.Outlined.Menu)
+    Menu(R.string.menu, true, false, Icons.Outlined.Menu),
+    Archive(R.string.courses_archive, true, true, null),
+    Journal(R.string.journal, true, true, null)
 }
