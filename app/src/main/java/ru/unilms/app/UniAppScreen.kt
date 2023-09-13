@@ -3,6 +3,7 @@ package ru.unilms.app
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Feed
+import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.unilms.R
@@ -18,6 +19,7 @@ enum class UniAppScreen(
     Login(R.string.login),
     SignUp(R.string.register),
     Feed(R.string.feed, false, true, Icons.Outlined.Feed),
+    Courses(R.string.courses, false, true, Icons.Outlined.LibraryBooks),
     Calendar(R.string.calendar, false, true, Icons.Outlined.CalendarMonth),
     Menu(R.string.menu, true, false, Icons.Outlined.Menu)
 }

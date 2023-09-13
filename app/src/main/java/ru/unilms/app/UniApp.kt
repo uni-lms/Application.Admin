@@ -24,6 +24,7 @@ import ru.unilms.components.global.UniAppTopBar
 import ru.unilms.components.global.UniBottomNavigation
 import ru.unilms.components.global.UniSideBar
 import ru.unilms.screens.CalendarScreen
+import ru.unilms.screens.CoursesScreen
 import ru.unilms.screens.FeedScreen
 import ru.unilms.screens.LoginOrSignUpScreen
 import ru.unilms.screens.LoginScreen
@@ -99,6 +100,9 @@ fun UniApp(
                 }
                 composable(UniAppScreen.Feed.name) {
                     FeedScreen()
+                }
+                composable(UniAppScreen.Courses.name) {
+                    CoursesScreen()
                 }
                 composable(UniAppScreen.Calendar.name) {
                     CalendarScreen()
