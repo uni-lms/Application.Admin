@@ -27,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -136,7 +135,7 @@ fun UniApp(
             },
             bottomBar = {
                 if (currentScreen.showBottomAppBar) {
-                    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.primaryContainer) {
+                    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.secondaryContainer) {
                         enumValues<UniAppScreen>().forEach { screen ->
                             if (screen.icon != null) {
                                 val isSelected =
@@ -145,7 +144,7 @@ fun UniApp(
                                     label = {
                                         Text(
                                             text = stringResource(screen.title),
-                                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+                                            color = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     },
                                     selected = isSelected,
@@ -162,7 +161,7 @@ fun UniApp(
                                         Icon(
                                             screen.icon,
                                             null,
-                                            tint = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+                                            tint = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
                                 )
