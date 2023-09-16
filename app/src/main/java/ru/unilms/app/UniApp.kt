@@ -25,6 +25,7 @@ import ru.unilms.components.global.UniBottomNavigation
 import ru.unilms.components.global.UniSideBar
 import ru.unilms.screens.ArchiveScreen
 import ru.unilms.screens.CalendarScreen
+import ru.unilms.screens.CourseScreen
 import ru.unilms.screens.CoursesScreen
 import ru.unilms.screens.FeedScreen
 import ru.unilms.screens.JournalScreen
@@ -33,6 +34,7 @@ import ru.unilms.screens.LoginScreen
 import ru.unilms.screens.SelectApiUriScreen
 import ru.unilms.screens.SignUpScreen
 import ru.unilms.viewmodels.UniAppViewModel
+import java.util.UUID
 
 @Composable
 fun UniApp(
@@ -40,15 +42,8 @@ fun UniApp(
 ) {
     val viewModel = hiltViewModel<UniAppViewModel>()
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = UniAppScreen.valueOf(
-        backStackEntry?.destination?.route ?: UniAppScreen.SelectApiUri.name
-    )
-
     val token = viewModel.token?.collectAsState(initial = "")?.value!!
     val apiUri = viewModel.apiUri?.collectAsState(initial = "")?.value!!
-
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     val startScreen = if (apiUri == "") {
         UniAppScreen.SelectApiUri.name
@@ -57,6 +52,22 @@ fun UniApp(
     } else {
         UniAppScreen.Feed.name
     }
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val route = backStackEntry?.destination?.route
+
+    val screenName = if (route?.contains("/") == true) {
+        route.split("/")[0]
+    } else {
+        route
+    }
+
+    val currentScreen = UniAppScreen.valueOf(
+        screenName ?: startScreen
+    )
+
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     ModalNavigationDrawer(
         drawerContent = {
             UniSideBar(navController, drawerState)
@@ -104,7 +115,13 @@ fun UniApp(
                     FeedScreen()
                 }
                 composable(UniAppScreen.Courses.name) {
-                    CoursesScreen()
+                    CoursesScreen { id ->
+                        goToScreenWithId(
+                            navController,
+                            UniAppScreen.Course,
+                            id
+                        )
+                    }
                 }
                 composable(UniAppScreen.Calendar.name) {
                     CalendarScreen()
@@ -114,6 +131,12 @@ fun UniApp(
                 }
                 composable(UniAppScreen.Journal.name) {
                     JournalScreen()
+                }
+                composable("${UniAppScreen.Course.name}/{courseId}") {
+                    val courseId = backStackEntry?.arguments?.getString("courseId")
+                    courseId?.let {
+                        CourseScreen(courseId = UUID.fromString(courseId))
+                    }
                 }
             }
         }
@@ -135,6 +158,10 @@ fun goToScreenFromNavBar(
 
 fun goToScreen(navController: NavHostController, screen: UniAppScreen) {
     navController.navigate(screen.name)
+}
+
+fun goToScreenWithId(navController: NavHostController, screen: UniAppScreen, id: UUID) {
+    navController.navigate("${screen.name}/${id}")
 }
 
 @Preview
