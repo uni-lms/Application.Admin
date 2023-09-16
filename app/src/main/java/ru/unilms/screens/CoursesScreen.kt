@@ -9,14 +9,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.components.courses.CourseCard
 import ru.unilms.viewmodels.CoursesScreenViewModel
+import java.util.UUID
 
 @Composable
-fun CoursesScreen() {
+fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
     val viewModel = hiltViewModel<CoursesScreenViewModel>()
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(10.dp)) {
         viewModel.courses.forEach {
-            CourseCard(it)
+            CourseCard(it) { goToCourseScreen(it.id) }
         }
     }
 }
