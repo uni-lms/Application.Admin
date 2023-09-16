@@ -127,7 +127,13 @@ fun UniApp(
                     CalendarScreen()
                 }
                 composable(UniAppScreen.Archive.name) {
-                    ArchiveScreen()
+                    ArchiveScreen { id ->
+                        goToScreenWithId(
+                            navController,
+                            UniAppScreen.Course,
+                            id
+                        )
+                    }
                 }
                 composable(UniAppScreen.Journal.name) {
                     JournalScreen()
