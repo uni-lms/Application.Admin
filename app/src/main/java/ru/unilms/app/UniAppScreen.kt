@@ -1,6 +1,8 @@
 package ru.unilms.app
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Archive
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Feed
 import androidx.compose.material.icons.outlined.LibraryBooks
@@ -12,7 +14,8 @@ enum class UniAppScreen(
     val title: Int = R.string.app_name,
     val canGoBack: Boolean = true,
     val showBottomAppBar: Boolean = false,
-    val icon: ImageVector? = null
+    val icon: ImageVector? = null,
+    val showInDrawer: Boolean = false
 ) {
     SelectApiUri(R.string.screen_server_select, false),
     LoginOrRegister,
@@ -22,7 +25,7 @@ enum class UniAppScreen(
     Courses(R.string.courses, false, true, Icons.Outlined.LibraryBooks),
     Calendar(R.string.calendar, false, true, Icons.Outlined.CalendarMonth),
     Menu(R.string.menu, true, false, Icons.Outlined.Menu),
-    Archive(R.string.courses_archive, true, true, null),
-    Journal(R.string.journal, true, true, null),
+    Archive(R.string.courses_archive, true, true, Icons.Outlined.Archive, true),
+    Journal(R.string.journal, true, true, Icons.Outlined.Book, true),
     Course(R.string.course, true, true, null)
 }

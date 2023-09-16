@@ -3,9 +3,6 @@ package ru.unilms.components.global
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -44,40 +41,27 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
         Spacer(modifier = Modifier.height(10.dp))
         Divider()
         Spacer(modifier = Modifier.height(10.dp))
-        NavigationDrawerItem(
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-            icon = {
-                Icon(
-                    Icons.Outlined.Archive,
-                    null,
-                )
-            },
-            label = { Text(text = "Архив курсов") },
-            selected = currentDestination?.hierarchy?.any { it.route == UniAppScreen.Archive.name } == true,
-            onClick = {
-                goToScreen(navController, UniAppScreen.Archive)
-                scope.launch {
-                    drawerState.close()
-                }
-            }
-        )
 
-        NavigationDrawerItem(
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-            icon = {
-                Icon(
-                    Icons.Outlined.Book,
-                    null,
+        enumValues<UniAppScreen>().forEach { screen ->
+            if (screen.showInDrawer && screen.icon != null) {
+                NavigationDrawerItem(
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                    icon = {
+                        Icon(
+                            screen.icon,
+                            null,
+                        )
+                    },
+                    label = { Text(text = stringResource(id = screen.title)) },
+                    selected = currentDestination?.hierarchy?.any { it.route == screen.name } == true,
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                        }
+                        goToScreen(navController, screen)
+                    }
                 )
-            },
-            label = { Text(text = "Журнал") },
-            selected = currentDestination?.hierarchy?.any { it.route == UniAppScreen.Journal.name } == true,
-            onClick = {
-                goToScreen(navController, UniAppScreen.Journal)
-                scope.launch {
-                    drawerState.close()
-                }
             }
-        )
+        }
     }
 }
