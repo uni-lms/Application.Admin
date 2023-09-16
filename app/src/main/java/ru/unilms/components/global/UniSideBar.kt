@@ -5,15 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,7 +26,6 @@ import ru.unilms.app.UniAppScreen
 import ru.unilms.app.goToScreen
 import ru.unilms.components.typography.CenteredRegularHeadline
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
@@ -44,7 +42,7 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
             )
 
             ListItem(
-                text = {
+                headlineContent = {
                     Text(
                         text = "Архив курсов",
                         color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -56,7 +54,7 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
                         drawerState.close()
                     }
                 }),
-                icon = {
+                leadingContent = {
                     Icon(
                         Icons.Outlined.Archive,
                         null,
@@ -66,7 +64,7 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
             )
 
             ListItem(
-                text = {
+                headlineContent = {
                     Text(
                         text = "Журнал",
                         color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -78,7 +76,7 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
                         drawerState.close()
                     }
                 }),
-                icon = {
+                leadingContent = {
                     Icon(
                         Icons.Outlined.Book,
                         null,
