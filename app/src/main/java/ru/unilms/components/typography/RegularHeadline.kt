@@ -13,7 +13,7 @@ fun RegularHeadline(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Left,
-    color: Color
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
     Text(
         text = text,
