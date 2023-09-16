@@ -1,15 +1,17 @@
 package ru.unilms.components.global
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +26,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.app.goToScreen
-import ru.unilms.components.typography.CenteredRegularHeadline
+import ru.unilms.components.typography.RegularHeadline
 
 @Composable
 fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
@@ -34,13 +36,16 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
     val currentDestination = backStackEntry?.destination
 
     ModalDrawerSheet {
-        Spacer(Modifier.height(10.dp))
-        CenteredRegularHeadline(
+        Spacer(modifier = Modifier.height(10.dp))
+        RegularHeadline(
             text = stringResource(R.string.menu),
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+        Divider()
+        Spacer(modifier = Modifier.height(10.dp))
         NavigationDrawerItem(
-            modifier = Modifier.fillMaxWidth(0.9f),
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
             icon = {
                 Icon(
                     Icons.Outlined.Archive,
@@ -58,7 +63,7 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            modifier = Modifier.fillMaxWidth(0.9f),
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
             icon = {
                 Icon(
                     Icons.Outlined.Book,
