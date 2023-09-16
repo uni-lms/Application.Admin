@@ -1,10 +1,10 @@
 package ru.unilms.components.global
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,12 +22,12 @@ fun UniBottomNavigation(navController: NavHostController, drawerState: DrawerSta
     val scope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
-    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.secondaryContainer) {
+    NavigationBar {
         enumValues<UniAppScreen>().forEach { screen ->
             if (screen.icon != null) {
                 val isSelected =
                     currentDestination?.hierarchy?.any { it.route == screen.name } == true
-                BottomNavigationItem(
+                NavigationBarItem(
                     label = {
                         Text(
                             text = stringResource(screen.title),
