@@ -70,7 +70,7 @@ fun UniApp(
 
     ModalNavigationDrawer(
         drawerContent = {
-            UniSideBar(navController, drawerState)
+            UniSideBar(navController, drawerState, viewModel.store)
         },
         drawerState = drawerState,
     ) {

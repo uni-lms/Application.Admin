@@ -16,7 +16,7 @@ import javax.inject.Inject
 class UniAppViewModel @Inject constructor(@ApplicationContext private val context: Context) :
     ViewModel() {
 
-    private val store = DataStore(context)
+    val store = DataStore(context)
 
     var token: Flow<String>? = null
     var apiUri: Flow<String>? = null

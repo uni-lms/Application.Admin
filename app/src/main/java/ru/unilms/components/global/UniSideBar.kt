@@ -3,6 +3,8 @@ package ru.unilms.components.global
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -24,9 +26,10 @@ import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.app.goToScreen
 import ru.unilms.components.typography.RegularHeadline
+import ru.unilms.data.DataStore
 
 @Composable
-fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
+fun UniSideBar(navController: NavHostController, drawerState: DrawerState, dataStore: DataStore) {
     val scope = rememberCoroutineScope()
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -63,5 +66,25 @@ fun UniSideBar(navController: NavHostController, drawerState: DrawerState) {
                 )
             }
         }
+
+        Divider()
+
+        NavigationDrawerItem(
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+            icon = {
+                Icon(
+                    Icons.Outlined.Logout,
+                    null,
+                )
+            },
+            label = { Text(text = "Удалить токен") },
+            selected = false,
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    dataStore.updateToken("")
+                }
+            }
+        )
     }
 }
