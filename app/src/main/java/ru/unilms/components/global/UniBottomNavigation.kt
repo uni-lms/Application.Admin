@@ -1,7 +1,7 @@
 package ru.unilms.components.global
 
-import androidx.compose.material.Icon
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
