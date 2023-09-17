@@ -1,20 +1,26 @@
 package ru.unilms.components.form
 
-import android.app.DatePickerDialog
-import android.widget.DatePicker
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import ru.unilms.utils.forms.Field
 import ch.benlu.composeform.FieldState
 import ch.benlu.composeform.Form
+import ru.unilms.R
+import ru.unilms.utils.forms.Field
 import java.util.Calendar
 import java.util.Date
 
@@ -27,7 +33,6 @@ class M3DateField(
     isEnabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Next,
     formatter: ((raw: Date?) -> String)? = null,
-    private val themeResId: Int = 0
 ) : Field<Date>(
     label = label,
     form = form,
@@ -38,6 +43,7 @@ class M3DateField(
     imeAction = imeAction,
     formatter = formatter
 ) {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Field() {
         this.updateComposableValue()
@@ -46,37 +52,43 @@ class M3DateField(
         }
 
         val focusRequester = FocusRequester()
-        val focusManager = LocalFocusManager.current
-        val context = LocalContext.current
-        val year: Int
-        val month: Int
-        val day: Int
 
         val calendar = Calendar.getInstance()
         calendar.time = value.value ?: Date()
-        year = calendar.get(Calendar.YEAR)
-        month = calendar.get(Calendar.MONTH)
-        day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val date = remember { mutableStateOf("") }
-        val datePickerDialog = DatePickerDialog(
-            context,
-            themeResId,
-            { _: DatePicker, yyyy: Int, mm: Int, dd: Int ->
-                val c = Calendar.getInstance()
-                c.set(yyyy, mm, dd, 0, 0)
-                val d = c.time
-                date.value = d.toString()
-                value.value = d
-                this.onChange(d, form)
-            },
-            year,
-            month,
-            day
-        )
+        val datePickerState =
+            rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
+        var isDatePickerOpened by remember { mutableStateOf(false) }
+        val confirmEnabled by remember { derivedStateOf { datePickerState.selectedDateMillis != null } }
 
-        datePickerDialog.setOnDismissListener {
-            focusManager.clearFocus()
+        if (isDatePickerOpened) {
+            DatePickerDialog(
+                onDismissRequest = {
+                    isDatePickerOpened = false
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            calendar.timeInMillis = datePickerState.selectedDateMillis!!
+                            this.onChange(calendar.time, form)
+                            isDatePickerOpened = false
+                        },
+                        enabled = confirmEnabled
+                    ) {
+                        Text(stringResource(R.string.ok))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            isDatePickerOpened = false
+                        }
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }) {
+                DatePicker(state = datePickerState)
+            }
         }
 
         M3TextFieldComponent(
@@ -90,7 +102,7 @@ class M3DateField(
             focusRequester = focusRequester,
             focusChanged = {
                 if (it.isFocused) {
-                    datePickerDialog.show()
+                    isDatePickerOpened = true
                 }
             }
         )
