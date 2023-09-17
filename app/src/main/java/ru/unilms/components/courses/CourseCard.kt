@@ -1,20 +1,14 @@
 package ru.unilms.components.courses
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.unilms.domain.model.courses.Course
@@ -22,43 +16,33 @@ import java.util.UUID
 
 @Composable
 fun CourseCard(course: Course, goToCourseScreen: () -> Unit) {
-
-    var progress by remember {
-        mutableFloatStateOf(0f)
-    }
-
-    val progressAnimate by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-        label = "course's progress"
+    ListItem(
+        modifier = Modifier
+            .clickable(onClick = goToCourseScreen)
+            .clip(MaterialTheme.shapes.medium),
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurface,
+            overlineColor = MaterialTheme.colorScheme.onSurface
+        ),
+        shadowElevation = 8.dp,
+        tonalElevation = 5.dp,
+        headlineContent = {
+            Text(
+                text = course.name,
+            )
+        },
+        trailingContent = {
+            CircularProgressIndicator(
+                progress = course.progress / 100,
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.onSecondary
+            )
+        },
+        supportingContent = { Text(text = course.tutors.joinToString()) },
+        overlineContent = { Text(text = "${course.semester} семестр") }
     )
-
-    LaunchedEffect(Unit) {
-        progress = course.progress / 100
-    }
-
-    Surface(
-        color = MaterialTheme.colorScheme.tertiaryContainer,
-        shadowElevation = 5.dp,
-        modifier = Modifier.clickable(onClick = goToCourseScreen)
-    ) {
-        ListItem(
-            headlineContent = {
-                Text(
-                    text = course.name,
-                )
-            },
-            trailingContent = {
-                CircularProgressIndicator(
-                    progress = progressAnimate,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    trackColor = MaterialTheme.colorScheme.tertiaryContainer
-                )
-            },
-            supportingContent = { Text(text = course.tutors.joinToString()) },
-            overlineContent = { Text(text = "${course.semester} семестр") }
-        )
-    }
 }
 
 @Composable
