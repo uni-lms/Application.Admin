@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.app.goToScreen
 import ru.unilms.data.DataStore
@@ -58,7 +59,7 @@ fun MenuScreen(navController: NavHostController, dataStore: DataStore) {
                     null,
                 )
             },
-            headlineContent = { Text(text = "Удалить токен") },
+            headlineContent = { Text(text = stringResource(R.string.clear_token)) },
         )
     }
 }

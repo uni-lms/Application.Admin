@@ -30,4 +30,5 @@
     <string name="courses_archive">Архив курсов</string>
     <string name="journal">Журнал</string>
     <string name="course">Курс</string>
+    <string name="clear_token">Удалить токен</string>
 </resources>
