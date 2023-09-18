@@ -41,8 +41,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun UNITheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -58,9 +57,15 @@ fun UNITheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
-            window.navigationBarColor = Color.Transparent.toArgb()
-            window.setDecorFitsSystemWindows(false)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.statusBarColor = Color.Transparent.toArgb()
+                window.navigationBarColor = Color.Transparent.toArgb()
+                window.setDecorFitsSystemWindows(false)
+            } else {
+                window.statusBarColor = colorScheme.primaryContainer.toArgb()
+                window.navigationBarColor = colorScheme.primaryContainer.toArgb()
+            }
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
