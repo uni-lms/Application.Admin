@@ -1,6 +1,5 @@
 package ru.unilms.components.global
 
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -8,18 +7,15 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.coroutines.launch
 import ru.unilms.app.UniAppScreen
 import ru.unilms.app.goToScreenFromNavBar
 
 @Composable
-fun UniBottomNavigation(navController: NavHostController, drawerState: DrawerState) {
-    val scope = rememberCoroutineScope()
+fun UniBottomNavigation(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
     NavigationBar {
@@ -36,13 +32,7 @@ fun UniBottomNavigation(navController: NavHostController, drawerState: DrawerSta
                     },
                     selected = isSelected,
                     onClick = {
-                        if (screen == UniAppScreen.Menu) {
-                            scope.launch {
-                                drawerState.open()
-                            }
-                        } else {
-                            goToScreenFromNavBar(navController, screen)
-                        }
+                        goToScreenFromNavBar(navController, screen)
                     },
                     icon = {
                         Icon(
