@@ -40,7 +40,7 @@ fun UniAppTopBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
+                        contentDescription = stringResource(R.string.screen_back_button)
                     )
                 }
             }

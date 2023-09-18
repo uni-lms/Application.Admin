@@ -30,17 +30,17 @@ fun LoginOrSignUpScreen(goToLoginScreen: () -> Unit, goToSignUpScreen: () -> Uni
             }
         }) {
             Text(
-                text = stringResource(R.string.login),
+                text = stringResource(R.string.screen_login),
                 style = MaterialTheme.typography.headlineSmall
             )
         }
         Text(
-            text = stringResource(id = R.string.or),
+            text = stringResource(id = R.string.service_or),
             style = MaterialTheme.typography.headlineSmall
         )
         TextButton(onClick = { goToSignUpScreen() }) {
             Text(
-                text = stringResource(R.string.register),
+                text = stringResource(R.string.screen_registration),
                 style = MaterialTheme.typography.headlineSmall
             )
         }

@@ -43,7 +43,7 @@ fun ImagePickerField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.avatar),
+            text = stringResource(R.string.field_avatar),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.secondary
         )

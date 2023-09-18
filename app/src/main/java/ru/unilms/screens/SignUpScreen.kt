@@ -49,7 +49,7 @@ fun SignUpScreen(goToFeedScreen: () -> Unit) {
                 }
             )
             M3TextField(
-                label = stringResource(id = R.string.last_name),
+                label = stringResource(id = R.string.field_last_name),
                 form = viewModel.form,
                 fieldState = viewModel.form.lastName,
                 keyboardType = KeyboardType.Text,
@@ -57,7 +57,7 @@ fun SignUpScreen(goToFeedScreen: () -> Unit) {
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
-                label = stringResource(id = R.string.first_name),
+                label = stringResource(id = R.string.field_first_name),
                 form = viewModel.form,
                 fieldState = viewModel.form.firstName,
                 keyboardType = KeyboardType.Text,
@@ -65,7 +65,7 @@ fun SignUpScreen(goToFeedScreen: () -> Unit) {
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
-                label = stringResource(id = R.string.patronymic),
+                label = stringResource(id = R.string.field_patronymic),
                 form = viewModel.form,
                 fieldState = viewModel.form.patronymic,
                 keyboardType = KeyboardType.Text,
@@ -73,27 +73,27 @@ fun SignUpScreen(goToFeedScreen: () -> Unit) {
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3TextField(
-                label = stringResource(id = R.string.email),
+                label = stringResource(id = R.string.field_email),
                 form = viewModel.form,
                 fieldState = viewModel.form.email,
                 keyboardType = KeyboardType.Email,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3DateField(
-                label = stringResource(id = R.string.birthDate),
+                label = stringResource(id = R.string.field_birth_date),
                 form = viewModel.form,
                 fieldState = viewModel.form.dateOfBirth,
                 formatter = ::dateShort,
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ).Field()
             M3PickerField(
-                label = stringResource(R.string.gender),
+                label = stringResource(R.string.field_gender),
                 form = viewModel.form,
                 fieldState = viewModel.form.gender,
                 isSearchable = false
             ).Field()
             M3PickerField(
-                label = stringResource(R.string.role),
+                label = stringResource(R.string.field_role),
                 form = viewModel.form,
                 fieldState = viewModel.form.role,
                 isSearchable = false

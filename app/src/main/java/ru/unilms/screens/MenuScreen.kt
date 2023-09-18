@@ -59,7 +59,7 @@ fun MenuScreen(navController: NavHostController, dataStore: DataStore) {
                     null,
                 )
             },
-            headlineContent = { Text(text = stringResource(R.string.clear_token)) },
+            headlineContent = { Text(text = stringResource(R.string.button_clear_token)) },
         )
     }
 }

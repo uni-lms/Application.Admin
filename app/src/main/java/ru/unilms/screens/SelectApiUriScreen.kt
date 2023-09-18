@@ -37,7 +37,7 @@ fun SelectApiUriScreen(goToLoginOrSignUpScreen: () -> Unit) {
                 .fillMaxSize()
         ) {
             M3TextField(
-                label = stringResource(id = R.string.api_uri),
+                label = stringResource(id = R.string.field_api_uri),
                 form = viewModel.form,
                 fieldState = viewModel.form.apiUri,
                 keyboardType = KeyboardType.Text,

@@ -75,7 +75,7 @@ class M3DateField(
                         },
                         enabled = confirmEnabled
                     ) {
-                        Text(stringResource(R.string.ok))
+                        Text(stringResource(R.string.button_ok))
                     }
                 },
                 dismissButton = {
@@ -84,7 +84,7 @@ class M3DateField(
                             isDatePickerOpened = false
                         }
                     ) {
-                        Text(stringResource(R.string.cancel))
+                        Text(stringResource(R.string.button_cancel))
                     }
                 }) {
                 DatePicker(state = datePickerState)

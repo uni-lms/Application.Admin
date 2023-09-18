@@ -63,7 +63,12 @@ fun <T> M3SingleSelectDialogComponent(
                         M3TextFieldComponent(
                             leadingIcon = { Icon(Icons.Filled.Search, null) },
                             onChange = { query.value = it },
-                            label = { Text(stringResource(id = R.string.search_go), color = MaterialTheme.colorScheme.secondary) },
+                            label = {
+                                Text(
+                                    stringResource(id = R.string.field_search),
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            },
                             isEnabled = true,
                             text = query.value
                         )
@@ -106,7 +111,7 @@ fun <T> M3SingleSelectDialogComponent(
                             shape = MaterialTheme.shapes.medium
                         ) {
                             Text(
-                                text = stringResource(id = R.string.cancel),
+                                text = stringResource(id = R.string.button_cancel),
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }

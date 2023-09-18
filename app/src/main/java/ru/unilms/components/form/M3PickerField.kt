@@ -16,11 +16,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import ru.unilms.utils.forms.Field
 import ch.benlu.composeform.FieldState
 import ch.benlu.composeform.Form
 import ch.benlu.composeform.fields.PickerValue
 import ru.unilms.R
+import ru.unilms.utils.forms.Field
 
 class M3PickerField<T: PickerValue>(
     label: String,
@@ -80,7 +80,7 @@ class M3PickerField<T: PickerValue>(
                 optionsList = fieldState.options!!,
                 optionItemFormatter = fieldState.optionItemFormatter,
                 defaultSelected = fieldState.state.value,
-                submitButtonText = stringResource(id = R.string.ok),
+                submitButtonText = stringResource(id = R.string.button_ok),
                 onSubmitButtonClick = {
                     isDialogVisible = false
                     this.onChange(it, form)
