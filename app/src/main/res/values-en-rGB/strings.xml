@@ -33,4 +33,5 @@
     <string name="role_admin">Administrator</string>
     <string name="service_or">or</string>
     <string name="fake_user_name">Test user</string>
+    <string name="label_semester">%1d semester</string>
 </resources>
