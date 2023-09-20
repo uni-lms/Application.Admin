@@ -31,4 +31,5 @@
     <string name="role_tutor">Преподаватель</string>
     <string name="role_admin">Администратор</string>
     <string name="service_or">или</string>
+    <string name="fake_user_name">Тестовый пользователь</string>
 </resources>
