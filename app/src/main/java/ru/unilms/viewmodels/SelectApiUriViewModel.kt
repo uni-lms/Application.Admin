@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
-import ru.unilms.forms.SelectApiUriForm
+import ru.unilms.ui.forms.SelectApiUriForm
 import javax.inject.Inject
 
 @HiltViewModel

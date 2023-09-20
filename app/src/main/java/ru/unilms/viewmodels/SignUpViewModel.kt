@@ -15,7 +15,7 @@ import ru.unilms.di.ResourcesProvider
 import ru.unilms.domain.model.auth.SignupRequest
 import ru.unilms.domain.model.user.Gender
 import ru.unilms.domain.model.user.Role
-import ru.unilms.forms.SignUpForm
+import ru.unilms.ui.forms.SignUpForm
 import java.util.UUID
 import javax.inject.Inject
 
