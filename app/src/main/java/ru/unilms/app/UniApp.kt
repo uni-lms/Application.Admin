@@ -2,8 +2,6 @@ package ru.unilms.app
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -84,7 +82,6 @@ fun UniApp(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
         ) {
             composable(UniAppScreen.SelectApiUri.name) {
                 SelectApiUriScreen { goToScreen(navController, UniAppScreen.LoginOrRegister) }
