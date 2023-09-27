@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Feed
 import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,7 +20,6 @@ enum class UniAppScreen(
     LoginOrRegister,
     Login(R.string.screen_login),
     SignUp(R.string.screen_registration),
-    Feed(R.string.screen_feed, false, true, Icons.Outlined.Feed),
     Courses(R.string.screen_courses, false, true, Icons.Outlined.LibraryBooks),
     Calendar(R.string.screen_calendar, false, true, Icons.Outlined.CalendarMonth),
     Menu(R.string.screen_menu, false, true, Icons.Outlined.Menu),

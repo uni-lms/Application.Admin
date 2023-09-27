@@ -21,7 +21,6 @@ import ru.unilms.ui.screens.ArchiveScreen
 import ru.unilms.ui.screens.CalendarScreen
 import ru.unilms.ui.screens.CourseScreen
 import ru.unilms.ui.screens.CoursesScreen
-import ru.unilms.ui.screens.FeedScreen
 import ru.unilms.ui.screens.JournalScreen
 import ru.unilms.ui.screens.LoginOrSignUpScreen
 import ru.unilms.ui.screens.LoginScreen
@@ -45,7 +44,7 @@ fun UniApp(
     } else if (token == "") {
         UniAppScreen.LoginOrRegister.name
     } else {
-        UniAppScreen.Feed.name
+        UniAppScreen.Courses.name
     }
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -92,13 +91,10 @@ fun UniApp(
                     { goToScreen(navController, UniAppScreen.SignUp) })
             }
             composable(UniAppScreen.Login.name) {
-                LoginScreen { goToScreen(navController, UniAppScreen.Feed) }
+                LoginScreen { goToScreen(navController, UniAppScreen.Courses) }
             }
             composable(UniAppScreen.SignUp.name) {
-                SignUpScreen { goToScreen(navController, UniAppScreen.Feed) }
-            }
-            composable(UniAppScreen.Feed.name) {
-                FeedScreen()
+                SignUpScreen { goToScreen(navController, UniAppScreen.Courses) }
             }
             composable(UniAppScreen.Courses.name) {
                 CoursesScreen { id ->
