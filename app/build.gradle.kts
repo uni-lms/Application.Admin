@@ -9,6 +9,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.sarhanm.versioner") version "4.1.9"
     kotlin("kapt")
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -60,7 +61,7 @@ android {
 
 dependencies {
 
-    val retrofitVersion = "2.9.0"
+    val ktorVersion = "2.3.4"
     val hiltVersion = "2.44"
 
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -76,8 +77,15 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.material:material-icons-extended-android:1.5.1")
+
+    // Ktor (http client)
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
 
     // Forms
     implementation("com.github.benjamin-luescher:compose-form:0.2.3")
@@ -86,10 +94,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:${hiltVersion}")
     kapt("com.google.dagger:hilt-android-compiler:${hiltVersion}")
 
-    // Retrofit (http client)
-    implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
-    implementation("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
-
     // Images
     implementation("io.coil-kt:coil-compose:2.4.0")
 
@@ -97,7 +101,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.2")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Debug stuff

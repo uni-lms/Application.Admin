@@ -1,10 +1,9 @@
 package ru.unilms.domain.model.auth
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class LoginRequest(
     val email: String,
     val password: String
-) : Parcelable
+)
