@@ -17,7 +17,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.unilms"
+        applicationId = "ru.unilms.admin"
         minSdk = 28
         targetSdk = 34
         versionCode = majorVersion * 10000 + minorVersion * 100 + patchVersion
