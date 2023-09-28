@@ -59,15 +59,15 @@ fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     FilterChip(
-                        selected = currentCoursesFilterChipStatus,
+                        selected = archivedCoursesFilterChipStatus,
                         onClick = {
-                            currentCoursesFilterChipStatus = true
-                            archivedCoursesFilterChipStatus = false
+                            currentCoursesFilterChipStatus = false
+                            archivedCoursesFilterChipStatus = true
                             futureCoursesFilterChipStatus = false
-                            courses = viewModel.loadCourses(CourseType.Current)
+                            courses = viewModel.loadCourses(CourseType.Archived)
                         },
-                        label = { Text("Текущие") },
-                        leadingIcon = if (currentCoursesFilterChipStatus) {
+                        label = { Text("Архивные") },
+                        leadingIcon = if (archivedCoursesFilterChipStatus) {
                             {
                                 Icon(
                                     imageVector = Icons.Outlined.Done,
@@ -80,15 +80,15 @@ fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
                         }
                     )
                     FilterChip(
-                        selected = archivedCoursesFilterChipStatus,
+                        selected = currentCoursesFilterChipStatus,
                         onClick = {
-                            currentCoursesFilterChipStatus = false
-                            archivedCoursesFilterChipStatus = true
+                            currentCoursesFilterChipStatus = true
+                            archivedCoursesFilterChipStatus = false
                             futureCoursesFilterChipStatus = false
-                            courses = viewModel.loadCourses(CourseType.Archived)
+                            courses = viewModel.loadCourses(CourseType.Current)
                         },
-                        label = { Text("Архивные") },
-                        leadingIcon = if (archivedCoursesFilterChipStatus) {
+                        label = { Text("Текущие") },
+                        leadingIcon = if (currentCoursesFilterChipStatus) {
                             {
                                 Icon(
                                     imageVector = Icons.Outlined.Done,
