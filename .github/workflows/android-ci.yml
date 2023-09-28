@@ -47,6 +47,11 @@ jobs:
           echo "::set-output name=VERSION_NAME::$(./gradlew -q printVersionName)"
         id: android_version
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       # Show information about the APK's signing certificates
       - name: Verify Signature
         run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
@@ -56,6 +61,6 @@ jobs:
         with:
           commit: $GITHUB_SHA
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts-branch: ${{ ${GITHUB_REF#refs/heads/} }}
+          artifacts-branch: ${{ steps.extract_branch.outputs.branch }}
           artifacts: |
             app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
