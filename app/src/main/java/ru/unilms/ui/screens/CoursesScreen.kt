@@ -1,7 +1,9 @@
 package ru.unilms.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.ui.components.courses.CourseCard
 import ru.unilms.viewmodels.CoursesScreenViewModel
@@ -32,7 +35,12 @@ fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
     )
 
     Box(Modifier.pullRefresh(pullRefreshState)) {
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
             items(items = courses, itemContent = { item ->
                 CourseCard(course = item) {
                     goToCourseScreen(item.id)
