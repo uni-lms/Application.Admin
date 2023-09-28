@@ -8,6 +8,9 @@ on:
       - "master"
 jobs:
   build:
+    permissions:
+      contents: write
+      pull-requests: write
     name: Build Signed APK
     runs-on: ubuntu-latest
     steps:
@@ -48,23 +51,6 @@ jobs:
       - name: Verify Signature
         run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
 
-      # Save the APK after the Build job is complete to publish it as a Github release in the next job
-      - name: Upload APK
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: UNI
-          path: app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
-  attach:
-    permissions:
-      contents: write
-      pull-requests: write
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download APK from build
-        uses: actions/download-artifact@v1
-        with:
-          name: UNI
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
