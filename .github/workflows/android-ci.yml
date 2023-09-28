@@ -56,8 +56,8 @@ jobs:
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
-          commit: $GITHUB_SHA
+          commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts-branch: ${{ steps.extract_branch.outputs.branch }}
+          artifacts-branch: artifacts
           artifacts: |
             app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
