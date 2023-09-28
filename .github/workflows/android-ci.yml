@@ -39,16 +39,21 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
 
+      - name: Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(./gradlew -q printVersionName)"
+        id: android_version
+
       # Show information about the APK's signing certificates
       - name: Verify Signature
-        run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI.apk
+        run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
 
       # Save the APK after the Build job is complete to publish it as a Github release in the next job
       - name: Upload APK
         uses: actions/upload-artifact@v3.1.2
         with:
           name: UNI
-          path: app/build/outputs/apk/release/UNI.apk
+          path: app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
   attach:
     permissions:
       contents: write
@@ -66,4 +71,4 @@ jobs:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: |
-            UNI/UNI.apk
+            UNI/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
