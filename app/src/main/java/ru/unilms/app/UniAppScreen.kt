@@ -13,15 +13,16 @@ enum class UniAppScreen(
     val canGoBack: Boolean = true,
     val showBottomAppBar: Boolean = false,
     val icon: ImageVector? = null,
+    val showInBottomBar: Boolean = true,
     val showInDrawer: Boolean = false
 ) {
-    SelectApiUri(R.string.screen_server_select, false),
-    LoginOrRegister,
-    Login(R.string.screen_login),
-    SignUp(R.string.screen_registration),
+    SelectApiUri(R.string.screen_server_select, false, showInBottomBar = false),
+    LoginOrRegister(showInBottomBar = false),
+    Login(R.string.screen_login, showInBottomBar = false),
+    SignUp(R.string.screen_registration, showInBottomBar = false),
     Courses(R.string.screen_courses, false, true, Icons.Outlined.LibraryBooks),
     Calendar(R.string.screen_calendar, false, true, Icons.Outlined.CalendarMonth),
     Menu(R.string.screen_menu, false, true, Icons.Outlined.Menu),
-    Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, true),
-    Course(R.string.screen_course, true, true, null)
+    Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
+    Course(R.string.screen_course, true, true, null, false)
 }

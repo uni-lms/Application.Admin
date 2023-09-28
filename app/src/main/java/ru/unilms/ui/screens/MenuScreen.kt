@@ -16,16 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.app.UniAppScreen
-import ru.unilms.app.goToScreen
 import ru.unilms.data.DataStore
 import ru.unilms.viewmodels.MenuViewModel
 
 @Composable
-fun MenuScreen(navController: NavHostController, dataStore: DataStore) {
+fun MenuScreen(navigate: (UniAppScreen) -> Unit, dataStore: DataStore) {
 
     val viewModel = hiltViewModel<MenuViewModel>()
 
@@ -37,7 +35,7 @@ fun MenuScreen(navController: NavHostController, dataStore: DataStore) {
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
                         .clickable {
-                            goToScreen(navController, screen)
+                            navigate(screen)
                         },
                     leadingContent = {
                         Icon(

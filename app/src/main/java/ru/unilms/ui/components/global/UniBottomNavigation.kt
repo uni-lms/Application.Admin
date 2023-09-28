@@ -20,7 +20,7 @@ fun UniBottomNavigation(navController: NavHostController) {
     val currentDestination = backStackEntry?.destination
     NavigationBar {
         enumValues<UniAppScreen>().forEach { screen ->
-            if (screen.icon != null && !screen.showInDrawer) {
+            if (screen.icon != null && !screen.showInDrawer && screen.showInBottomBar) {
                 val isSelected =
                     currentDestination?.hierarchy?.any { it.route == screen.name } == true
                 NavigationBarItem(

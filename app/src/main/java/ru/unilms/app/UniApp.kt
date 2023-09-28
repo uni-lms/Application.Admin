@@ -108,15 +108,21 @@ fun UniApp(
                 CalendarScreen()
             }
             composable(UniAppScreen.Menu.name) {
-                MenuScreen(navController = navController, dataStore = viewModel.store)
+                MenuScreen(
+                    { screen -> goToScreen(navController, screen) },
+                    dataStore = viewModel.store
+                )
             }
-            composable(UniAppScreen.Journal.name) {
-                JournalScreen()
+            composable("${UniAppScreen.Journal.name}/{courseId}") {
+                val courseId = backStackEntry?.arguments?.getString("courseId")
+                JournalScreen(courseId = UUID.fromString(courseId))
             }
             composable("${UniAppScreen.Course.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
                 courseId?.let {
-                    CourseScreen(courseId = UUID.fromString(courseId))
+                    CourseScreen(courseId = UUID.fromString(courseId)) { screen, id ->
+                        goToScreenWithId(navController, screen, id)
+                    }
                 }
             }
         }
