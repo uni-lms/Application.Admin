@@ -128,3 +128,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
+
+task("printVersionName") {
+    println(android.defaultConfig.versionName)
+}
