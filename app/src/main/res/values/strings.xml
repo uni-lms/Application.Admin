@@ -4,12 +4,10 @@
     <string name="screen_registration">Регистрация</string>
     <string name="screen_server_select">Выбор сервера</string>
     <string name="screen_login">Вход в аккаунт</string>
-    <string name="screen_feed">Главная</string>
     <string name="screen_calendar">Календарь</string>
     <string name="screen_back_button">Назад</string>
     <string name="screen_menu">Меню</string>
     <string name="screen_courses">Курсы</string>
-    <string name="screen_courses_archive">Архив курсов</string>
     <string name="screen_journal">Журнал</string>
     <string name="screen_course">Курс</string>
     <string name="field_last_name">Фамилия</string>

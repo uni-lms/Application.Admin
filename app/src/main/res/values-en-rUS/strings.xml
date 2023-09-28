@@ -4,12 +4,10 @@
     <string name="screen_registration">Registration</string>
     <string name="screen_server_select">Select server</string>
     <string name="screen_login">Sign in</string>
-    <string name="screen_feed">Feed</string>
     <string name="screen_calendar">Calendar</string>
     <string name="screen_back_button">Back</string>
     <string name="screen_menu">Menu</string>
     <string name="screen_courses">Courses</string>
-    <string name="screen_courses_archive">Courses archive</string>
     <string name="screen_journal">Journal</string>
     <string name="screen_course">Course</string>
     <string name="field_last_name">Last name</string>
