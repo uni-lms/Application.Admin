@@ -2,10 +2,7 @@ name: Android CI
 
 on:
   pull_request:
-    types: [ "opened" ]
-  push:
-    branches-ignore:
-      - "master"
+    types: [ "opened", "synchronize" ]
 jobs:
   build:
     permissions:
