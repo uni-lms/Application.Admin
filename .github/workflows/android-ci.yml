@@ -1,12 +1,11 @@
 name: Android CI
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Application version'
-        required: true
-        default: '1.0'
+  pull_request:
+    types: [ "opened" ]
+  push:
+    branches-ignore:
+      - "master"
 jobs:
   build:
     name: Build Signed APK
@@ -42,16 +41,18 @@ jobs:
 
       # Show information about the APK's signing certificates
       - name: Verify Signature
-        run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI_${{ github.event.inputs.version }}.apk
+        run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI.apk
 
       # Save the APK after the Build job is complete to publish it as a Github release in the next job
       - name: Upload APK
         uses: actions/upload-artifact@v3.1.2
         with:
           name: UNI
-          path: app/build/outputs/apk/release/UNI_${{ github.event.inputs.version }}.apk
-  release:
-    name: Release APK
+          path: app/build/outputs/apk/release/UNI.apk
+  attach:
+    permissions:
+      contents: write
+      pull-requests: write
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -59,14 +60,10 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: UNI
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull request artifacts
+        uses: gavv/pull-request-artifacts@v1.0.0
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: Release v${{ github.event.inputs.version }}
-          draft: false
-          prerelease: false
-          files: UNI/UNI_${{ github.event.inputs.version }}.apk
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: |
+            UNI/UNI.apk
