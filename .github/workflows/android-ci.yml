@@ -56,5 +56,6 @@ jobs:
         with:
           commit: $GITHUB_SHA
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts-branch: ${GITHUB_REF#refs/heads/}
           artifacts: |
-            UNI/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
+            app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
