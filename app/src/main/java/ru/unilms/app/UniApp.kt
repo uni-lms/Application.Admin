@@ -17,7 +17,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.unilms.ui.components.global.UniAppTopBar
 import ru.unilms.ui.components.global.UniBottomNavigation
-import ru.unilms.ui.screens.ArchiveScreen
 import ru.unilms.ui.screens.CalendarScreen
 import ru.unilms.ui.screens.CourseScreen
 import ru.unilms.ui.screens.CoursesScreen
@@ -110,15 +109,6 @@ fun UniApp(
             }
             composable(UniAppScreen.Menu.name) {
                 MenuScreen(navController = navController, dataStore = viewModel.store)
-            }
-            composable(UniAppScreen.Archive.name) {
-                ArchiveScreen { id ->
-                    goToScreenWithId(
-                        navController,
-                        UniAppScreen.Course,
-                        id
-                    )
-                }
             }
             composable(UniAppScreen.Journal.name) {
                 JournalScreen()
