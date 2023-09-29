@@ -12,7 +12,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.unilms.app.UniAppScreen
-import ru.unilms.app.goToScreenFromNavBar
+import ru.unilms.app.goToScreen
 
 @Composable
 fun UniBottomNavigation(navController: NavHostController) {
@@ -32,7 +32,7 @@ fun UniBottomNavigation(navController: NavHostController) {
                     },
                     selected = isSelected,
                     onClick = {
-                        goToScreenFromNavBar(navController, screen)
+                        goToScreen(navController, screen)
                     },
                     icon = {
                         Icon(

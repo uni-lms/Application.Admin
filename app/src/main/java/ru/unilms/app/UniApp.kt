@@ -97,7 +97,7 @@ fun UniApp(
             }
             composable(UniAppScreen.Courses.name) {
                 CoursesScreen { id ->
-                    goToScreenWithId(
+                    goToScreen(
                         navController,
                         UniAppScreen.Course,
                         id
@@ -121,7 +121,7 @@ fun UniApp(
                 val courseId = backStackEntry?.arguments?.getString("courseId")
                 courseId?.let {
                     CourseScreen(courseId = UUID.fromString(courseId)) { screen, id ->
-                        goToScreenWithId(navController, screen, id)
+                        goToScreen(navController, screen, id)
                     }
                 }
             }
@@ -129,25 +129,19 @@ fun UniApp(
     }
 }
 
-fun goToScreenFromNavBar(
-    navController: NavHostController,
-    screen: UniAppScreen
-) {
-    navController.navigate(screen.name) {
+fun goToScreen(navController: NavHostController, screen: UniAppScreen, id: UUID? = null) {
+    val route: String = if (id == null) {
+        screen.name
+    } else {
+        "${screen.name}/$id"
+    }
+    navController.navigate(route) {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
         restoreState = true
     }
-}
-
-fun goToScreen(navController: NavHostController, screen: UniAppScreen) {
-    navController.navigate(screen.name)
-}
-
-fun goToScreenWithId(navController: NavHostController, screen: UniAppScreen, id: UUID) {
-    navController.navigate("${screen.name}/${id}")
 }
 
 @Preview
