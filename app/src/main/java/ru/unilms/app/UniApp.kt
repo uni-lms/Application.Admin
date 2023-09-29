@@ -116,13 +116,13 @@ fun UniApp(
             composable("${UniAppScreen.Journal.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
                 courseId?.let {
-                    JournalScreen(courseId = UUID.fromString(courseId))
+                    JournalScreen(courseId = UUID.fromString(it))
                 }
             }
             composable("${UniAppScreen.Course.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
                 courseId?.let {
-                    CourseScreen(courseId = UUID.fromString(courseId)) { screen, id ->
+                    CourseScreen(courseId = UUID.fromString(it)) { screen, id ->
                         goToScreen(navController, screen, id)
                     }
                 }
