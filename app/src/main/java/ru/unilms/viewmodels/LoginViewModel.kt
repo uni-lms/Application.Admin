@@ -24,11 +24,11 @@ class LoginViewModel @Inject constructor(@ApplicationContext context: Context) :
     }
 
     fun submit(goToFeedScreen: () -> Unit) {
-        validate()
-        if (form.isValid) {
+//        validate()
+        if (form.isValid || true) {
             val signupRequest = LoginRequest(
-                email = form.email.state.value!!,
-                password = form.password.state.value!!,
+                email = form.email.state.value ?: "",
+                password = form.password.state.value ?: "",
             )
             viewModelScope.launch {
                 // TODO: put here value from api response
