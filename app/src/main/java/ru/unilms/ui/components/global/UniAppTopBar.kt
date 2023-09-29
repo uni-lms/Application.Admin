@@ -2,12 +2,12 @@ package ru.unilms.ui.components.global
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,11 +24,11 @@ fun UniAppTopBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = {
             Text(
                 stringResource(id = currentScreen.title),
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.titleLarge
             )
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -53,6 +53,6 @@ fun UniAppTopBar(
 fun UniAppTopBarPreview() {
     UniAppTopBar(
         currentScreen = UniAppScreen.SignUp,
-        canNavigateBack = false,
+        canNavigateBack = true,
         navigateUp = { })
 }
