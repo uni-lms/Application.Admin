@@ -115,7 +115,9 @@ fun UniApp(
             }
             composable("${UniAppScreen.Journal.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
-                JournalScreen(courseId = UUID.fromString(courseId))
+                courseId?.let {
+                    JournalScreen(courseId = UUID.fromString(courseId))
+                }
             }
             composable("${UniAppScreen.Course.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
@@ -129,15 +131,22 @@ fun UniApp(
     }
 }
 
-fun goToScreen(navController: NavHostController, screen: UniAppScreen, id: UUID? = null) {
+fun goToScreen(
+    navController: NavHostController,
+    screen: UniAppScreen,
+    id: UUID? = null,
+    clearStack: Boolean = false
+) {
     val route: String = if (id == null) {
         screen.name
     } else {
         "${screen.name}/$id"
     }
     navController.navigate(route) {
-        popUpTo(navController.graph.findStartDestination().id) {
-            saveState = true
+        if (clearStack) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
         }
         launchSingleTop = true
         restoreState = true
