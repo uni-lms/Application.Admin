@@ -28,7 +28,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'ru.unilms.jks'
-          fileDir: '/home/runner/work/application/application/app/keystore/'
+          fileDir: '/home/runner/work/Application.Admin/Application.Admin/app/keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
 
       # Build and sign APK ("-x test" argument is used to skip tests)
