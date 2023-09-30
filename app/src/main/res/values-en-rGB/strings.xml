@@ -27,7 +27,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_register">Register</string>
     <string name="button_save">Save</string>
-    <string name="button_clear_token">Clear token</string>
+    <string name="button_logout">Log out</string>
     <string name="button_login">Log In</string>
     <string name="role_tutor">Tutor</string>
     <string name="role_admin">Administrator</string>
@@ -35,4 +35,5 @@
     <string name="fake_user_name">Test user</string>
     <string name="label_semester">%1d semester</string>
     <string name="button_forgot_password">Forgot password?</string>
+    <string name="fake_user_email">me@example.com</string>
 </resources>

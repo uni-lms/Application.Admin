@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Logout
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,21 @@ fun MenuScreen(navigate: (UniAppScreen) -> Unit, dataStore: DataStore) {
     val viewModel = hiltViewModel<MenuViewModel>()
 
     val scope = rememberCoroutineScope()
+    val whoami by remember { mutableStateOf(viewModel.whoami()) }
     Column {
+        ListItem(
+            modifier = Modifier
+                .padding(NavigationDrawerItemDefaults.ItemPadding),
+            leadingContent = {
+                Icon(
+                    imageVector = Icons.Outlined.BugReport,
+                    contentDescription = null
+                )
+            },
+            headlineContent = { Text(text = whoami.name) },
+            supportingContent = { Text(text = whoami.email) }
+        )
+
         enumValues<UniAppScreen>().forEach { screen ->
             if (screen.showInDrawer && screen.icon != null) {
                 ListItem(
@@ -48,7 +64,6 @@ fun MenuScreen(navigate: (UniAppScreen) -> Unit, dataStore: DataStore) {
             }
         }
 
-
         ListItem(
             modifier = Modifier
                 .padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -63,21 +78,8 @@ fun MenuScreen(navigate: (UniAppScreen) -> Unit, dataStore: DataStore) {
                     null,
                 )
             },
-            headlineContent = { Text(text = stringResource(R.string.button_clear_token)) },
+            headlineContent = { Text(text = stringResource(R.string.button_logout)) },
         )
 
-        Divider()
-
-        ListItem(
-            modifier = Modifier
-                .padding(NavigationDrawerItemDefaults.ItemPadding),
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Outlined.BugReport,
-                    contentDescription = null
-                )
-            },
-            headlineContent = { Text(text = viewModel.getUserName()) }
-        )
     }
 }
