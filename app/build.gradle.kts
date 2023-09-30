@@ -124,6 +124,10 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    // Calendar
+    implementation("com.kizitonwose.calendar:compose:2.4.0-beta01")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+
     // Debug stuff
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
