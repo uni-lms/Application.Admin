@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -23,11 +24,13 @@ import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
 import ru.unilms.ui.components.calendar.MonthName
+import ru.unilms.viewmodels.CalendarViewModel
 import java.time.YearMonth
 
 @Composable
 fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
 
+    val viewModel = hiltViewModel<CalendarViewModel>()
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val daysOfWeek = daysOfWeek()
     var currentMonth = remember { YearMonth.now() }
@@ -40,6 +43,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
         endMonth = endMonth,
     )
     val scope = rememberCoroutineScope()
+    var data = viewModel.requestDataForMonth(currentMonth)
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -49,6 +53,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                         onClick = {
                             val month = currentMonth.minusMonths(1)
                             currentMonth = month
+                            data = viewModel.requestDataForMonth(currentMonth)
                             scope.launch {
                                 state.animateScrollToMonth(month)
                             }
@@ -60,6 +65,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                         onClick = {
                             val month = currentMonth.plusMonths(1)
                             currentMonth = month
+                            data = viewModel.requestDataForMonth(currentMonth)
                             scope.launch {
                                 state.animateScrollToMonth(month)
                             }
@@ -74,7 +80,11 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
 
     Column(modifier = Modifier.padding(10.dp)) {
         HorizontalCalendar(
-            dayContent = { Day(day = it) },
+            dayContent = {
+                Day(
+                    day = it,
+                    eventsInfo = data.dayEventsInfo.firstOrNull { item -> item.dayOfMonth == it.date.dayOfMonth })
+            },
             state = state,
             monthHeader = {
                 Column(
