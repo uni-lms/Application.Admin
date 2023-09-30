@@ -20,6 +20,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.courses.CourseCard
 import ru.unilms.utils.enums.CourseType
 import ru.unilms.viewmodels.CoursesScreenViewModel
@@ -35,7 +37,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
+fun CoursesScreen(goToCourseScreen: (UUID) -> Unit, onComposing: (AppBarState) -> Unit) {
     val viewModel = hiltViewModel<CoursesScreenViewModel>()
     var courses by remember { mutableStateOf(viewModel.loadCourses()) }
     val refreshing = viewModel.isLoading
@@ -48,6 +50,16 @@ fun CoursesScreen(goToCourseScreen: (UUID) -> Unit) {
         refreshing = viewModel.isLoading,
         onRefresh = viewModel::loadCourses
     )
+
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                actions = { }
+            )
+        )
+    }
+
 
     Box(Modifier.pullRefresh(pullRefreshState)) {
         LazyColumn(

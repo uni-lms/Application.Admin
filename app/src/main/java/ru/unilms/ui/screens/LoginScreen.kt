@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,12 +25,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
+import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.form.M3TextField
 import ru.unilms.viewmodels.LoginViewModel
 
 @Composable
-fun LoginScreen(goToFeedScreen: () -> Unit) {
+fun LoginScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit) {
     val viewModel = hiltViewModel<LoginViewModel>()
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                actions = { }
+            )
+        )
+    }
 
     Surface(
         modifier = Modifier

@@ -12,16 +12,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.R
+import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.form.ImagePickerField
 import ru.unilms.ui.components.form.M3DateField
 import ru.unilms.ui.components.form.M3PickerField
@@ -29,9 +30,17 @@ import ru.unilms.ui.components.form.M3TextField
 import ru.unilms.viewmodels.SignUpViewModel
 
 @Composable
-fun SignUpScreen(goToFeedScreen: () -> Unit) {
+fun SignUpScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit) {
 
     val viewModel = hiltViewModel<SignUpViewModel>()
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                actions = { }
+            )
+        )
+    }
 
     Surface(
         modifier = Modifier
@@ -109,10 +118,4 @@ fun SignUpScreen(goToFeedScreen: () -> Unit) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewSignUpScreen() {
-    SignUpScreen {}
 }

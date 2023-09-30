@@ -1,5 +1,6 @@
 package ru.unilms.ui.components.global
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +23,8 @@ fun UniAppTopBar(
     currentScreen: UniAppScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable() RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -44,8 +46,10 @@ fun UniAppTopBar(
                     )
                 }
             }
-        }
+        },
+        actions = actions
     )
+
 }
 
 @Preview
@@ -54,5 +58,7 @@ fun UniAppTopBarPreview() {
     UniAppTopBar(
         currentScreen = UniAppScreen.SignUp,
         canNavigateBack = true,
-        navigateUp = { })
+        navigateUp = { },
+        actions = {}
+    )
 }
