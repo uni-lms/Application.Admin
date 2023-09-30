@@ -1,6 +1,7 @@
 package ru.unilms.app
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.LibraryBooks
@@ -24,5 +25,6 @@ enum class UniAppScreen(
     Calendar(R.string.screen_calendar, false, true, Icons.Outlined.CalendarMonth),
     Menu(R.string.screen_menu, false, true, Icons.Outlined.Menu),
     Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
-    Course(R.string.screen_course, true, true, null, false)
+    Course(R.string.screen_course, true, true, null, false),
+    Settings(R.string.screen_settings, true, true, Icons.Filled.Settings, false)
 }

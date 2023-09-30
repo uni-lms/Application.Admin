@@ -42,7 +42,7 @@ fun MenuScreen(
         onComposing(
             AppBarState(
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navigate(UniAppScreen.Settings) }) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
                             contentDescription = null
