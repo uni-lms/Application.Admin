@@ -19,12 +19,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.form.M3TextField
 import ru.unilms.viewmodels.SelectApiUriViewModel
+import java.util.UUID
 
 @Composable
-fun SelectApiUriScreen(goToLoginOrSignUpScreen: () -> Unit, onComposing: (AppBarState) -> Unit) {
+fun SelectApiUriScreen(
+    navigate: (UniAppScreen, UUID?) -> Unit,
+    onComposing: (AppBarState) -> Unit
+) {
 
     val viewModel = hiltViewModel<SelectApiUriViewModel>()
 
@@ -59,7 +64,14 @@ fun SelectApiUriScreen(goToLoginOrSignUpScreen: () -> Unit, onComposing: (AppBar
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Button(onClick = { viewModel.submit(goToLoginOrSignUpScreen) }) {
+                Button(onClick = {
+                    viewModel.submit {
+                        navigate(
+                            UniAppScreen.LoginOrRegister,
+                            null
+                        )
+                    }
+                }) {
                     Text(text = stringResource(R.string.button_save))
                 }
             }

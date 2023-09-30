@@ -10,12 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
+import java.util.UUID
 
 @Composable
 fun LoginOrSignUpScreen(
-    goToLoginScreen: () -> Unit,
-    goToSignUpScreen: () -> Unit,
+    navigate: (UniAppScreen, UUID?) -> Unit,
     onComposing: (AppBarState) -> Unit
 ) {
 
@@ -32,7 +33,7 @@ fun LoginOrSignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        TextButton(onClick = goToLoginScreen) {
+        TextButton(onClick = { navigate(UniAppScreen.Login, null) }) {
             Text(
                 text = stringResource(R.string.screen_login),
                 style = MaterialTheme.typography.headlineSmall
@@ -42,7 +43,7 @@ fun LoginOrSignUpScreen(
             text = stringResource(id = R.string.service_or),
             style = MaterialTheme.typography.headlineSmall
         )
-        TextButton(onClick = { goToSignUpScreen() }) {
+        TextButton(onClick = { navigate(UniAppScreen.SignUp, null) }) {
             Text(
                 text = stringResource(R.string.screen_registration),
                 style = MaterialTheme.typography.headlineSmall

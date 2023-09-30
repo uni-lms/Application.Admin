@@ -22,15 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.form.ImagePickerField
 import ru.unilms.ui.components.form.M3DateField
 import ru.unilms.ui.components.form.M3PickerField
 import ru.unilms.ui.components.form.M3TextField
 import ru.unilms.viewmodels.SignUpViewModel
+import java.util.UUID
 
 @Composable
-fun SignUpScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit) {
+fun SignUpScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
 
     val viewModel = hiltViewModel<SignUpViewModel>()
 
@@ -112,7 +114,7 @@ fun SignUpScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit)
             ).Field()
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { viewModel.submit { goToFeedScreen() } }) {
+                Button(onClick = { viewModel.submit { navigate(UniAppScreen.Courses, null) } }) {
                     Text(text = stringResource(R.string.button_register))
                 }
             }

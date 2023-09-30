@@ -83,8 +83,6 @@ fun UniApp(
             }
         }
     ) { innerPadding ->
-//        val uiState by viewModel.uiState.collectAsState()
-
         NavHost(
             navController = navController,
             startDestination = startScreen,
@@ -97,10 +95,11 @@ fun UniApp(
                     onComposing = {
                         appBarState = it
                     },
-                    goToLoginOrSignUpScreen = {
+                    navigate = { screen, id ->
                         goToScreen(
                             navController,
-                            UniAppScreen.LoginOrRegister
+                            screen,
+                            id
                         )
                     }
                 )
@@ -110,8 +109,7 @@ fun UniApp(
                     onComposing = {
                         appBarState = it
                     },
-                    goToLoginScreen = { goToScreen(navController, UniAppScreen.Login) },
-                    goToSignUpScreen = { goToScreen(navController, UniAppScreen.SignUp) }
+                    navigate = { screen, id -> goToScreen(navController, screen, id) }
                 )
             }
             composable(UniAppScreen.Login.name) {
@@ -119,8 +117,8 @@ fun UniApp(
                     onComposing = {
                         appBarState = it
                     },
-                    goToFeedScreen = {
-                        goToScreen(navController, UniAppScreen.Courses)
+                    navigate = { screen, id ->
+                        goToScreen(navController, screen, id)
                     }
                 )
             }
@@ -129,22 +127,18 @@ fun UniApp(
                     onComposing = {
                         appBarState = it
                     },
-                    goToFeedScreen = {
-                        goToScreen(navController, UniAppScreen.Courses)
+                    navigate = { screen, id ->
+                        goToScreen(navController, screen, id)
                     }
                 )
             }
             composable(UniAppScreen.Courses.name) {
                 CoursesScreen(
+                    navigate = { screen, id ->
+                        goToScreen(navController, screen, id)
+                    },
                     onComposing = {
                         appBarState = it
-                    },
-                    goToCourseScreen = { id ->
-                        goToScreen(
-                            navController,
-                            UniAppScreen.Course,
-                            id
-                        )
                     }
                 )
             }

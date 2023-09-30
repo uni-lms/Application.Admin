@@ -25,12 +25,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.form.M3TextField
 import ru.unilms.viewmodels.LoginViewModel
+import java.util.UUID
 
 @Composable
-fun LoginScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit) {
+fun LoginScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
     val viewModel = hiltViewModel<LoginViewModel>()
 
     LaunchedEffect(key1 = true) {
@@ -75,7 +77,14 @@ fun LoginScreen(goToFeedScreen: () -> Unit, onComposing: (AppBarState) -> Unit) 
                     TextButton(onClick = { /*TODO*/ }) {
                         Text(text = stringResource(R.string.button_forgot_password))
                     }
-                    Button(onClick = { viewModel.submit { goToFeedScreen() } }) {
+                    Button(onClick = {
+                        viewModel.submit {
+                            navigate(
+                                UniAppScreen.Courses,
+                                null
+                            )
+                        }
+                    }) {
                         Text(text = stringResource(R.string.button_login))
                     }
                 }

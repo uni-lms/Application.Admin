@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.courses.CourseCard
 import ru.unilms.utils.enums.CourseType
@@ -37,7 +38,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CoursesScreen(goToCourseScreen: (UUID) -> Unit, onComposing: (AppBarState) -> Unit) {
+fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
     val viewModel = hiltViewModel<CoursesScreenViewModel>()
     var courses by remember { mutableStateOf(viewModel.loadCourses()) }
     val refreshing = viewModel.isLoading
@@ -137,7 +138,7 @@ fun CoursesScreen(goToCourseScreen: (UUID) -> Unit, onComposing: (AppBarState) -
             }
             items(items = courses, itemContent = { item ->
                 CourseCard(course = item) {
-                    goToCourseScreen(item.id)
+                    navigate(UniAppScreen.Course, item.id)
                 }
             })
         }
