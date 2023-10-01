@@ -23,16 +23,14 @@ import com.kizitonwose.calendar.core.DayPosition
 import ru.unilms.domain.model.calendar.DayEventsInfo
 
 @Composable
-fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?) {
+fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
     val enabled = day.position == DayPosition.MonthDate
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .clickable(
                 enabled = enabled,
-                onClick = {
-                    /*TODO*/
-                }
+                onClick = onDayClick
             ),
         contentAlignment = Alignment.Center
     ) {

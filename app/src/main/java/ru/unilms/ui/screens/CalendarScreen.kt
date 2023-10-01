@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.launch
@@ -28,7 +33,9 @@ import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
 import ru.unilms.ui.components.calendar.MonthName
 import ru.unilms.viewmodels.CalendarViewModel
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
@@ -47,6 +54,10 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
     )
     val scope = rememberCoroutineScope()
     var data by remember { mutableStateOf(viewModel.requestDataForMonth(currentMonth)) }
+    var isModalOpened by remember { mutableStateOf(false) }
+    var selectedDay: CalendarDay? by remember {
+        mutableStateOf(CalendarDay(LocalDate.now(), DayPosition.MonthDate))
+    }
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -86,7 +97,11 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
             dayContent = {
                 Day(
                     day = it,
-                    eventsInfo = data.dayEventsInfo.firstOrNull { item -> item.dayOfMonth == it.date.dayOfMonth })
+                    eventsInfo = data.dayEventsInfo.firstOrNull { item -> item.dayOfMonth == it.date.dayOfMonth }
+                ) {
+                    selectedDay = it
+                    isModalOpened = true
+                }
             },
             state = state,
             monthHeader = {
@@ -98,6 +113,27 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                 }
             }
         )
+    }
+
+    when (isModalOpened) {
+        true -> AlertDialog(
+            onDismissRequest = {
+                isModalOpened = false
+                selectedDay = null
+            }, confirmButton = {
+                TextButton(onClick = {
+                    isModalOpened = false
+                    selectedDay = null
+                }) {
+                    Text(text = "Закрыть")
+                }
+            }, title = {
+                Text(
+                    selectedDay?.date?.format(DateTimeFormatter.ofPattern("d MMMM, EEE")) ?: ""
+                )
+            })
+
+        false -> null
     }
 
 }
