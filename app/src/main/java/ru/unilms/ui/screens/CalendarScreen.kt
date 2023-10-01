@@ -10,8 +10,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +46,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
         endMonth = endMonth,
     )
     val scope = rememberCoroutineScope()
-    var data = viewModel.requestDataForMonth(currentMonth)
+    var data by remember { mutableStateOf(viewModel.requestDataForMonth(currentMonth)) }
 
     LaunchedEffect(key1 = true) {
         onComposing(
