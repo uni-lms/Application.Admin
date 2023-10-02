@@ -36,4 +36,5 @@
     <string name="button_forgot_password">Забыли пароль?</string>
     <string name="fake_user_email">me@example.com</string>
     <string name="screen_settings">Настройки</string>
+    <string name="button_close">Закрыть</string>
 </resources>

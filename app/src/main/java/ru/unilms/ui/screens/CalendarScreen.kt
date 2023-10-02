@@ -1,7 +1,8 @@
 package ru.unilms.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
@@ -20,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
@@ -34,6 +36,7 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
@@ -119,18 +122,14 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
             },
             state = state,
             monthHeader = {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(15.dp),
-                ) {
-//                    MonthName(month = it)
-                    DaysOfWeek(daysOfWeek = daysOfWeek)
-                }
+                DaysOfWeek(daysOfWeek = daysOfWeek)
+                Spacer(modifier = Modifier.height(20.dp))
             }
         )
     }
 
-    when (isModalOpened) {
-        true -> AlertDialog(
+    if (isModalOpened) {
+        AlertDialog(
             onDismissRequest = {
                 isModalOpened = false
                 selectedDay = null
@@ -139,15 +138,14 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                     isModalOpened = false
                     selectedDay = null
                 }) {
-                    Text(text = "Закрыть")
+                    Text(text = stringResource(id = R.string.button_close))
                 }
             }, title = {
                 Text(
                     selectedDay?.date?.format(DateTimeFormatter.ofPattern("d MMMM, EEE")) ?: ""
                 )
-            })
-
-        false -> null
+            }
+        )
     }
 
 }
