@@ -24,12 +24,13 @@ fun UniAppTopBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String? = null,
     actions: @Composable() RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         title = {
             Text(
-                stringResource(id = currentScreen.title),
+                title ?: stringResource(id = currentScreen.title),
                 style = MaterialTheme.typography.titleLarge
             )
         },

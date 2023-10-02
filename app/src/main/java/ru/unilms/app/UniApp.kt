@@ -74,7 +74,8 @@ fun UniApp(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null && currentScreen.canGoBack,
                 navigateUp = { navController.navigateUp() },
-                actions = appBarState.actions
+                actions = appBarState.actions,
+                title = appBarState.title
             )
         },
         bottomBar = {
