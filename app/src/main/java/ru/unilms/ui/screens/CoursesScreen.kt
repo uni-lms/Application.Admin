@@ -27,8 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.courses.CourseCard
@@ -79,7 +81,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             futureCoursesFilterChipStatus = false
                             courses = viewModel.loadCourses(CourseType.Archived)
                         },
-                        label = { Text("Архивные") },
+                        label = { Text(stringResource(R.string.courses_filter_archived)) },
                         leadingIcon = if (archivedCoursesFilterChipStatus) {
                             {
                                 Icon(
@@ -100,7 +102,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             futureCoursesFilterChipStatus = false
                             courses = viewModel.loadCourses(CourseType.Current)
                         },
-                        label = { Text("Текущие") },
+                        label = { Text(stringResource(R.string.courses_filter_current)) },
                         leadingIcon = if (currentCoursesFilterChipStatus) {
                             {
                                 Icon(
@@ -121,7 +123,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             futureCoursesFilterChipStatus = true
                             courses = viewModel.loadCourses(CourseType.Future)
                         },
-                        label = { Text("Предстоящие") },
+                        label = { Text(stringResource(R.string.courses_filter_upcoming)) },
                         leadingIcon = if (futureCoursesFilterChipStatus) {
                             {
                                 Icon(
