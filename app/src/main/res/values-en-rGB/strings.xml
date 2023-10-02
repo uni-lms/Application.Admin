@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">UNI</string>
     <string name="screen_registration">Registration</string>
     <string name="screen_server_select">Select server</string>
     <string name="screen_login">Sign in</string>
