@@ -37,10 +37,11 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.AppBarState
 import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
-import ru.unilms.ui.components.calendar.MonthName
 import ru.unilms.viewmodels.CalendarViewModel
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
@@ -71,9 +72,16 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
         data = viewModel.requestDataForMonth(visibleMonth.yearMonth)
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(visibleMonth) {
         onComposing(
             AppBarState(
+                title = "${
+                    visibleMonth.yearMonth.month.getDisplayName(
+                        TextStyle.FULL_STANDALONE,
+                        Locale.getDefault()
+                    )
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                } ${visibleMonth.yearMonth.year}",
                 actions = {
                     IconButton(
                         onClick = {
@@ -114,7 +122,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                 ) {
-                    MonthName(month = it)
+//                    MonthName(month = it)
                     DaysOfWeek(daysOfWeek = daysOfWeek)
                 }
             }
