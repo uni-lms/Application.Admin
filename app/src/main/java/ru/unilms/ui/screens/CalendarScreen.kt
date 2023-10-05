@@ -129,18 +129,18 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
     }
 
     if (isModalOpened) {
+        val onModalDismiss = {
+            isModalOpened = false
+            selectedDay = null
+        }
         AlertDialog(
-            onDismissRequest = {
-                isModalOpened = false
-                selectedDay = null
-            }, confirmButton = {
-                TextButton(onClick = {
-                    isModalOpened = false
-                    selectedDay = null
-                }) {
+            onDismissRequest = onModalDismiss,
+            confirmButton = {
+                TextButton(onClick = onModalDismiss) {
                     Text(text = stringResource(id = R.string.button_close))
                 }
-            }, title = {
+            },
+            title = {
                 Text(
                     selectedDay?.date?.format(DateTimeFormatter.ofPattern("d MMMM, EEE")) ?: ""
                 )
