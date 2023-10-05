@@ -7,5 +7,7 @@ data class DayEvent(
     val id: UUID,
     val type: EventType,
     val title: String,
-    val time: String
+    val time: String,
+    val auditorium: String? = null,
+    val subject: String? = null
 )
