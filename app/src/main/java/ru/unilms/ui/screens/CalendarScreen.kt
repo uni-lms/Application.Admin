@@ -16,7 +16,6 @@ import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -46,18 +45,24 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.domain.model.calendar.DayEvent
 import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
+import ru.unilms.ui.components.calendar.events.DeadlineEvent
+import ru.unilms.ui.components.calendar.events.LessonEvent
+import ru.unilms.ui.components.calendar.events.RegularEvent
+import ru.unilms.utils.enums.EventType
 import ru.unilms.viewmodels.CalendarViewModel
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import java.util.UUID
 
 @Composable
-fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
+fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (UniAppScreen, UUID) -> Unit) {
 
     val viewModel = hiltViewModel<CalendarViewModel>()
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
@@ -174,11 +179,22 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                 } else {
                     LazyColumn(
                         modifier = Modifier
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                            .padding(3.dp),
                     ) {
                         items(items = dayEvents, itemContent = {
-                            ListItem(headlineContent = { Text(text = it.title) })
+                            when (it.type) {
+                                EventType.Deadline -> DeadlineEvent(
+                                    event = it,
+                                    onClick = { screen, id -> navigate(screen, id) }
+                                )
+
+                                EventType.Lesson -> LessonEvent(
+                                    event = it,
+                                    onClick = { screen, id -> navigate(screen, id) }
+                                )
+
+                                EventType.Regular -> RegularEvent(event = it)
+                            }
                         })
                     }
                 }
