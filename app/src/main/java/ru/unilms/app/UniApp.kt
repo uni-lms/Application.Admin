@@ -144,9 +144,14 @@ fun UniApp(
                 )
             }
             composable(UniAppScreen.Calendar.name) {
-                CalendarScreen {
-                    appBarState = it
-                }
+                CalendarScreen(
+                    navigate = { screen, id ->
+                        goToScreen(navController, screen, id)
+                    },
+                    onComposing = {
+                        appBarState = it
+                    }
+                )
             }
             composable(UniAppScreen.Menu.name) {
                 MenuScreen(
