@@ -2,8 +2,10 @@ package ru.unilms.viewmodels
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ru.unilms.domain.model.calendar.DayEvent
 import ru.unilms.domain.model.calendar.DayEventsInfo
 import ru.unilms.domain.model.calendar.MonthEventsInfo
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -43,6 +45,124 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
             YearMonth.of(2023, 10) -> oct2023data
             YearMonth.of(2023, 11) -> nov2023data
             else -> MonthEventsInfo(listOf())
+        }
+    }
+
+    fun requestDataForDay(date: LocalDate): List<DayEvent> {
+        return when (date) {
+            LocalDate.parse("2023-09-01") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-09-04") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-09-08") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-09-10") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-10-03") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-10-08") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-10-12") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-10-15") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-10-16") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-11-05") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-11-09") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-11-13") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-11-16") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            LocalDate.parse("2023-11-20") -> listOf(
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+                DayEvent("Дедлайн по Л/Р №1"),
+            )
+
+            else -> listOf()
         }
     }
 }

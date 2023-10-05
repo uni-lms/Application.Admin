@@ -1,15 +1,23 @@
 package ru.unilms.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -20,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,6 +47,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.domain.model.calendar.DayEvent
 import ru.unilms.ui.components.calendar.Day
 import ru.unilms.ui.components.calendar.DaysOfWeek
 import ru.unilms.viewmodels.CalendarViewModel
@@ -67,6 +77,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
     var selectedDay: CalendarDay? by remember {
         mutableStateOf(null)
     }
+    var dayEvents by remember { mutableStateOf(listOf<DayEvent>()) }
     val visibleMonth = rememberFirstCompletelyVisibleMonth(state)
     LaunchedEffect(visibleMonth) {
         // Clear selection if we scroll to a new month.
@@ -118,6 +129,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                 ) {
                     selectedDay = it
                     isModalOpened = true
+                    dayEvents = viewModel.requestDataForDay(it.date)
                 }
             },
             state = state,
@@ -132,6 +144,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
         val onModalDismiss = {
             isModalOpened = false
             selectedDay = null
+            dayEvents = listOf()
         }
         AlertDialog(
             onDismissRequest = onModalDismiss,
@@ -144,6 +157,31 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit) {
                 Text(
                     selectedDay?.date?.format(DateTimeFormatter.ofPattern("d MMMM, EEE")) ?: ""
                 )
+            },
+            text = {
+                if (dayEvents.isEmpty()) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Outlined.Inbox, null, modifier = Modifier.size(30.dp))
+                        Text(
+                            text = stringResource(R.string.service_no_events),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(items = dayEvents, itemContent = {
+                            ListItem(headlineContent = { Text(text = it.title) })
+                        })
+                    }
+                }
             }
         )
     }

@@ -30,6 +30,7 @@
     <string name="role_tutor">Преподаватель</string>
     <string name="role_admin">Администратор</string>
     <string name="service_or">или</string>
+    <string name="service_no_events">Событий нет</string>
     <string name="fake_user_name">Иванов П. В.</string>
     <string name="field_password">Пароль</string>
     <string name="button_login">Войти</string>

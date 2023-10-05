@@ -31,6 +31,7 @@
     <string name="role_tutor">Tutor</string>
     <string name="role_admin">Administrator</string>
     <string name="service_or">or</string>
+    <string name="service_no_events">No events</string>
     <string name="fake_user_name">Test user</string>
     <string name="label_semester">%1d semester</string>
     <string name="button_forgot_password">Forgot password?</string>
