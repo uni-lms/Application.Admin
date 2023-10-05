@@ -41,4 +41,5 @@
     <string name="courses_filter_upcoming">Upcoming</string>
     <string name="courses_filter_current">Current</string>
     <string name="courses_filter_archived">Archived</string>
+    <string name="screen_task">Task</string>
 </resources>
