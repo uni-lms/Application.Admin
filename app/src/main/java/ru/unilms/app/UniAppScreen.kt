@@ -27,5 +27,6 @@ enum class UniAppScreen(
     Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
     Course(R.string.screen_course, true, true, null, false),
     Task(R.string.screen_task, true, true, null, false),
+    Lesson(R.string.screen_lesson, true, true, null, false),
     Settings(R.string.screen_settings, true, true, Icons.Filled.Settings, false)
 }
