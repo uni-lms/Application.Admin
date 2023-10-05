@@ -33,13 +33,12 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
     fun requestDataForDay(date: LocalDate): List<DayEvent> {
         val id = UUID.randomUUID()
         val time = "10:15"
+        val lessonTime = "8.30 - 10.00"
         return when (date) {
             LocalDate.parse("2023-10-01") -> listOf(
+                DayEvent(id, EventType.Lesson, "Дедлайн по Л/Р №1", lessonTime, "404а-2", "ТП"),
                 DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Regular, "Дедлайн по Л/Р №1", time),
             )
 
             LocalDate.parse("2023-10-04") -> listOf(
