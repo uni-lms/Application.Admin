@@ -5,8 +5,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.unilms.domain.model.calendar.DayEvent
 import ru.unilms.domain.model.calendar.DayEventsInfo
 import ru.unilms.domain.model.calendar.MonthEventsInfo
+import ru.unilms.utils.enums.EventType
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.UUID
 import javax.inject.Inject
@@ -32,38 +32,38 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
 
     fun requestDataForDay(date: LocalDate): List<DayEvent> {
         val id = UUID.randomUUID()
-        val time = LocalDateTime.parse("2023-09-01T10:15:30")
+        val time = "10:15"
         return when (date) {
             LocalDate.parse("2023-10-01") -> listOf(
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
             )
 
             LocalDate.parse("2023-10-04") -> listOf(
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
             )
 
             LocalDate.parse("2023-10-08") -> listOf(
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
             )
 
             LocalDate.parse("2023-10-10") -> listOf(
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
             )
 
             else -> listOf()
