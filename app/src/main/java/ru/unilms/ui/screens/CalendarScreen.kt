@@ -14,11 +14,9 @@ import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -149,34 +147,6 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (UniAppScreen, 
                 Spacer(modifier = Modifier.height(20.dp))
             }
         )
-
-        Column {
-            ListItem(
-                leadingContent = {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ) {}
-                },
-                headlineContent = { Text(text = stringResource(R.string.event_type_regular)) }
-            )
-            ListItem(
-                leadingContent = {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ) {}
-                },
-                headlineContent = { Text(text = stringResource(R.string.event_type_lessons)) }
-            )
-            ListItem(
-                leadingContent = {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    ) {}
-                },
-                headlineContent = { Text(text = stringResource(R.string.event_type_deadlines)) }
-            )
-        }
-
     }
 
     if (isModalOpened) {
