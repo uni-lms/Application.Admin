@@ -11,8 +11,8 @@ import java.util.UUID
 fun LessonEvent(event: DayEvent, onClick: (UniAppScreen, UUID) -> Unit) {
     BaseEvent(
         icon = Icons.Outlined.School,
-        overlineText = event.subject,
-        headlineText = event.title,
+        overlineText = event.lessonType,
+        headlineText = event.subject ?: "",
         supportingText = event.time,
         trailingText = event.auditorium,
         onClick = { onClick(UniAppScreen.Lesson, event.id) }
