@@ -51,19 +51,19 @@ fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
                 ) {
                     eventsInfo?.let {
                         if (it.regularEvents != 0) {
-                            Badge(containerColor = MaterialTheme.colorScheme.primaryContainer) {
-                                Text(text = it.regularEvents.toString())
-                            }
+                            Badge(containerColor = MaterialTheme.colorScheme.primaryContainer)// {
+//                                Text(text = it.regularEvents.toString())
+//                            }
                         }
                         if (it.deadlines != 0) {
-                            Badge(containerColor = MaterialTheme.colorScheme.secondaryContainer) {
-                                Text(text = it.deadlines.toString())
-                            }
+                            Badge(containerColor = MaterialTheme.colorScheme.errorContainer) //{
+//                                Text(text = it.deadlines.toString())
+                            //}
                         }
                         if (it.lessons != 0) {
-                            Badge(containerColor = MaterialTheme.colorScheme.tertiaryContainer) {
-                                Text(text = it.lessons.toString())
-                            }
+                            Badge(containerColor = MaterialTheme.colorScheme.tertiaryContainer) //{
+//                                Text(text = it.lessons.toString())
+                            //}
                         }
                     }
                 }
