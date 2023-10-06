@@ -41,6 +41,7 @@ import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.nextMonth
@@ -79,6 +80,7 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (UniAppScreen, 
         firstDayOfWeek = firstDayOfWeek,
         startMonth = startMonth,
         endMonth = endMonth,
+        outDateStyle = OutDateStyle.EndOfGrid
     )
     val scope = rememberCoroutineScope()
     var data by remember { mutableStateOf(viewModel.requestDataForMonth(currentMonth)) }
@@ -155,21 +157,24 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (UniAppScreen, 
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ) {}
                 },
-                headlineContent = { Text(text = stringResource(R.string.event_type_regular)) })
+                headlineContent = { Text(text = stringResource(R.string.event_type_regular)) }
+            )
             ListItem(
                 leadingContent = {
                     Badge(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     ) {}
                 },
-                headlineContent = { Text(text = stringResource(R.string.event_type_lessons)) })
+                headlineContent = { Text(text = stringResource(R.string.event_type_lessons)) }
+            )
             ListItem(
                 leadingContent = {
                     Badge(
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer
                     ) {}
                 },
-                headlineContent = { Text(text = stringResource(R.string.event_type_deadlines)) })
+                headlineContent = { Text(text = stringResource(R.string.event_type_deadlines)) }
+            )
         }
 
     }
