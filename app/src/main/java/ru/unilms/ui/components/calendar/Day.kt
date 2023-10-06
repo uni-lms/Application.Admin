@@ -1,6 +1,5 @@
 package ru.unilms.ui.components.calendar
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,8 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,8 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -56,17 +51,17 @@ fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
                 ) {
                     eventsInfo?.let {
                         if (it.regularEvents != 0) {
-                            Badge {
+                            Badge(containerColor = MaterialTheme.colorScheme.primaryContainer) {
                                 Text(text = it.regularEvents.toString())
                             }
                         }
                         if (it.deadlines != 0) {
-                            Badge {
+                            Badge(containerColor = MaterialTheme.colorScheme.secondaryContainer) {
                                 Text(text = it.deadlines.toString())
                             }
                         }
                         if (it.lessons != 0) {
-                            Badge {
+                            Badge(containerColor = MaterialTheme.colorScheme.tertiaryContainer) {
                                 Text(text = it.lessons.toString())
                             }
                         }
@@ -75,14 +70,4 @@ fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
             }
         }
     }
-}
-
-@Composable
-private fun Dot(color: Color) {
-    Box(
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(color)
-            .size(3.dp)
-    )
 }
