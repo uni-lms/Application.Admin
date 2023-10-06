@@ -43,4 +43,7 @@
     <string name="courses_filter_archived">Archived</string>
     <string name="screen_task">Task</string>
     <string name="screen_lesson">Lesson</string>
+    <string name="event_type_regular">Regular events</string>
+    <string name="event_type_lessons">Lessons</string>
+    <string name="event_type_deadlines">Deadlines</string>
 </resources>

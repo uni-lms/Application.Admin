@@ -43,4 +43,7 @@
     <string name="courses_filter_archived">Архивные</string>
     <string name="screen_task">Задание</string>
     <string name="screen_lesson">Занятие</string>
+    <string name="event_type_regular">События</string>
+    <string name="event_type_lessons">Пары</string>
+    <string name="event_type_deadlines">Дедлайны</string>
 </resources>
