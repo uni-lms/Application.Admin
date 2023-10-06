@@ -9,5 +9,6 @@ data class DayEvent(
     val title: String,
     val time: String,
     val auditorium: String? = null,
-    val subject: String? = null
+    val subject: String? = null,
+    val lessonType: String? = null
 )
