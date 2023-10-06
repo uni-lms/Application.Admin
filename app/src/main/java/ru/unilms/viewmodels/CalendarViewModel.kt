@@ -16,10 +16,10 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
 
     private val oct2023data = MonthEventsInfo(
         listOf(
-            DayEventsInfo(1, hasEvents = true, hasLessons = true, hasDeadlines = true),
-            DayEventsInfo(4, hasEvents = false, hasLessons = true, hasDeadlines = false),
-            DayEventsInfo(8, hasEvents = true, hasLessons = false, hasDeadlines = false),
-            DayEventsInfo(10, hasEvents = false, hasLessons = false, hasDeadlines = true)
+            DayEventsInfo(1, regularEvents = 1, lessons = 1, deadlines = 1),
+            DayEventsInfo(4, regularEvents = 0, lessons = 1, deadlines = 0),
+            DayEventsInfo(8, regularEvents = 1, lessons = 0, deadlines = 0),
+            DayEventsInfo(10, regularEvents = 0, lessons = 1, deadlines = 1)
         )
     )
 
@@ -36,32 +36,21 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         val lessonTime = "8.30 - 10.00"
         return when (date) {
             LocalDate.parse("2023-10-01") -> listOf(
-                DayEvent(id, EventType.Lesson, "Дедлайн по Л/Р №1", lessonTime, "404а-2", "ТП"),
+                DayEvent(id, EventType.Lesson, "", lessonTime, "404а-2", "ТП", "Лекция"),
                 DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Regular, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Regular, "Кастомное событие", time),
             )
 
             LocalDate.parse("2023-10-04") -> listOf(
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Lesson, "", lessonTime, "404а-2", "ТП", "Лекция"),
             )
 
             LocalDate.parse("2023-10-08") -> listOf(
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Regular, "Кастомное событие", time),
             )
 
             LocalDate.parse("2023-10-10") -> listOf(
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
-                DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
+                DayEvent(id, EventType.Lesson, "", lessonTime, "404а-2", "ТП", "Лекция"),
                 DayEvent(id, EventType.Deadline, "Дедлайн по Л/Р №1", time),
             )
 

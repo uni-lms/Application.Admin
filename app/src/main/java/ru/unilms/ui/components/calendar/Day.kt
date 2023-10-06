@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import ru.unilms.domain.model.calendar.DayEventsInfo
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
     val enabled = day.position == DayPosition.MonthDate
@@ -52,14 +55,20 @@ fun Day(day: CalendarDay, eventsInfo: DayEventsInfo?, onDayClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     eventsInfo?.let {
-                        if (it.hasEvents) {
-                            Dot(color = Color.Blue)
+                        if (it.regularEvents != 0) {
+                            Badge {
+                                Text(text = it.regularEvents.toString())
+                            }
                         }
-                        if (it.hasDeadlines) {
-                            Dot(color = Color.Green)
+                        if (it.deadlines != 0) {
+                            Badge {
+                                Text(text = it.deadlines.toString())
+                            }
                         }
-                        if (it.hasLessons) {
-                            Dot(color = Color.Red)
+                        if (it.lessons != 0) {
+                            Badge {
+                                Text(text = it.lessons.toString())
+                            }
                         }
                     }
                 }
