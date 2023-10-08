@@ -46,4 +46,6 @@
     <string name="event_type_regular">Regular events</string>
     <string name="event_type_lessons">Lessons</string>
     <string name="event_type_deadlines">Deadlines</string>
+    <string name="screen_quiz">Quiz</string>
+    <string name="screen_file">File</string>
 </resources>

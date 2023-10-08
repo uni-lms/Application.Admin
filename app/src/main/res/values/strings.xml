@@ -46,4 +46,6 @@
     <string name="event_type_regular">События</string>
     <string name="event_type_lessons">Пары</string>
     <string name="event_type_deadlines">Дедлайны</string>
+    <string name="screen_quiz">Тест</string>
+    <string name="screen_file">Файл</string>
 </resources>
