@@ -48,4 +48,14 @@
     <string name="event_type_deadlines">Deadlines</string>
     <string name="screen_quiz">Quiz</string>
     <string name="screen_file">File</string>
+    <string name="label_deadline">Deadline</string>
+    <string name="label_last_change">Last change</string>
+    <string name="label_task_status">Status</string>
+    <string name="task_status_not_sent">Not sent</string>
+    <string name="task_status_sent">Sent</string>
+    <string name="task_status_checked">Checked</string>
+    <string name="task_status_overdue">Overdue</string>
+    <string name="label_mark">Mark</string>
+    <string name="label_comments">Comments</string>
+    <string name="button_send_answer">Send answer</string>
 </resources>

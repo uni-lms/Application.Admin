@@ -48,4 +48,14 @@
     <string name="event_type_deadlines">Дедлайны</string>
     <string name="screen_quiz">Тест</string>
     <string name="screen_file">Файл</string>
+    <string name="label_deadline">Сделать до</string>
+    <string name="label_last_change">Последнее изменение</string>
+    <string name="label_task_status">Статус</string>
+    <string name="task_status_not_sent">Не отправлено</string>
+    <string name="task_status_sent">Отправлено на проверку</string>
+    <string name="task_status_checked">Проверено</string>
+    <string name="task_status_overdue">Просрочено</string>
+    <string name="label_mark">Оценка</string>
+    <string name="label_comments">Комментарии</string>
+    <string name="button_send_answer">Отправить ответ</string>
 </resources>
