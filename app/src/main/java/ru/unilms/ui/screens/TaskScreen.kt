@@ -140,7 +140,7 @@ fun TaskScreen(
         )
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { }) {
+            Button(onClick = { navigate(UniAppScreen.SubmitAnswer, taskId) }) {
                 Text(text = stringResource(R.string.button_send_answer))
             }
         }
