@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.data.AppBarState
-import ru.unilms.utils.units.Bytes
 import ru.unilms.viewmodels.SubmitAnswerViewModel
-import java.util.Locale
 import java.util.UUID
 
 @Composable
@@ -35,7 +33,6 @@ fun SubmitAnswerScreen(
         )
     }
 
-    val answerRequirements = viewModel.getAnswerRequirements()
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -45,11 +42,9 @@ fun SubmitAnswerScreen(
             headlineContent = { Text(text = stringResource(id = R.string.label_file_size_limit)) },
             trailingContent = {
                 Text(
-                    text = Bytes.format(
-                        answerRequirements.fileSizeLimitInBytes,
-                        Locale.getDefault()
-                    )
+                    text = stringResource(id = R.string.label_megabytes, 50)
                 )
-            })
+            }
+        )
     }
 }

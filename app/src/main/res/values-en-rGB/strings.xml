@@ -60,4 +60,5 @@
     <string name="button_send_answer">Send answer</string>
     <string name="screen_send_task_answer">Submit task answer</string>
     <string name="label_file_size_limit">File size limit</string>
+    <string name="label_megabytes">%1$d MB</string>
 </resources>
