@@ -31,6 +31,7 @@ import ru.unilms.ui.screens.MenuScreen
 import ru.unilms.ui.screens.SelectApiUriScreen
 import ru.unilms.ui.screens.SettingsScreen
 import ru.unilms.ui.screens.SignUpScreen
+import ru.unilms.ui.screens.SubmitAnswerScreen
 import ru.unilms.ui.screens.TaskScreen
 import ru.unilms.viewmodels.UniAppViewModel
 import java.util.UUID
@@ -189,6 +190,14 @@ fun UniApp(
                     TaskScreen(
                         taskId = UUID.fromString(it),
                         navigate = { screen, id -> goToScreen(navController, screen, id) },
+                        onComposing = { appBarState = it })
+                }
+            }
+            composable("${UniAppScreen.SubmitAnswer.name}/{taskId}") {
+                val taskId = backStackEntry?.arguments?.getString("taskId")
+                taskId?.let {
+                    SubmitAnswerScreen(
+                        taskId = UUID.fromString(taskId),
                         onComposing = { appBarState = it })
                 }
             }

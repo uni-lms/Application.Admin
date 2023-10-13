@@ -58,4 +58,6 @@
     <string name="label_mark">Mark</string>
     <string name="label_comments">Comments</string>
     <string name="button_send_answer">Send answer</string>
+    <string name="screen_send_task_answer">Submit task answer</string>
+    <string name="label_file_size_limit">File size limit</string>
 </resources>

@@ -58,4 +58,6 @@
     <string name="label_mark">Оценка</string>
     <string name="label_comments">Комментарии</string>
     <string name="button_send_answer">Отправить ответ</string>
+    <string name="screen_send_task_answer">Отправка ответа на задание</string>
+    <string name="label_file_size_limit">Макс. размер одного файла</string>
 </resources>
