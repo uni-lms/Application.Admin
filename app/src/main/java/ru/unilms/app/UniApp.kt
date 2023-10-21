@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -216,7 +215,6 @@ fun goToScreen(
     navController: NavHostController,
     screen: UniAppScreen,
     id: UUID? = null,
-    clearStack: Boolean = false
 ) {
     val route: String = if (id == null) {
         screen.name
@@ -224,11 +222,6 @@ fun goToScreen(
         "${screen.name}/$id"
     }
     navController.navigate(route) {
-        if (clearStack) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-        }
         launchSingleTop = true
         restoreState = true
     }

@@ -32,7 +32,7 @@ fun UniBottomNavigation(navController: NavHostController) {
                     },
                     selected = isSelected,
                     onClick = {
-                        goToScreen(navController, screen, clearStack = true)
+                        goToScreen(navController, screen)
                     },
                     icon = {
                         Icon(
