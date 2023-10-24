@@ -12,6 +12,6 @@ fun FileItem(item: CourseItem, onClick: (UniAppScreen, UUID) -> Unit) {
     BaseItem(
         icon = Icons.Outlined.AttachFile,
         name = item.visibleName,
-        onClick = { onClick(UniAppScreen.File, item.id) }
+        onClick = { onClick(UniAppScreen.UnderConstruction, item.id) }
     )
 }
