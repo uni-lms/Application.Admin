@@ -12,12 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.utils.units.minutes
+import ru.unilms.viewmodels.QuizInfoViewModel
 import java.util.UUID
 
 @Composable
 fun QuizInfoScreen(quizId: UUID) {
+    val viewModel = hiltViewModel<QuizInfoViewModel>()
+
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -28,7 +32,7 @@ fun QuizInfoScreen(quizId: UUID) {
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_amount_of_questions)) },
             trailingContent = {
                 Text(
-                    text = "10"
+                    text = viewModel.data.amountOfQuestions.toString()
                 )
             }
         )
@@ -36,7 +40,7 @@ fun QuizInfoScreen(quizId: UUID) {
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_amount_of_attempts)) },
             trailingContent = {
                 Text(
-                    text = "1"
+                    text = viewModel.data.amountOfAttempts.toString()
                 )
             }
         )
@@ -44,7 +48,7 @@ fun QuizInfoScreen(quizId: UUID) {
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_try_time_limit)) },
             trailingContent = {
                 Text(
-                    text = 59.minutes
+                    text = viewModel.data.timeLimit.minutes
                 )
             }
         )
