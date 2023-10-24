@@ -27,6 +27,7 @@ import ru.unilms.ui.screens.JournalScreen
 import ru.unilms.ui.screens.LoginOrSignUpScreen
 import ru.unilms.ui.screens.LoginScreen
 import ru.unilms.ui.screens.MenuScreen
+import ru.unilms.ui.screens.QuizInfoScreen
 import ru.unilms.ui.screens.SelectApiUriScreen
 import ru.unilms.ui.screens.SettingsScreen
 import ru.unilms.ui.screens.SignUpScreen
@@ -206,6 +207,12 @@ fun UniApp(
                         appBarState = it
                     },
                 )
+            }
+            composable("${UniAppScreen.Quiz.name}/{quizId}") {
+                val quizId = backStackEntry?.arguments?.getString("quizId")
+                quizId?.let {
+                    QuizInfoScreen(quizId = UUID.fromString(quizId))
+                }
             }
         }
     }
