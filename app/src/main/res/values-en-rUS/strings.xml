@@ -61,4 +61,8 @@
     <string name="screen_send_task_answer">Submit task answer</string>
     <string name="label_file_size_limit">File size limit</string>
     <string name="label_megabytes">%1$d MB</string>
+    <string name="label_quiz_amount_of_questions">Amount of questions</string>
+    <string name="label_quiz_amount_of_attempts">Amount of attempts</string>
+    <string name="label_quiz_try_time_limit">Time limit</string>
+    <string name="label_quiz_begin_attempt">Begin attempt</string>
 </resources>

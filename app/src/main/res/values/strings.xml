@@ -61,4 +61,8 @@
     <string name="screen_send_task_answer">Отправка ответа на задание</string>
     <string name="label_file_size_limit">Макс. размер одного файла</string>
     <string name="label_megabytes">%1$d МБ</string>
+    <string name="label_quiz_amount_of_questions">Количество вопросов</string>
+    <string name="label_quiz_amount_of_attempts">Количество попыток</string>
+    <string name="label_quiz_try_time_limit">Ограничение по времени</string>
+    <string name="label_quiz_begin_attempt">Начать попытку</string>
 </resources>
