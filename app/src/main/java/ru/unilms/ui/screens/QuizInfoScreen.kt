@@ -15,13 +15,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
+import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
 import ru.unilms.utils.units.minutes
 import ru.unilms.viewmodels.QuizInfoViewModel
 import java.util.UUID
 
 @Composable
-fun QuizInfoScreen(quizId: UUID, onComposing: (AppBarState) -> Unit) {
+fun QuizInfoScreen(
+    quizId: UUID,
+    onComposing: (AppBarState) -> Unit,
+    navigate: (UniAppScreen, UUID, Int) -> Unit
+) {
     val viewModel = hiltViewModel<QuizInfoViewModel>()
 
     LaunchedEffect(true) {
@@ -62,7 +67,8 @@ fun QuizInfoScreen(quizId: UUID, onComposing: (AppBarState) -> Unit) {
                 )
             }
         )
-        Button(onClick = { /*TODO*/ }) {
+        /* TODO: Добавить создание попытки решения теста (привязанной к этому тесту) при клике на кнопку */
+        Button(onClick = { navigate(UniAppScreen.QuizAttempt, UUID.randomUUID(), 1) }) {
             Text(text = stringResource(id = R.string.label_quiz_begin_attempt))
         }
     }

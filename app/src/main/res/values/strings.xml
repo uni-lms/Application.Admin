@@ -66,4 +66,5 @@
     <string name="label_quiz_try_time_limit">Ограничение по времени</string>
     <string name="label_quiz_begin_attempt">Начать попытку</string>
     <string name="label_under_construction">В разработке...</string>
+    <string name="label_quiz_attempt">Попытка выполнения теста</string>
 </resources>

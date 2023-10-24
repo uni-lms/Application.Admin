@@ -27,6 +27,7 @@ import ru.unilms.ui.screens.JournalScreen
 import ru.unilms.ui.screens.LoginOrSignUpScreen
 import ru.unilms.ui.screens.LoginScreen
 import ru.unilms.ui.screens.MenuScreen
+import ru.unilms.ui.screens.QuestionScreen
 import ru.unilms.ui.screens.QuizInfoScreen
 import ru.unilms.ui.screens.SelectApiUriScreen
 import ru.unilms.ui.screens.SettingsScreen
@@ -214,9 +215,18 @@ fun UniApp(
                 quizId?.let {
                     QuizInfoScreen(
                         quizId = UUID.fromString(quizId),
-                    ) {
-                        appBarState = it
-                    }
+                        onComposing = {
+                            appBarState = it
+                        },
+                        navigate = { screen, id, qNumber ->
+                            goToScreen(
+                                navController,
+                                screen,
+                                id,
+                                qNumber
+                            )
+                        }
+                    )
                 }
             }
             composable(UniAppScreen.UnderConstruction.name) {
@@ -224,6 +234,26 @@ fun UniApp(
             }
             composable("${UniAppScreen.UnderConstruction.name}/{itemId}") {
                 UnderConstructionScreen()
+            }
+            composable("${UniAppScreen.QuizAttempt.name}/{attemptId}/{questionNumber}") {
+                val attemptId = backStackEntry?.arguments?.getString("attemptId")!!
+                val questionNumber = backStackEntry?.arguments?.getString("questionNumber")!!
+
+                QuestionScreen(
+                    UUID.fromString(attemptId),
+                    questionNumber.toInt(),
+                    onComposing = {
+                        appBarState = it
+                    },
+                    navigate = { screen, id, qNumber ->
+                        goToScreen(
+                            navController,
+                            screen,
+                            id,
+                            qNumber
+                        )
+                    }
+                )
             }
         }
     }
@@ -240,6 +270,22 @@ fun goToScreen(
         "${screen.name}/$id"
     }
     navController.navigate(route) {
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+fun goToScreen(
+    navController: NavHostController,
+    screen: UniAppScreen,
+    id: UUID? = null,
+    questionNumber: Int? = null
+) {
+    if (questionNumber == null) {
+        return goToScreen(navController, screen, id)
+    }
+
+    navController.navigate("${screen.name}/$id/$questionNumber") {
         launchSingleTop = true
         restoreState = true
     }
