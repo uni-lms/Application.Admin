@@ -33,6 +33,7 @@ import ru.unilms.ui.screens.SettingsScreen
 import ru.unilms.ui.screens.SignUpScreen
 import ru.unilms.ui.screens.SubmitAnswerScreen
 import ru.unilms.ui.screens.TaskScreen
+import ru.unilms.ui.screens.UnderConstructionScreen
 import ru.unilms.viewmodels.UniAppViewModel
 import java.util.UUID
 
@@ -213,6 +214,12 @@ fun UniApp(
                 quizId?.let {
                     QuizInfoScreen(quizId = UUID.fromString(quizId))
                 }
+            }
+            composable(UniAppScreen.UnderConstruction.name) {
+                UnderConstructionScreen()
+            }
+            composable("${UniAppScreen.UnderConstruction.name}/{itemId}") {
+                UnderConstructionScreen()
             }
         }
     }
