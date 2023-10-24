@@ -212,7 +212,11 @@ fun UniApp(
             composable("${UniAppScreen.Quiz.name}/{quizId}") {
                 val quizId = backStackEntry?.arguments?.getString("quizId")
                 quizId?.let {
-                    QuizInfoScreen(quizId = UUID.fromString(quizId))
+                    QuizInfoScreen(
+                        quizId = UUID.fromString(quizId),
+                    ) {
+                        appBarState = it
+                    }
                 }
             }
             composable(UniAppScreen.UnderConstruction.name) {

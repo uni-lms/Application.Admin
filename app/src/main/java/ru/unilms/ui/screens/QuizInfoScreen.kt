@@ -8,19 +8,29 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
+import ru.unilms.data.AppBarState
 import ru.unilms.utils.units.minutes
 import ru.unilms.viewmodels.QuizInfoViewModel
 import java.util.UUID
 
 @Composable
-fun QuizInfoScreen(quizId: UUID) {
+fun QuizInfoScreen(quizId: UUID, onComposing: (AppBarState) -> Unit) {
     val viewModel = hiltViewModel<QuizInfoViewModel>()
+
+    LaunchedEffect(true) {
+        onComposing(
+            AppBarState(
+                title = viewModel.data.visibleName
+            )
+        )
+    }
 
     Column(
         modifier = Modifier
