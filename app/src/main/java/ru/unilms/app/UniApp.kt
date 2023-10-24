@@ -189,7 +189,7 @@ fun UniApp(
                 val taskId = backStackEntry?.arguments?.getString("taskId")
                 taskId?.let {
                     TaskScreen(
-                        taskId = UUID.fromString(it),
+                        taskId = UUID.fromString(taskId),
                         navigate = { screen, id -> goToScreen(navController, screen, id) },
                         onComposing = { appBarState = it })
                 }
