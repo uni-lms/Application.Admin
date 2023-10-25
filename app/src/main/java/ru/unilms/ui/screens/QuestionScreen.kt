@@ -11,10 +11,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Rule
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,14 +34,28 @@ fun QuestionScreen(
     attemptId: UUID,
     questionNumber: Int,
     onComposing: (AppBarState) -> Unit,
-    navigate: (UniAppScreen, UUID, Int) -> Unit
+    navigate: (UniAppScreen, UUID, Int?, Boolean) -> Unit
 ) {
 
     val amountOfQuestions = 10
 
     LaunchedEffect(true) {
         onComposing(
-            AppBarState(title = "Попытка выполнения теста")
+            AppBarState(
+                title = "Попытка выполнения теста",
+                actions = {
+                    IconButton(onClick = {
+                        navigate(
+                            UniAppScreen.QuizAttemptResults,
+                            attemptId,
+                            null,
+                            false
+                        )
+                    }) {
+                        Icon(imageVector = Icons.Outlined.Rule, contentDescription = null)
+                    }
+                }
+            )
         )
     }
 
@@ -57,7 +73,7 @@ fun QuestionScreen(
         ) {
             (1..amountOfQuestions).forEach {
                 FilterChip(
-                    onClick = { navigate(UniAppScreen.QuizAttempt, attemptId, it) },
+                    onClick = { navigate(UniAppScreen.QuizAttempt, attemptId, it, false) },
                     selected = it == questionNumber,
                     label = { Text(text = it.toString()) }
                 )
@@ -76,7 +92,8 @@ fun QuestionScreen(
                     navigate(
                         UniAppScreen.QuizAttempt,
                         attemptId,
-                        questionNumber - 1
+                        questionNumber - 1,
+                        false
                     )
                 },
                 enabled = questionNumber > 1
@@ -94,7 +111,8 @@ fun QuestionScreen(
                     navigate(
                         UniAppScreen.QuizAttempt,
                         attemptId,
-                        questionNumber + 1
+                        questionNumber + 1,
+                        false
                     )
                 },
                 enabled = questionNumber < amountOfQuestions

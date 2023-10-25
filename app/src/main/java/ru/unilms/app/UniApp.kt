@@ -287,7 +287,7 @@ fun goToScreen(
     navController.navigate(route) {
         if (!saveEntry) {
             popUpTo(navController.currentDestination?.route ?: "") {
-                inclusive = false
+                inclusive = true
             }
         }
         launchSingleTop = true
