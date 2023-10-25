@@ -4,14 +4,17 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Rule
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
@@ -23,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -117,13 +119,9 @@ fun QuestionScreen(
                 },
                 enabled = questionNumber > 1
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
-                    Text(text = "Назад")
-                }
+                Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                Text(text = "Назад")
             }
             FilledTonalButton(
                 onClick = {
@@ -136,13 +134,9 @@ fun QuestionScreen(
                 },
                 enabled = questionNumber < questionInfo.amountOfQuestions
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Вперёд")
-                    Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
-                }
+                Text(text = "Вперёд")
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
             }
         }
 
