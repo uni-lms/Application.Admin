@@ -33,6 +33,6 @@ enum class UniAppScreen(
     Lesson(R.string.screen_lesson, true, true, null, false),
     Settings(R.string.screen_settings, true, true, Icons.Filled.Settings, false),
     UnderConstruction(R.string.label_under_construction, true, true, null, false),
-    QuizAttempt(R.string.label_quiz_attempt, true, false, null, false),
+    QuizAttempt(R.string.label_quiz_attempt, false, false, null, false),
     QuizAttemptResults(R.string.screen_quiz_attempt_results, true, true, null, false)
 }
