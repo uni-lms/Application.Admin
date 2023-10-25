@@ -36,7 +36,28 @@ class CoursesScreenViewModel @Inject constructor() : ViewModel() {
             50f,
             5,
             listOf("Монахова Г. Е.")
-        )
+        ),
+        Course(
+            UUID.randomUUID(),
+            "Информационные сети",
+            25f,
+            5,
+            listOf("Курочкин С. В.")
+        ),
+        Course(
+            UUID.randomUUID(),
+            "Моделирование систем",
+            45f,
+            5,
+            listOf("Шамышева О. Н.")
+        ),
+        Course(
+            UUID.randomUUID(),
+            "Распределённые программные системы",
+            90f,
+            5,
+            listOf("Проскурина Г. В.")
+        ),
     )
 
     private val futureCourses = listOf(
