@@ -37,7 +37,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             applicationVariants.all {
                 val variant = this
                 variant.outputs
