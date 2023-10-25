@@ -21,11 +21,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
+import ru.unilms.ui.components.form.FieldType
+import ru.unilms.ui.components.form.FormField
+import ru.unilms.ui.forms.QuestionForm
+import ru.unilms.viewmodels.QuestionViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,12 +44,23 @@ fun QuestionScreen(
     navigate: (UniAppScreen, UUID, Int?, Boolean) -> Unit
 ) {
 
-    val amountOfQuestions = 10
+    val viewModel = hiltViewModel<QuestionViewModel>()
+
+    val questionInfo = viewModel.getQuestionInfo(questionNumber)
+    val formFields = questionInfo.answers.map {
+        if (questionInfo.isMultipleChoicesAllowed) {
+            FormField(it.title, it.id, FieldType.Checkbox)
+        } else {
+            FormField(it.title, it.id, FieldType.RadioButton)
+        }
+    }
+
+    val formState = remember { mutableStateListOf<FormField>() }
 
     LaunchedEffect(true) {
         onComposing(
             AppBarState(
-                title = "Попытка выполнения теста",
+                title = questionInfo.quizTitle,
                 actions = {
                     IconButton(onClick = {
                         navigate(
@@ -71,7 +89,7 @@ fun QuestionScreen(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            (1..amountOfQuestions).forEach {
+            (1..questionInfo.amountOfQuestions).forEach {
                 FilterChip(
                     onClick = { navigate(UniAppScreen.QuizAttempt, attemptId, it, false) },
                     selected = it == questionNumber,
@@ -81,7 +99,8 @@ fun QuestionScreen(
         }
 
         Text(text = "Вопрос №$questionNumber", style = MaterialTheme.typography.titleLarge)
-        Text(text = "Тут типа какой-то текст вопроса")
+        Text(text = questionInfo.questionTitle)
+        QuestionForm(formState, formFields)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -115,7 +134,7 @@ fun QuestionScreen(
                         false
                     )
                 },
-                enabled = questionNumber < amountOfQuestions
+                enabled = questionNumber < questionInfo.amountOfQuestions
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
