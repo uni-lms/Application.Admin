@@ -10,29 +10,60 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionViewModel @Inject constructor() : ViewModel() {
     fun getQuestionInfo(questionNumber: Int): QuestionInfo {
-        return QuestionInfo(
-            10,
-            "Тест",
-            "Тут типа какой-то вопрос",
-            questionNumber % 2 == 0,
-            listOf(
-                QuestionChoice(
-                    UUID.randomUUID(),
-                    "Ответ ${questionNumber + 1}"
-                ),
-                QuestionChoice(
-                    UUID.randomUUID(),
-                    "Ответ ${questionNumber + 2}"
-                ),
-                QuestionChoice(
-                    UUID.randomUUID(),
-                    "Ответ ${questionNumber + 3}"
-                ),
-                QuestionChoice(
-                    UUID.randomUUID(),
-                    "Ответ ${questionNumber + 4}"
-                ),
+        return when (questionNumber) {
+            1 -> QuestionInfo(
+                10,
+                "Рейтинг-контроль №1",
+                "Что такое полиморфизм?",
+                false,
+                listOf(
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Возможность реализации наследуемых свойств или методов отличающимися способами в рамках множества абстракций"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Моделирование требуемых атрибутов и взаимодействий сущностей в виде классов для определения абстрактного представления системы"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Скрытие внутреннего состояния и функций объекта и предоставление доступа только через открытый набор функций"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Возможность создания новых абстракций на основе существующих"
+                    ),
+                )
             )
-        )
+
+            else -> QuestionInfo(
+                10,
+                "Рейтинг-контроль №1",
+                "В программной системе SPSS количественно оценить отличие полученного в результате частотного анализа распределения от нормального можно с помощью",
+                true,
+                listOf(
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Стандартного отклонения"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Коэффициента пикообразности"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Моды"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Медианы"
+                    ),
+                    QuestionChoice(
+                        UUID.randomUUID(),
+                        "Коэффициента асимметрии"
+                    ),
+                )
+            )
+        }
     }
 }
