@@ -81,7 +81,8 @@ fun QuestionScreen(
 
     Column(
         modifier = Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
@@ -99,11 +100,9 @@ fun QuestionScreen(
             }
         }
 
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            Text(text = "Вопрос №$questionNumber", style = MaterialTheme.typography.titleLarge)
-            Text(text = questionInfo.questionTitle)
-            QuestionForm(formState, formFields)
-        }
+        Text(text = "Вопрос №$questionNumber", style = MaterialTheme.typography.titleLarge)
+        Text(text = questionInfo.questionTitle)
+        QuestionForm(formState, formFields)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
