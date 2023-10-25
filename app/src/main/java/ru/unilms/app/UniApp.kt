@@ -263,6 +263,7 @@ fun goToScreen(
     navController: NavHostController,
     screen: UniAppScreen,
     id: UUID? = null,
+    saveEntry: Boolean = true
 ) {
     val route: String = if (id == null) {
         screen.name
@@ -270,6 +271,11 @@ fun goToScreen(
         "${screen.name}/$id"
     }
     navController.navigate(route) {
+        if (!saveEntry) {
+            popUpTo(navController.currentDestination?.route ?: "") {
+                inclusive = false
+            }
+        }
         launchSingleTop = true
         restoreState = true
     }
@@ -279,13 +285,19 @@ fun goToScreen(
     navController: NavHostController,
     screen: UniAppScreen,
     id: UUID? = null,
-    questionNumber: Int? = null
+    questionNumber: Int? = null,
+    saveEntry: Boolean = true
 ) {
     if (questionNumber == null) {
-        return goToScreen(navController, screen, id)
+        return goToScreen(navController, screen, id, saveEntry)
     }
 
     navController.navigate("${screen.name}/$id/$questionNumber") {
+        if (!saveEntry) {
+            popUpTo(navController.currentDestination?.route ?: "") {
+                inclusive = false
+            }
+        }
         launchSingleTop = true
         restoreState = true
     }
