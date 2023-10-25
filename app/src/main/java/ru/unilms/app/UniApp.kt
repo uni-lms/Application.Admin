@@ -29,13 +29,13 @@ import ru.unilms.ui.screens.LoginScreen
 import ru.unilms.ui.screens.MenuScreen
 import ru.unilms.ui.screens.QuestionScreen
 import ru.unilms.ui.screens.QuizInfoScreen
+import ru.unilms.ui.screens.QuizResultsScreen
 import ru.unilms.ui.screens.SelectApiUriScreen
 import ru.unilms.ui.screens.SettingsScreen
 import ru.unilms.ui.screens.SignUpScreen
 import ru.unilms.ui.screens.SubmitAnswerScreen
 import ru.unilms.ui.screens.TaskScreen
 import ru.unilms.ui.screens.UnderConstructionScreen
-import ru.unilms.viewmodels.QuizResultsScreen
 import ru.unilms.viewmodels.UniAppViewModel
 import java.util.UUID
 
