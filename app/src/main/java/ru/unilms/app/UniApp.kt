@@ -35,6 +35,7 @@ import ru.unilms.ui.screens.SignUpScreen
 import ru.unilms.ui.screens.SubmitAnswerScreen
 import ru.unilms.ui.screens.TaskScreen
 import ru.unilms.ui.screens.UnderConstructionScreen
+import ru.unilms.viewmodels.QuizResultsScreen
 import ru.unilms.viewmodels.UniAppViewModel
 import java.util.UUID
 
@@ -235,25 +236,38 @@ fun UniApp(
             composable("${UniAppScreen.UnderConstruction.name}/{itemId}") {
                 UnderConstructionScreen()
             }
-            composable("${UniAppScreen.QuizAttempt.name}/{attemptId}/{questionNumber}") {
-                val attemptId = backStackEntry?.arguments?.getString("attemptId")!!
-                val questionNumber = backStackEntry?.arguments?.getString("questionNumber")!!
-
-                QuestionScreen(
-                    UUID.fromString(attemptId),
-                    questionNumber.toInt(),
-                    onComposing = {
+            composable("${UniAppScreen.QuizAttemptResults}/{attemptId}") {
+                val attemptId = backStackEntry?.arguments?.getString("attemptId")
+                attemptId?.let {
+                    QuizResultsScreen(
+                        UUID.fromString(attemptId),
+                    ) {
                         appBarState = it
-                    },
-                    navigate = { screen, id, qNumber ->
-                        goToScreen(
-                            navController,
-                            screen,
-                            id,
-                            qNumber
-                        )
                     }
-                )
+                }
+            }
+            composable("${UniAppScreen.QuizAttempt.name}/{attemptId}/{questionNumber}") {
+                val attemptId = backStackEntry?.arguments?.getString("attemptId")
+                val questionNumber = backStackEntry?.arguments?.getString("questionNumber")
+
+                if (attemptId != null && questionNumber != null) {
+                    QuestionScreen(
+                        UUID.fromString(attemptId),
+                        questionNumber.toInt(),
+                        onComposing = {
+                            appBarState = it
+                        },
+                        navigate = { screen, id, qNumber, saveState ->
+                            goToScreen(
+                                navController,
+                                screen,
+                                id,
+                                qNumber,
+                                saveState
+                            )
+                        }
+                    )
+                }
             }
         }
     }

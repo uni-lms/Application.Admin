@@ -66,5 +66,6 @@
     <string name="label_quiz_try_time_limit">Time limit</string>
     <string name="label_quiz_begin_attempt">Begin attempt</string>
     <string name="label_under_construction">Under construction</string>
-    <string name="label_quiz_attempt">Test solving attempt</string>
+    <string name="label_quiz_attempt">Quiz solving attempt</string>
+    <string name="screen_quiz_attempt_results">Quiz results</string>
 </resources>
