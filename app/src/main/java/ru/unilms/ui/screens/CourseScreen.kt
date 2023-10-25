@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -57,6 +58,15 @@ fun CourseScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        ListItem(
+            leadingContent = {
+                Icon(
+                    imageVector = Icons.Outlined.Groups,
+                    contentDescription = null
+                )
+            },
+            headlineContent = { Text(text = "Комната ВКС для лекций (Google Meet)") }
+        )
         ListItem(
             leadingContent = { Icon(Icons.Outlined.Book, null) },
             headlineContent = { Text(text = stringResource(id = R.string.screen_journal)) },
