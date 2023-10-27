@@ -12,8 +12,8 @@ import ru.unilms.data.DataStore
 import ru.unilms.domain.model.auth.LoginRequest
 import ru.unilms.network.services.AuthService
 import ru.unilms.network.services.AuthServiceImpl
-import ru.unilms.network.services.Response
 import ru.unilms.ui.forms.LoginForm
+import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject
 
 
@@ -23,6 +23,8 @@ class LoginViewModel @Inject constructor(@ApplicationContext private val context
 
     private var store: DataStore? = null
     private var baseUrl = ""
+
+    var form = LoginForm()
 
     init {
         store = DataStore(context)
@@ -48,43 +50,25 @@ class LoginViewModel @Inject constructor(@ApplicationContext private val context
             viewModelScope.launch {
                 AuthService.client.use { client ->
                     val service = AuthServiceImpl(client, baseUrl)
-
-                    when (val res = service.login(loginRequest)) {
-                        is Response.Success -> {
-                            store?.updateToken(res.body.token)
+                    processResponse(
+                        service.login(loginRequest),
+                        onSuccess = {
+                            viewModelScope.launch {
+                                store?.updateToken(it.token)
+                            }
                             goToFeedScreen()
+                        },
+                        onError = {
+                            val message =
+                                if (it != null) "Произошла ошибка: ${it.reason}"
+                                else "Произошла неизвестная ошибка"
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
-
-                        is Response.Error.HttpError -> {
-                            Toast.makeText(
-                                context,
-                                "Произошла ошибка: ${res.errorBody?.reason}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        is Response.Error.NetworkError -> {
-                            Toast.makeText(
-                                context,
-                                "Произошла ошибка: Нет доступа к интернету",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        is Response.Error.SerializationError -> {
-                            Toast.makeText(
-                                context,
-                                "Произошла ошибка: Ошибка разбора ответа",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
+                    )
                 }
+
             }
         }
     }
-
-    var form = LoginForm()
 
 }
