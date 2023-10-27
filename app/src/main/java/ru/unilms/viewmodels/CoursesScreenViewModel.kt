@@ -1,95 +1,67 @@
 package ru.unilms.viewmodels
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
+import ru.unilms.data.DataStore
 import ru.unilms.domain.model.courses.Course
+import ru.unilms.network.services.CoursesService
+import ru.unilms.network.services.CoursesServiceImpl
 import ru.unilms.utils.enums.CourseType
-import java.util.UUID
+import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject
 
 @HiltViewModel
-class CoursesScreenViewModel @Inject constructor() : ViewModel() {
+class CoursesScreenViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+    ViewModel() {
 
     var isLoading = false
+    private var store: DataStore? = null
+    private var baseUrl = ""
+    private var token = ""
 
-    private val archivedCourses = listOf(
-        Course(
-            UUID.randomUUID(),
-            "Технологии программирования",
-            80f,
-            3,
-            listOf("Вершинин В. В.", "Данилов В. В.")
-        ),
-        Course(
-            UUID.randomUUID(),
-            "Алгоритмы и структуры данных",
-            20f,
-            2,
-            listOf("Шамышева О. Н.")
-        )
-    )
+    init {
+        store = DataStore(context)
+        viewModelScope.launch {
+            store!!.apiUri.collect {
+                baseUrl = it
+            }
+        }
 
-    private val currentCourses = listOf(
-        Course(
-            UUID.randomUUID(),
-            "Графические информационные технологии",
-            50f,
-            5,
-            listOf("Монахова Г. Е.")
-        ),
-        Course(
-            UUID.randomUUID(),
-            "Информационные сети",
-            25f,
-            5,
-            listOf("Курочкин С. В.")
-        ),
-        Course(
-            UUID.randomUUID(),
-            "Моделирование систем",
-            45f,
-            5,
-            listOf("Шамышева О. Н.")
-        ),
-        Course(
-            UUID.randomUUID(),
-            "Распределённые программные системы",
-            90f,
-            5,
-            listOf("Проскурина Г. В.")
-        ),
-    )
-
-    private val futureCourses = listOf(
-        Course(
-            UUID.randomUUID(),
-            "Информационные технологии в образовании",
-            40f,
-            7,
-            listOf("Озерова М. И.")
-        ),
-        Course(UUID.randomUUID(), "Графический и веб-дизайн", 10f, 7, listOf("Шамышев Х. Б.")),
-        Course(
-            UUID.randomUUID(),
-            "Качество программно-информационных систем",
-            5f,
-            7,
-            listOf("Ланская М. К.")
-        )
-    )
+        viewModelScope.launch {
+            store!!.token.collect {
+                token = it
+            }
+        }
+    }
 
     fun loadCourses(coursesType: CourseType = CourseType.Current): List<Course> {
         isLoading = true
+        var result = emptyList<Course>()
 
-        val courses = when (coursesType) {
-            CourseType.Archived -> archivedCourses
-            CourseType.Current -> currentCourses
-            CourseType.Future -> futureCourses
+        viewModelScope.launch {
+            CoursesService.client.use { client ->
+                val service = CoursesServiceImpl(client, baseUrl, token)
+                processResponse(service.getEnrolled(coursesType),
+                    onSuccess = {
+                        result = it
+                    },
+                    onError = {
+                        val message =
+                            if (it != null) "Произошла ошибка: ${it.reason}"
+                            else "Произошла неизвестная ошибка"
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
         }
 
         isLoading = false
-
-        return courses
+        return result
     }
 
 }
