@@ -3,5 +3,5 @@ package ru.unilms.utils.enums
 enum class CourseType(val value: String) {
     Archived("archived"),
     Current("current"),
-    Future("future")
+    Upcoming("upcoming")
 }

@@ -121,7 +121,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             currentCoursesFilterChipStatus = false
                             archivedCoursesFilterChipStatus = false
                             futureCoursesFilterChipStatus = true
-                            courses = viewModel.loadCourses(CourseType.Future)
+                            courses = viewModel.loadCourses(CourseType.Upcoming)
                         },
                         label = { Text(stringResource(R.string.courses_filter_upcoming)) },
                         leadingIcon = if (futureCoursesFilterChipStatus) {
