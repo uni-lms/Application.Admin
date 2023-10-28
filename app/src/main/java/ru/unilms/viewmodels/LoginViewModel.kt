@@ -55,8 +55,8 @@ class LoginViewModel @Inject constructor(@ApplicationContext private val context
                         onSuccess = {
                             viewModelScope.launch {
                                 store?.updateToken(it.token)
+                                goToFeedScreen()
                             }
-                            goToFeedScreen()
                         },
                         onError = {
                             val message =
@@ -66,7 +66,6 @@ class LoginViewModel @Inject constructor(@ApplicationContext private val context
                         }
                     )
                 }
-
             }
         }
     }
