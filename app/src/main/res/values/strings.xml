@@ -68,4 +68,8 @@
     <string name="label_under_construction">В разработке…</string>
     <string name="label_quiz_attempt">Попытка выполнения теста</string>
     <string name="screen_quiz_attempt_results">Результаты теста</string>
+    <string name="course_block_lectures">Лекции</string>
+    <string name="course_block_course_project">Курсовой проект</string>
+    <string name="course_block_lab_works">Лабораторные работы</string>
+    <string name="course_block_final_certification">Итоговая аттестация</string>
 </resources>

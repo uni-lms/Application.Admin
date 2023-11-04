@@ -76,7 +76,10 @@ fun CourseScreen(
         )
         Divider()
         courseContent.blocks.forEach { block ->
-            Text(text = block.title, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(block.title.labelId),
+                style = MaterialTheme.typography.titleMedium
+            )
             block.items.forEach { item ->
                 when (item.type) {
                     CourseItemType.File -> FileItem(
