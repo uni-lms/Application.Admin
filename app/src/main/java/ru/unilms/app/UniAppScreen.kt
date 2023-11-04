@@ -30,6 +30,7 @@ enum class UniAppScreen(
     SubmitAnswer(R.string.screen_send_task_answer, true, true, null, false),
     Quiz(R.string.screen_quiz, true, true, null, false),
     File(R.string.screen_file, true, true, null, false),
+    Text(R.string.screen_text, true, true, null, false),
     Lesson(R.string.screen_lesson, true, true, null, false),
     Settings(R.string.screen_settings, true, true, Icons.Filled.Settings, false),
     UnderConstruction(R.string.label_under_construction, true, true, null, false),

@@ -196,6 +196,15 @@ fun UniApp(
                         onComposing = { appBarState = it })
                 }
             }
+            composable("${UniAppScreen.Text.name}/{textId}") {
+                val textId = backStackEntry?.arguments?.getString("textId")
+                textId?.let {
+//                    TaskScreen(
+//                        taskId = UUID.fromString(textId),
+//                        navigate = { screen, id -> goToScreen(navController, screen, id) },
+//                        onComposing = { appBarState = it })
+                }
+            }
             composable("${UniAppScreen.SubmitAnswer.name}/{taskId}") {
                 val taskId = backStackEntry?.arguments?.getString("taskId")
                 taskId?.let {

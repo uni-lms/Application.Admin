@@ -33,6 +33,7 @@ import ru.unilms.domain.model.courses.CourseContent
 import ru.unilms.ui.components.courses.items.FileItem
 import ru.unilms.ui.components.courses.items.QuizItem
 import ru.unilms.ui.components.courses.items.TaskItem
+import ru.unilms.ui.components.courses.items.TextItem
 import ru.unilms.utils.enums.CourseItemType
 import ru.unilms.viewmodels.CourseScreenViewModel
 import java.util.UUID
@@ -106,6 +107,11 @@ fun CourseScreen(
                     CourseItemType.Task -> TaskItem(
                         item = item,
                         onClick = { screen, id -> navigate(screen, id) })
+
+                    CourseItemType.Text -> TextItem(
+                        item = item,
+                        onClick = { screen, id -> navigate(screen, id) }
+                    )
                 }
             }
         }

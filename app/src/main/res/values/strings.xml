@@ -72,4 +72,5 @@
     <string name="course_block_course_project">Курсовой проект</string>
     <string name="course_block_lab_works">Лабораторные работы</string>
     <string name="course_block_final_certification">Итоговая аттестация</string>
+    <string name="screen_text">Текст</string>
 </resources>
