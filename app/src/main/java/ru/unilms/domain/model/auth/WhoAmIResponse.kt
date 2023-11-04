@@ -1,3 +1,6 @@
 package ru.unilms.domain.model.auth
 
-data class WhoAmIResponse(val email: String, val name: String)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class WhoAmIResponse(val email: String, val role: String)

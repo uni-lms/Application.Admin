@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,9 +35,12 @@ fun MenuScreen(
 ) {
 
     val viewModel = hiltViewModel<MenuViewModel>()
+    var whoami by remember { mutableStateOf(viewModel.emptyUser) }
+    val coroutineScope = rememberCoroutineScope()
 
-    val scope = rememberCoroutineScope()
-    val whoami by remember { mutableStateOf(viewModel.whoami()) }
+    fun updateUser() = coroutineScope.launch {
+        whoami = viewModel.whoami()
+    }
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -51,6 +55,7 @@ fun MenuScreen(
                 }
             )
         )
+        updateUser()
     }
     Column {
         ListItem(
@@ -62,7 +67,7 @@ fun MenuScreen(
                     contentDescription = null
                 )
             },
-            headlineContent = { Text(text = whoami.name) },
+            headlineContent = { Text(text = whoami.role) },
             supportingContent = { Text(text = whoami.email) }
         )
 
@@ -89,9 +94,7 @@ fun MenuScreen(
             modifier = Modifier
                 .padding(NavigationDrawerItemDefaults.ItemPadding)
                 .clickable {
-                    scope.launch {
-                        viewModel.dataStore.updateToken("")
-                    }
+                    viewModel.logout()
                 },
             leadingContent = {
                 Icon(
