@@ -2,7 +2,6 @@ package ru.unilms.viewmodels
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,8 +46,6 @@ class MenuViewModel @Inject constructor(@ApplicationContext val context: Context
                 result = processResponse(response)
             }
         }
-
-        Log.d("whoami", result.toString())
 
         return result ?: emptyUser
     }
