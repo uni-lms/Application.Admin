@@ -1,16 +1,16 @@
 package ru.unilms.viewmodels
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.model.courses.Course
-import ru.unilms.network.services.CoursesService
 import ru.unilms.network.services.CoursesServiceImpl
+import ru.unilms.network.services.HttpClientFactory
 import ru.unilms.utils.enums.CourseType
 import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject
@@ -20,48 +20,37 @@ class CoursesScreenViewModel @Inject constructor(@ApplicationContext private val
     ViewModel() {
 
     var isLoading = false
-    private var store: DataStore? = null
-    private var baseUrl = ""
-    private var token = ""
+    private var store: DataStore = DataStore(context)
+    private lateinit var service: CoursesServiceImpl
 
     init {
-        store = DataStore(context)
         viewModelScope.launch {
-            store!!.apiUri.collect {
-                baseUrl = it
+            store.apiUri.collect {
+                HttpClientFactory.baseUrl = it
             }
         }
 
         viewModelScope.launch {
-            store!!.token.collect {
-                token = it
+            store.token.collect {
+                service = CoursesServiceImpl(it)
             }
         }
     }
 
-    fun loadCourses(coursesType: CourseType = CourseType.Current): List<Course> {
-        isLoading = true
-        var result = emptyList<Course>()
+    suspend fun loadCourses(coursesType: CourseType = CourseType.Current): List<Course> {
+        var result: List<Course>? = null
+
+        val response = service.getEnrolled(coursesType)
 
         viewModelScope.launch {
-            CoursesService.client.use { client ->
-                val service = CoursesServiceImpl(client, baseUrl, token)
-                processResponse(service.getEnrolled(coursesType),
-                    onSuccess = {
-                        result = it
-                    },
-                    onError = {
-                        val message =
-                            if (it != null) "Произошла ошибка: ${it.reason}"
-                            else "Произошла неизвестная ошибка"
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                    }
-                )
+            isLoading = true
+            coroutineScope {
+                result = processResponse(response)
             }
+            isLoading = false
         }
 
-        isLoading = false
-        return result
+        return result ?: emptyList()
     }
 
 }

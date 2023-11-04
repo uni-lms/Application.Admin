@@ -24,15 +24,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
+import ru.unilms.domain.model.courses.Course
 import ru.unilms.ui.components.courses.CourseCard
 import ru.unilms.utils.enums.CourseType
 import ru.unilms.viewmodels.CoursesScreenViewModel
@@ -41,9 +44,13 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<CoursesScreenViewModel>()
-    var courses by remember { mutableStateOf(viewModel.loadCourses()) }
+    var courses: List<Course> by remember { mutableStateOf(emptyList()) }
     val refreshing = viewModel.isLoading
+
+    fun updateCourses(type: CourseType = CourseType.Current) =
+        coroutineScope.launch { courses = viewModel.loadCourses(type) }
 
     var currentCoursesFilterChipStatus by remember { mutableStateOf(true) }
     var archivedCoursesFilterChipStatus by remember { mutableStateOf(false) }
@@ -51,7 +58,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.isLoading,
-        onRefresh = viewModel::loadCourses
+        onRefresh = { updateCourses() }
     )
 
 
@@ -61,6 +68,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                 actions = { }
             )
         )
+        updateCourses()
     }
 
 
@@ -79,7 +87,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             currentCoursesFilterChipStatus = false
                             archivedCoursesFilterChipStatus = true
                             futureCoursesFilterChipStatus = false
-                            courses = viewModel.loadCourses(CourseType.Archived)
+                            updateCourses(CourseType.Archived)
                         },
                         label = { Text(stringResource(R.string.courses_filter_archived)) },
                         leadingIcon = if (archivedCoursesFilterChipStatus) {
@@ -100,7 +108,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             currentCoursesFilterChipStatus = true
                             archivedCoursesFilterChipStatus = false
                             futureCoursesFilterChipStatus = false
-                            courses = viewModel.loadCourses(CourseType.Current)
+                            updateCourses(CourseType.Current)
                         },
                         label = { Text(stringResource(R.string.courses_filter_current)) },
                         leadingIcon = if (currentCoursesFilterChipStatus) {
@@ -121,7 +129,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                             currentCoursesFilterChipStatus = false
                             archivedCoursesFilterChipStatus = false
                             futureCoursesFilterChipStatus = true
-                            courses = viewModel.loadCourses(CourseType.Upcoming)
+                            updateCourses(CourseType.Upcoming)
                         },
                         label = { Text(stringResource(R.string.courses_filter_upcoming)) },
                         leadingIcon = if (futureCoursesFilterChipStatus) {
