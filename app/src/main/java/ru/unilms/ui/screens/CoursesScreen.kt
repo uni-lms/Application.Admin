@@ -52,15 +52,35 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
     fun updateCourses(type: CourseType = CourseType.Current) =
         coroutineScope.launch { courses = viewModel.loadCourses(type) }
 
+    fun getCurrentCourseType(current: Boolean, archived: Boolean, upcoming: Boolean): CourseType {
+        if (current) {
+            return CourseType.Current
+        }
+        if (archived) {
+            return CourseType.Archived
+        }
+        if (upcoming) {
+            return CourseType.Upcoming
+        }
+        return CourseType.Current
+    }
+
     var currentCoursesFilterChipStatus by remember { mutableStateOf(true) }
     var archivedCoursesFilterChipStatus by remember { mutableStateOf(false) }
-    var futureCoursesFilterChipStatus by remember { mutableStateOf(false) }
+    var upcomingCoursesFilterChipStatus by remember { mutableStateOf(false) }
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.isLoading,
-        onRefresh = { updateCourses() }
+        onRefresh = {
+            updateCourses(
+                getCurrentCourseType(
+                    currentCoursesFilterChipStatus,
+                    archivedCoursesFilterChipStatus,
+                    upcomingCoursesFilterChipStatus
+                )
+            )
+        }
     )
-
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -86,7 +106,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                         onClick = {
                             currentCoursesFilterChipStatus = false
                             archivedCoursesFilterChipStatus = true
-                            futureCoursesFilterChipStatus = false
+                            upcomingCoursesFilterChipStatus = false
                             updateCourses(CourseType.Archived)
                         },
                         label = { Text(stringResource(R.string.courses_filter_archived)) },
@@ -107,7 +127,7 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                         onClick = {
                             currentCoursesFilterChipStatus = true
                             archivedCoursesFilterChipStatus = false
-                            futureCoursesFilterChipStatus = false
+                            upcomingCoursesFilterChipStatus = false
                             updateCourses(CourseType.Current)
                         },
                         label = { Text(stringResource(R.string.courses_filter_current)) },
@@ -124,15 +144,15 @@ fun CoursesScreen(navigate: (UniAppScreen, UUID?) -> Unit, onComposing: (AppBarS
                         }
                     )
                     FilterChip(
-                        selected = futureCoursesFilterChipStatus,
+                        selected = upcomingCoursesFilterChipStatus,
                         onClick = {
                             currentCoursesFilterChipStatus = false
                             archivedCoursesFilterChipStatus = false
-                            futureCoursesFilterChipStatus = true
+                            upcomingCoursesFilterChipStatus = true
                             updateCourses(CourseType.Upcoming)
                         },
                         label = { Text(stringResource(R.string.courses_filter_upcoming)) },
-                        leadingIcon = if (futureCoursesFilterChipStatus) {
+                        leadingIcon = if (upcomingCoursesFilterChipStatus) {
                             {
                                 Icon(
                                     imageVector = Icons.Outlined.Done,
