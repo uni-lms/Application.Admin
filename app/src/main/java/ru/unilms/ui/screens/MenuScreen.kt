@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.School
+import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.SupervisorAccount
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
+import ru.unilms.utils.enums.UserRole
 import ru.unilms.viewmodels.MenuViewModel
 
 @Composable
@@ -62,12 +65,24 @@ fun MenuScreen(
             modifier = Modifier
                 .padding(NavigationDrawerItemDefaults.ItemPadding),
             leadingContent = {
-                Icon(
-                    imageVector = Icons.Outlined.BugReport,
-                    contentDescription = null
-                )
+                when (whoami.role) {
+                    UserRole.Admin -> Icon(
+                        imageVector = Icons.Outlined.Shield,
+                        contentDescription = null
+                    )
+
+                    UserRole.Student -> Icon(
+                        imageVector = Icons.Outlined.School,
+                        contentDescription = null
+                    )
+
+                    UserRole.Tutor -> Icon(
+                        imageVector = Icons.Outlined.SupervisorAccount,
+                        contentDescription = null
+                    )
+                }
             },
-            headlineContent = { Text(text = whoami.role) },
+            headlineContent = { Text(text = whoami.fullName) },
             supportingContent = { Text(text = whoami.email) }
         )
 

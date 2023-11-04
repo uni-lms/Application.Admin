@@ -13,6 +13,7 @@ import ru.unilms.data.DataStore
 import ru.unilms.domain.model.auth.WhoAmIResponse
 import ru.unilms.network.services.AuthServiceImpl
 import ru.unilms.network.services.HttpClientFactory
+import ru.unilms.utils.enums.UserRole
 import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class MenuViewModel @Inject constructor(@ApplicationContext val context: Context
 
     private val store = DataStore(context)
     private lateinit var service: AuthServiceImpl
-    val emptyUser = WhoAmIResponse("email@example.com", "Вася Пупкин")
+    val emptyUser = WhoAmIResponse("email@example.com", UserRole.Student, "Вася Пупкин")
 
     init {
         viewModelScope.launch {
