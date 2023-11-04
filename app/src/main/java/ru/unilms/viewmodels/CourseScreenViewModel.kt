@@ -1,47 +1,53 @@
 package ru.unilms.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.unilms.domain.model.courses.CourseBlock
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import ru.unilms.data.DataStore
 import ru.unilms.domain.model.courses.CourseContent
-import ru.unilms.domain.model.courses.CourseItem
-import ru.unilms.utils.enums.CourseItemType
+import ru.unilms.network.services.CoursesServiceImpl
+import ru.unilms.network.services.HttpClientFactory
+import ru.unilms.utils.networking.processResponse
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class CourseScreenViewModel @Inject constructor() : ViewModel() {
+class CourseScreenViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+    ViewModel() {
 
-    fun getCourseContent(): CourseContent {
-        return CourseContent(
-            "ТП (3 семестр)", listOf(
-                CourseBlock(
-                    "Лекции",
-                    listOf(
-                        CourseItem(UUID.randomUUID(), "Лекция 1", CourseItemType.File),
-                        CourseItem(UUID.randomUUID(), "Лекция 2", CourseItemType.File),
-                        CourseItem(UUID.randomUUID(), "Лекция 3", CourseItemType.File)
-                    )
-                ),
-                CourseBlock(
-                    "Рейтинг-контроль №1",
-                    listOf(
-                        CourseItem(UUID.randomUUID(), "Тест", CourseItemType.Quiz),
-                    )
-                ),
-                CourseBlock(
-                    "Лабораторные работы",
-                    listOf(
-                        CourseItem(UUID.randomUUID(), "МУ к Л/Р №1", CourseItemType.File),
-                        CourseItem(UUID.randomUUID(), "Л/Р №1", CourseItemType.Task),
-                        CourseItem(UUID.randomUUID(), "МУ к Л/Р №2", CourseItemType.File),
-                        CourseItem(UUID.randomUUID(), "Л/Р №2", CourseItemType.Task),
-                        CourseItem(UUID.randomUUID(), "МУ к Л/Р №3", CourseItemType.File),
-                        CourseItem(UUID.randomUUID(), "Л/Р №3", CourseItemType.Task)
-                    )
-                ),
-            )
-        )
+    private var store: DataStore = DataStore(context)
+    private lateinit var service: CoursesServiceImpl
+
+    init {
+        viewModelScope.launch {
+            store.apiUri.collect {
+                HttpClientFactory.baseUrl = it
+            }
+        }
+
+        viewModelScope.launch {
+            store.token.collect {
+                service = CoursesServiceImpl(it)
+            }
+        }
+    }
+
+    suspend fun getCourseContent(courseId: UUID): CourseContent? {
+        var result: CourseContent? = null
+
+        val response = service.getCourseContents(courseId)
+
+        viewModelScope.launch {
+            coroutineScope {
+                result = processResponse(response)
+            }
+        }
+
+        return result
     }
 
 }

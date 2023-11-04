@@ -19,13 +19,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.app.UniAppScreen
 import ru.unilms.data.AppBarState
+import ru.unilms.domain.model.courses.CourseContent
 import ru.unilms.ui.components.courses.items.FileItem
 import ru.unilms.ui.components.courses.items.QuizItem
 import ru.unilms.ui.components.courses.items.TaskItem
@@ -40,13 +44,22 @@ fun CourseScreen(
     onComposing: (AppBarState) -> Unit
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<CourseScreenViewModel>()
-    val courseContent by remember { mutableStateOf(viewModel.getCourseContent()) }
+    var courseContent: CourseContent? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(key1 = true) {
+    fun updateCourseContent() = coroutineScope.launch {
+        courseContent = viewModel.getCourseContent(courseId)
+    }
+
+    LaunchedEffect(true) {
+        updateCourseContent()
+    }
+
+    LaunchedEffect(courseContent) {
         onComposing(
             AppBarState(
-                title = courseContent.subjectAbbreviation,
+                title = "${courseContent?.abbreviation} (${courseContent?.semester} семестр)",
                 actions = { }
             )
         )
@@ -75,7 +88,7 @@ fun CourseScreen(
             }
         )
         Divider()
-        courseContent.blocks.forEach { block ->
+        courseContent?.blocks?.forEach { block ->
             Text(
                 text = stringResource(block.title.labelId),
                 style = MaterialTheme.typography.titleMedium
