@@ -82,6 +82,7 @@ dependencies {
 
     val ktorVersion = "2.3.4"
     val hiltVersion = "2.48.1"
+    val richTextVersion = "0.17.0"
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -134,6 +135,11 @@ dependencies {
     // Debug stuff
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // RichText
+    implementation("com.halilibo.compose-richtext:richtext-ui-material3:${richTextVersion}")
+    implementation("com.halilibo.compose-richtext:richtext-commonmark:${richTextVersion}")
+
 }
 
 task("printVersionName") {
