@@ -60,7 +60,7 @@ fun CourseScreen(
     LaunchedEffect(courseContent) {
         onComposing(
             AppBarState(
-                title = "${courseContent?.abbreviation} (${courseContent?.semester} семестр)",
+                title = if (courseContent != null) "${courseContent?.abbreviation} (${courseContent?.semester} семестр)" else null,
                 actions = { }
             )
         )
