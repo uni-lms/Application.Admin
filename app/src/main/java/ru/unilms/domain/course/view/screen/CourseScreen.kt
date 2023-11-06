@@ -90,28 +90,30 @@ fun CourseScreen(
         )
         Divider()
         courseContent?.blocks?.forEach { block ->
-            Text(
-                text = stringResource(block.title.labelId),
-                style = MaterialTheme.typography.titleMedium
-            )
-            block.items.forEach { item ->
-                when (item.type) {
-                    CourseItemType.File -> FileItem(
-                        item = item,
-                        onClick = { screen, id -> navigate(screen, id) })
+            if (block.items.isNotEmpty()) {
+                Text(
+                    text = stringResource(block.title.labelId),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                block.items.forEach { item ->
+                    when (item.type) {
+                        CourseItemType.File -> FileItem(
+                            item = item,
+                            onClick = { screen, id -> navigate(screen, id) })
 
-                    CourseItemType.Quiz -> QuizItem(
-                        item = item,
-                        onClick = { screen, id -> navigate(screen, id) })
+                        CourseItemType.Quiz -> QuizItem(
+                            item = item,
+                            onClick = { screen, id -> navigate(screen, id) })
 
-                    CourseItemType.Task -> TaskItem(
-                        item = item,
-                        onClick = { screen, id -> navigate(screen, id) })
+                        CourseItemType.Task -> TaskItem(
+                            item = item,
+                            onClick = { screen, id -> navigate(screen, id) })
 
-                    CourseItemType.Text -> TextItem(
-                        item = item,
-                        onClick = { screen, id -> navigate(screen, id) }
-                    )
+                        CourseItemType.Text -> TextItem(
+                            item = item,
+                            onClick = { screen, id -> navigate(screen, id) }
+                        )
+                    }
                 }
             }
         }
