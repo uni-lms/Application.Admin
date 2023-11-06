@@ -7,5 +7,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizInfoViewModel @Inject constructor() : ViewModel() {
-    val data = QuizInfo("Тест", 10, 1, 59)
+    val data = QuizInfo(
+        "Тест",
+        10,
+        1,
+        1,
+        59,
+        listOf(),
+        false
+    )
 }
