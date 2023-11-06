@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.processResponse
-import ru.unilms.domain.course.model.FileContentInfo
+import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.network.CoursesServiceImpl
 import java.util.UUID
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class TextViewModel @Inject constructor(@ApplicationContext private val context:
         }
     }
 
-    suspend fun getFileContent(textId: UUID): String {
+    suspend fun getTextContent(textId: UUID): String {
         var result: ByteArray? = null
         val response = service.getTextContent(textId)
 
@@ -49,8 +49,8 @@ class TextViewModel @Inject constructor(@ApplicationContext private val context:
         return String(result ?: byteArrayOf())
     }
 
-    suspend fun getFileInfo(textId: UUID): FileContentInfo? {
-        var result: FileContentInfo? = null
+    suspend fun getTextContentInfo(textId: UUID): TextContentInfo? {
+        var result: TextContentInfo? = null
         val response = service.getTextContentInfo(textId)
 
         viewModelScope.launch {
