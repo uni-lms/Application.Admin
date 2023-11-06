@@ -1,6 +1,7 @@
 package ru.unilms.domain.file.viewmodel
 
 import android.content.Context
+import android.text.format.Formatter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,5 +47,12 @@ class FileViewModel @Inject constructor(@ApplicationContext private val context:
         }
 
         return result
+    }
+
+    fun formatFileSize(fileSize: Long?): String? {
+        if (fileSize != null) {
+            return Formatter.formatFileSize(context, fileSize)
+        }
+        return null
     }
 }

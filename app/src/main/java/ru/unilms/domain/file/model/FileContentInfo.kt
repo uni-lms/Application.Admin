@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class FileContentInfo(
     val courseAbbreviation: String,
     val visibleName: String,
-    val fileSize: String,
-    val mimeType: String,
+    val fileSize: Long,
+    val extension: String,
 )
