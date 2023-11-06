@@ -1,9 +1,10 @@
-package ru.unilms.network.services
+package ru.unilms.network.services.courses
 
 import ru.unilms.domain.model.courses.Course
 import ru.unilms.domain.model.courses.CourseContent
 import ru.unilms.domain.model.courses.FileContentInfo
 import ru.unilms.domain.model.error.ErrorResponse
+import ru.unilms.network.Response
 import ru.unilms.utils.enums.CourseType
 import java.util.UUID
 

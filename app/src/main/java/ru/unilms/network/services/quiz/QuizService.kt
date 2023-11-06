@@ -1,9 +1,10 @@
-package ru.unilms.network.services
+package ru.unilms.network.services.quiz
 
 import ru.unilms.domain.model.error.ErrorResponse
 import ru.unilms.domain.model.quiz.QuestionChoice
 import ru.unilms.domain.model.quiz.QuestionInfo
 import ru.unilms.domain.model.quiz.QuizInfo
+import ru.unilms.network.Response
 import java.util.UUID
 
 interface QuizService {

@@ -1,4 +1,4 @@
-package ru.unilms.network.services
+package ru.unilms.network.services.courses
 
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -17,6 +17,10 @@ import ru.unilms.domain.model.courses.Course
 import ru.unilms.domain.model.courses.CourseContent
 import ru.unilms.domain.model.courses.FileContentInfo
 import ru.unilms.domain.model.error.ErrorResponse
+import ru.unilms.network.HttpClientFactory
+import ru.unilms.network.Response
+import ru.unilms.network.errorBody
+import ru.unilms.network.safeRequest
 import ru.unilms.utils.enums.CourseType
 import java.util.UUID
 

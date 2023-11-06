@@ -10,8 +10,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.model.auth.WhoAmIResponse
-import ru.unilms.network.services.AuthServiceImpl
-import ru.unilms.network.services.HttpClientFactory
+import ru.unilms.network.HttpClientFactory
+import ru.unilms.network.services.auth.AuthServiceImpl
 import ru.unilms.utils.enums.UserRole
 import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject

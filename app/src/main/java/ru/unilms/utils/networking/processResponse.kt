@@ -1,6 +1,6 @@
 package ru.unilms.utils.networking
 
-import ru.unilms.network.services.Response
+import ru.unilms.network.Response
 
 //fun <T, E> processResponse(
 //    response: Response<T, E>,

@@ -1,4 +1,4 @@
-package ru.unilms.network.services
+package ru.unilms.network
 
 sealed class Response<out T, out E> {
     data class Success<T>(val body: T) : Response<T, Nothing>()

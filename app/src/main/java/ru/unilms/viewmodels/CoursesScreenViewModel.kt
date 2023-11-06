@@ -9,8 +9,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.model.courses.Course
-import ru.unilms.network.services.CoursesServiceImpl
-import ru.unilms.network.services.HttpClientFactory
+import ru.unilms.network.HttpClientFactory
+import ru.unilms.network.services.courses.CoursesServiceImpl
 import ru.unilms.utils.enums.CourseType
 import ru.unilms.utils.networking.processResponse
 import javax.inject.Inject

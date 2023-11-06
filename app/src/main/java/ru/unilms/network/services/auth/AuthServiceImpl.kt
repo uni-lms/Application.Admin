@@ -1,4 +1,4 @@
-package ru.unilms.network.services
+package ru.unilms.network.services.auth
 
 import io.ktor.client.request.accept
 import io.ktor.client.request.headers
@@ -12,6 +12,9 @@ import ru.unilms.domain.model.auth.LoginRequest
 import ru.unilms.domain.model.auth.LoginResponse
 import ru.unilms.domain.model.auth.WhoAmIResponse
 import ru.unilms.domain.model.error.ErrorResponse
+import ru.unilms.network.HttpClientFactory
+import ru.unilms.network.Response
+import ru.unilms.network.safeRequest
 
 class AuthServiceImpl(val token: String = "") : AuthService {
     override suspend fun login(body: LoginRequest): Response<LoginResponse, ErrorResponse> {
