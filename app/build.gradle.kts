@@ -140,6 +140,9 @@ dependencies {
     implementation("com.halilibo.compose-richtext:richtext-ui-material3:${richTextVersion}")
     implementation("com.halilibo.compose-richtext:richtext-commonmark:${richTextVersion}")
 
+    // Downloading files
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+
 }
 
 task("printVersionName") {
