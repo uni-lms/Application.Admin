@@ -75,4 +75,6 @@
     <string name="screen_text">Text</string>
     <string name="label_file_size">Size</string>
     <string name="label_file_type">File type</string>
+    <string name="notification_channel_downloads_name">Downloads</string>
+    <string name="notification_channel_downloads_description">Channel used to display notifications, related to downloading files from server</string>
 </resources>
