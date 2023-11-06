@@ -8,4 +8,7 @@ data class FileContentInfo(
     val visibleName: String,
     val fileSize: Long,
     val extension: String,
+    val fileId: String,
+    val mimeType: String,
+    val fileName: String,
 )
