@@ -17,7 +17,8 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class FileViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
+class FileViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+    ViewModel() {
     private var store: DataStore = DataStore(context)
     private lateinit var service: CoursesServiceImpl
 
@@ -54,5 +55,15 @@ class FileViewModel @Inject constructor(@ApplicationContext private val context:
             return Formatter.formatFileSize(context, fileSize)
         }
         return null
+    }
+
+    fun buildFileDownloadUrl(fileId: String): String {
+        var url = ""
+        viewModelScope.launch {
+            store.apiUri.collect {
+                url = "$it/v1/static/${fileId}/download"
+            }
+        }
+        return url
     }
 }
