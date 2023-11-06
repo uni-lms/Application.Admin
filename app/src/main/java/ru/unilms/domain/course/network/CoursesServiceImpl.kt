@@ -20,8 +20,9 @@ import ru.unilms.domain.common.network.errorBody
 import ru.unilms.domain.common.network.safeRequest
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
-import ru.unilms.domain.course.model.FileContentInfo
+import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
+import ru.unilms.domain.file.model.FileContentInfo
 import java.util.UUID
 
 class CoursesServiceImpl(
@@ -75,11 +76,23 @@ class CoursesServiceImpl(
         }
     }
 
-    override suspend fun getTextContentInfo(textId: UUID): Response<FileContentInfo, ErrorResponse> {
+    override suspend fun getTextContentInfo(textId: UUID): Response<TextContentInfo, ErrorResponse> {
         val client = HttpClientFactory.httpClient
         return client.safeRequest {
             method = HttpMethod.Get
             url("${HttpClientFactory.baseUrl}/v1/materials/text/${textId}/info")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getFileContentInfo(fileId: UUID): Response<FileContentInfo, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/materials/file/${fileId}/info")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
