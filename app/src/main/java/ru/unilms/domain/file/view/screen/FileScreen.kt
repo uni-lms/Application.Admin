@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,6 +31,7 @@ import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.file.model.FileContentInfo
+import ru.unilms.domain.file.util.DownloaderImpl
 import ru.unilms.domain.file.viewmodel.FileViewModel
 import java.util.UUID
 
@@ -43,6 +45,7 @@ fun FileScreen(
     val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<FileViewModel>()
     var fileContentInfo: FileContentInfo? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
 
     fun updateFileInfo() = coroutineScope.launch {
         fileContentInfo = viewModel.getFileInfo(fileId)
@@ -99,8 +102,19 @@ fun FileScreen(
             }
         )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Скачать")
+            Button(
+                onClick = {
+                    fileContentInfo?.let {
+                        val url = viewModel.buildFileDownloadUrl(it.fileId)
+                        DownloaderImpl(context).downloadFile(
+                            url,
+                            it.mimeType,
+                            it.fileName
+                        )
+                    }
+                }
+            ) {
+                Text(text = stringResource(R.string.label_download_file))
             }
         }
     }

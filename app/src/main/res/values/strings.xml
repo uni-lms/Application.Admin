@@ -75,4 +75,5 @@
     <string name="screen_text">Текст</string>
     <string name="label_file_size">Размер</string>
     <string name="label_file_type">Тип файла</string>
+    <string name="label_download_file">Скачать файл</string>
 </resources>
