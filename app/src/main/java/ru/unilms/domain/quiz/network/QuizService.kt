@@ -2,9 +2,9 @@ package ru.unilms.domain.quiz.network
 
 import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.Response
-import ru.unilms.domain.quiz.view.screen.QuestionChoice
-import ru.unilms.domain.quiz.view.screen.QuestionInfo
-import ru.unilms.domain.quiz.view.screen.QuizInfo
+import ru.unilms.domain.quiz.model.QuestionChoice
+import ru.unilms.domain.quiz.model.QuestionInfo
+import ru.unilms.domain.quiz.model.QuizInfo
 import java.util.UUID
 
 interface QuizService {

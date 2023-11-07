@@ -2,8 +2,8 @@ package ru.unilms.domain.quiz.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.unilms.domain.quiz.view.screen.QuestionChoice
-import ru.unilms.domain.quiz.view.screen.QuestionInfo
+import ru.unilms.domain.quiz.model.QuestionChoice
+import ru.unilms.domain.quiz.model.QuestionInfo
 import java.util.UUID
 import javax.inject.Inject
 

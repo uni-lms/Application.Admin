@@ -1,4 +1,4 @@
-package ru.unilms.domain.quiz.view.screen
+package ru.unilms.domain.quiz.model
 
 import kotlinx.serialization.Serializable
 import ru.unilms.domain.common.serialization.UUIDSerializer
