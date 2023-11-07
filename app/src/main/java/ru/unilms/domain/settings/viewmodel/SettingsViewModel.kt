@@ -14,10 +14,4 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(@ApplicationContext context: Context) : ViewModel() {
     private val store = DataStore(context)
 
-    fun clearServerInfo() {
-        viewModelScope.launch {
-            store.updateToken("")
-            store.updateApiUri("")
-        }
-    }
 }
