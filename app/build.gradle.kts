@@ -119,7 +119,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Images
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
