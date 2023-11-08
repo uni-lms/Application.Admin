@@ -4,8 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.QuestionMark
+import androidx.compose.material.icons.outlined.Repeat
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,13 +32,16 @@ import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.common.unit.minutes
 import ru.unilms.domain.quiz.model.QuizInfo
 import ru.unilms.domain.quiz.viewmodel.QuizInfoViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.UUID
 
 @Composable
 fun QuizInfoScreen(
     quizId: UUID,
     onComposing: (AppBarState) -> Unit,
-    navigate: (Screens, UUID, Int) -> Unit
+    navigate: (Screens, UUID, Int?) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<QuizInfoViewModel>()
@@ -40,6 +49,17 @@ fun QuizInfoScreen(
 
     fun updateQuizInfo() = coroutineScope.launch {
         quizInfo = viewModel.getQuizInfo(quizId)
+    }
+
+    fun startAttempt() = coroutineScope.launch {
+        viewModel.startAttempt(quizId) { id ->
+            navigate(Screens.QuizAttempt, id, 1)
+        }
+    }
+
+    fun formatDateTime(dt: LocalDateTime?): String {
+        if (dt == null) return "…"
+        return dt.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
     }
 
     LaunchedEffect(true) {
@@ -61,6 +81,9 @@ fun QuizInfoScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ListItem(
+            leadingContent = {
+                Icon(imageVector = Icons.Outlined.QuestionMark, contentDescription = null)
+            },
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_amount_of_questions)) },
             trailingContent = {
                 Text(
@@ -69,6 +92,9 @@ fun QuizInfoScreen(
             }
         )
         ListItem(
+            leadingContent = {
+                Icon(imageVector = Icons.Outlined.Repeat, contentDescription = null)
+            },
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_amount_of_attempts)) },
             trailingContent = {
                 Text(
@@ -77,6 +103,9 @@ fun QuizInfoScreen(
             }
         )
         ListItem(
+            leadingContent = {
+                Icon(imageVector = Icons.Outlined.Timer, contentDescription = null)
+            },
             headlineContent = { Text(text = stringResource(id = R.string.label_quiz_try_time_limit)) },
             trailingContent = {
                 Text(
@@ -85,8 +114,46 @@ fun QuizInfoScreen(
             }
         )
         /* TODO: Добавить создание попытки решения теста (привязанной к этому тесту) при клике на кнопку */
-        Button(onClick = { navigate(Screens.QuizAttempt, UUID.randomUUID(), 1) }) {
-            Text(text = stringResource(id = R.string.label_quiz_begin_attempt))
+        if (quizInfo != null && quizInfo!!.remainingAttempts > 0) {
+            Button(onClick = { startAttempt() }) {
+                Text(text = stringResource(id = R.string.label_quiz_begin_attempt))
+            }
+        }
+
+        if (quizInfo != null && quizInfo!!.attempts.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.label_quiz_pass_attempts),
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            quizInfo!!.attempts.forEachIndexed { ind, it ->
+                ListItem(
+                    overlineContent = {
+                        Text(text = "${formatDateTime(it.startedAt)} — ${formatDateTime(it.finishedAt)}")
+                    },
+                    headlineContent = {
+                        Text(text = stringResource(R.string.label_attempt_name, ind + 1))
+                    },
+                    supportingContent = {
+                        Text(text = "${it.accruedPoints} / ${quizInfo!!.maximumPoints}")
+                    },
+                    trailingContent = {
+                        if (it.finishedAt == null) {
+                            Button(onClick = {
+                                navigate(Screens.QuizAttempt, it.id, 1)
+                            }) {
+                                Text(text = stringResource(R.string.label_continue_attempt))
+                            }
+                        } else {
+                            Button(onClick = {
+                                navigate(Screens.QuizAttemptResults, it.id, null)
+                            }) {
+                                Text(text = stringResource(R.string.label_open_results))
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }

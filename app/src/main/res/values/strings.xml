@@ -76,4 +76,8 @@
     <string name="label_file_size">Размер</string>
     <string name="label_file_type">Тип файла</string>
     <string name="label_download_file">Скачать файл</string>
+    <string name="label_quiz_pass_attempts">Попытки</string>
+    <string name="label_continue_attempt">Продолжить попытку</string>
+    <string name="label_open_results">Посмотреть результаты</string>
+    <string name="label_attempt_name">Попытка №%1$s</string>
 </resources>

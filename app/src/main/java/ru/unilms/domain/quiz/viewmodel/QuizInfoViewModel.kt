@@ -10,13 +10,15 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.processResponse
+import ru.unilms.domain.quiz.model.AttemptInfoDto
 import ru.unilms.domain.quiz.model.QuizInfo
 import ru.unilms.domain.quiz.network.QuizServiceImpl
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizInfoViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
+class QuizInfoViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+    ViewModel() {
     private var store: DataStore = DataStore(context)
     private lateinit var service: QuizServiceImpl
 
@@ -46,5 +48,18 @@ class QuizInfoViewModel @Inject constructor(@ApplicationContext private val cont
         }
 
         return result
+    }
+
+    suspend fun startAttempt(quizId: UUID, navigate: (UUID) -> Unit) {
+        var result: AttemptInfoDto? = null
+        val response = service.startAttempt(quizId)
+
+        viewModelScope.launch {
+            coroutineScope {
+                result = processResponse(response)
+            }
+        }
+
+        result?.let { navigate(it.id) }
     }
 }
