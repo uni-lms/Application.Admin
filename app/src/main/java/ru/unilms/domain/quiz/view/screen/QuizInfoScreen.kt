@@ -115,7 +115,6 @@ fun QuizInfoScreen(
                 )
             }
         )
-        /* TODO: Добавить создание попытки решения теста (привязанной к этому тесту) при клике на кнопку */
         if (quizInfo != null && quizInfo!!.remainingAttempts > 0) {
             Button(onClick = { startAttempt() }) {
                 Text(text = stringResource(id = R.string.label_quiz_begin_attempt))
