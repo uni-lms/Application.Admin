@@ -2,6 +2,7 @@ package ru.unilms.domain.quiz.network
 
 import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.Response
+import ru.unilms.domain.quiz.model.AttemptInfoDto
 import ru.unilms.domain.quiz.model.QuestionChoice
 import ru.unilms.domain.quiz.model.QuestionInfo
 import ru.unilms.domain.quiz.model.QuizInfo
@@ -15,7 +16,7 @@ interface QuizService {
         selectedChoices: List<QuestionChoice>
     ): Response<Nothing, ErrorResponse>
 
-    suspend fun startAttempt(quizId: UUID): Response<UUID, ErrorResponse>
+    suspend fun startAttempt(quizId: UUID): Response<AttemptInfoDto, ErrorResponse>
     suspend fun finishAttempt(attemptId: UUID): Response<Nothing, ErrorResponse>
     suspend fun getAttemptResults(attemptId: UUID): Response<Nothing, ErrorResponse>
 }
