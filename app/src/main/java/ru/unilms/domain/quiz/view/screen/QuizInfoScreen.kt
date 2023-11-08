@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Repeat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -139,10 +141,15 @@ fun QuizInfoScreen(
                     },
                     trailingContent = {
                         if (it.finishedAt == null) {
-                            Button(onClick = {
-                                navigate(Screens.QuizAttempt, it.id, 1)
-                            }) {
-                                Text(text = stringResource(R.string.label_continue_attempt))
+                            FilledTonalIconButton(
+                                onClick = {
+                                    navigate(Screens.QuizAttempt, it.id, 1)
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.PlayCircleOutline,
+                                    contentDescription = null
+                                )
                             }
                         }
                     }
