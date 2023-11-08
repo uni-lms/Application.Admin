@@ -14,9 +14,11 @@ import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
 import ru.unilms.domain.quiz.model.AttemptInfoDto
-import ru.unilms.domain.quiz.model.QuestionChoice
+import ru.unilms.domain.quiz.model.ChosenAnswer
 import ru.unilms.domain.quiz.model.QuestionInfo
 import ru.unilms.domain.quiz.model.QuizInfo
+import ru.unilms.domain.quiz.model.SaveAnswerRequest
+import ru.unilms.domain.quiz.model.SaveAnswerResponse
 import java.util.UUID
 
 class QuizServiceImpl(val token: String) : QuizService {
@@ -48,10 +50,21 @@ class QuizServiceImpl(val token: String) : QuizService {
     }
 
     override suspend fun saveAnswer(
+        attemptId: UUID,
         questionId: UUID,
-        selectedChoices: List<QuestionChoice>,
-    ): Response<Nothing, ErrorResponse> {
-        TODO("Not yet implemented")
+        selectedChoices: List<ChosenAnswer>,
+    ): Response<SaveAnswerResponse, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Post
+            url("${HttpClientFactory.baseUrl}/v1/quiz-attempt/${attemptId}/save-answer")
+            setBody(SaveAnswerRequest(questionId, selectedChoices))
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
     }
 
     override suspend fun startAttempt(quizId: UUID): Response<AttemptInfoDto, ErrorResponse> {

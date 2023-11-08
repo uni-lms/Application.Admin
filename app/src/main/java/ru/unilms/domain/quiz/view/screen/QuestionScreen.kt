@@ -39,6 +39,7 @@ import ru.unilms.data.AppBarState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.common.form.dynamic.FieldType
 import ru.unilms.domain.common.form.dynamic.FormField
+import ru.unilms.domain.quiz.model.ChosenAnswer
 import ru.unilms.domain.quiz.model.QuestionInfo
 import ru.unilms.domain.quiz.view.form.QuestionForm
 import ru.unilms.domain.quiz.viewmodel.QuestionViewModel
@@ -67,8 +68,16 @@ fun QuestionScreen(
 
     val formState = remember { mutableStateListOf<FormField>() }
 
+    fun saveAnswer() = coroutineScope.launch {
+        viewModel.saveAnswer(attemptId, questionInfo.id, formState.map {
+            ChosenAnswer(it.id)
+        })
+    }
+
+
     LaunchedEffect(questionNumber) {
         updateQuestionInfo()
+        formState.clear()
     }
 
     LaunchedEffect(questionInfo) {
@@ -102,7 +111,10 @@ fun QuestionScreen(
         ) {
             (1..questionInfo.amountOfQuestions).forEach {
                 FilterChip(
-                    onClick = { navigate(Screens.QuizAttempt, attemptId, it, false) },
+                    onClick = {
+                        saveAnswer()
+                        navigate(Screens.QuizAttempt, attemptId, it, false)
+                    },
                     selected = it == questionNumber,
                     label = { Text(text = it.toString()) }
                 )
@@ -122,6 +134,7 @@ fun QuestionScreen(
         ) {
             FilledTonalButton(
                 onClick = {
+                    saveAnswer()
                     navigate(
                         Screens.QuizAttempt,
                         attemptId,
@@ -138,6 +151,7 @@ fun QuestionScreen(
             if (questionNumber < questionInfo.amountOfQuestions) {
                 FilledTonalButton(
                     onClick = {
+                        saveAnswer()
                         navigate(
                             Screens.QuizAttempt,
                             attemptId,

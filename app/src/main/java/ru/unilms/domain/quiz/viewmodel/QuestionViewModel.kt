@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.processResponse
+import ru.unilms.domain.quiz.model.ChosenAnswer
 import ru.unilms.domain.quiz.model.QuestionInfo
 import ru.unilms.domain.quiz.network.QuizServiceImpl
 import java.util.UUID
@@ -55,5 +56,13 @@ class QuestionViewModel @Inject constructor(@ApplicationContext private val cont
         }
 
         return result
+    }
+
+    suspend fun saveAnswer(attemptId: UUID, questionId: UUID, selectedChoices: List<ChosenAnswer>) {
+        val response = service.saveAnswer(attemptId, questionId, selectedChoices)
+
+        viewModelScope.launch {
+            processResponse(response)
+        }
     }
 }
