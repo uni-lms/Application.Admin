@@ -3,6 +3,7 @@ package ru.unilms.domain.quiz.view.form
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,6 +50,7 @@ fun QuestionForm(
                     Row(
                         Modifier
                             .fillMaxWidth()
+                            .defaultMinSize(minHeight = 56.dp)
                             .selectable(
                                 selected = (field in formState),
                                 onClick = { onOptionSelected(formState, field, false) },

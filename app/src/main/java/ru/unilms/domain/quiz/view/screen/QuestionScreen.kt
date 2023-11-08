@@ -67,16 +67,17 @@ fun QuestionScreen(
 
     val formState = remember { mutableStateListOf<FormField>() }
 
-    val title = stringResource(R.string.title_question_number, questionNumber)
+    LaunchedEffect(questionNumber) {
+        updateQuestionInfo()
+    }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(questionInfo) {
         onComposing(
             AppBarState(
-                title = title,
+                title = questionInfo.quizTitle,
                 actions = { }
             )
         )
-        updateQuestionInfo()
     }
 
     val formFields = questionInfo.choices.map {
@@ -108,7 +109,10 @@ fun QuestionScreen(
             }
         }
 
-        Text(text = "Вопрос №$questionNumber", style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(R.string.title_question_number, questionNumber),
+            style = MaterialTheme.typography.titleLarge
+        )
         Text(text = questionInfo.questionTitle)
         QuestionForm(formState, formFields)
 

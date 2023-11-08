@@ -80,7 +80,7 @@
     <string name="label_continue_attempt">Continue attempt</string>
     <string name="label_open_results">View results</string>
     <string name="label_attempt_name">Attempt #%1$s</string>
-    <string name="title_question_number">Question #%1$s</string>
+    <string name="title_question_number">Question #%1$d</string>
     <string name="button_finish_attempt">Finish</string>
     <string name="button_question_next">Next</string>
     <string name="button_question_prev">Prev</string>
