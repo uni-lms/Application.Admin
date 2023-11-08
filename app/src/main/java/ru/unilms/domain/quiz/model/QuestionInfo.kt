@@ -1,12 +1,17 @@
 package ru.unilms.domain.quiz.model
 
 import kotlinx.serialization.Serializable
+import ru.unilms.domain.common.serialization.UUIDSerializer
+import java.util.UUID
 
 @Serializable
 data class QuestionInfo(
-    val amountOfQuestions: Int,
+    @Serializable(UUIDSerializer::class)
+    val id: UUID,
     val quizTitle: String,
     val questionTitle: String,
+    val sequenceNumber: Int,
+    val amountOfQuestions: Int,
     val isMultipleChoicesAllowed: Boolean,
-    val answers: List<QuestionChoice>
+    val choices: List<QuestionChoice>,
 )

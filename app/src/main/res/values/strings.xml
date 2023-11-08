@@ -80,4 +80,8 @@
     <string name="label_continue_attempt">Продолжить попытку</string>
     <string name="label_open_results">Посмотреть результаты</string>
     <string name="label_attempt_name">Попытка №%1$s</string>
+    <string name="title_question_number">Вопрос №%1$s</string>
+    <string name="button_finish_attempt">Завершить</string>
+    <string name="button_question_next">Вперёд</string>
+    <string name="button_question_prev">Назад</string>
 </resources>

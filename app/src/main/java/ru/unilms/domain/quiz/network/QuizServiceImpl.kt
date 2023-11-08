@@ -39,7 +39,7 @@ class QuizServiceImpl(val token: String) : QuizService {
         val client = HttpClientFactory.httpClient
         return client.safeRequest {
             method = HttpMethod.Get
-            url("${HttpClientFactory.baseUrl}/v1/materials/quiz/${attemptId}/question/${questionNumber}")
+            url("${HttpClientFactory.baseUrl}/v1/quiz-attempt/${attemptId}/question/${questionNumber}")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
