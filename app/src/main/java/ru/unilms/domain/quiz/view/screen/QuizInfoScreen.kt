@@ -129,13 +129,13 @@ fun QuizInfoScreen(
             quizInfo!!.attempts.forEachIndexed { ind, it ->
                 ListItem(
                     overlineContent = {
-                        Text(text = "${formatDateTime(it.startedAt)} — ${formatDateTime(it.finishedAt)}")
+                        Text(text = "${it.accruedPoints} / ${quizInfo!!.maximumPoints}")
                     },
                     headlineContent = {
                         Text(text = stringResource(R.string.label_attempt_name, ind + 1))
                     },
                     supportingContent = {
-                        Text(text = "${it.accruedPoints} / ${quizInfo!!.maximumPoints}")
+                        Text(text = "${formatDateTime(it.startedAt)} — ${formatDateTime(it.finishedAt)}")
                     },
                     trailingContent = {
                         if (it.finishedAt == null) {
@@ -143,12 +143,6 @@ fun QuizInfoScreen(
                                 navigate(Screens.QuizAttempt, it.id, 1)
                             }) {
                                 Text(text = stringResource(R.string.label_continue_attempt))
-                            }
-                        } else {
-                            Button(onClick = {
-                                navigate(Screens.QuizAttemptResults, it.id, null)
-                            }) {
-                                Text(text = stringResource(R.string.label_open_results))
                             }
                         }
                     }

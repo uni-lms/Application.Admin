@@ -34,7 +34,6 @@ import ru.unilms.domain.journal.view.screen.JournalScreen
 import ru.unilms.domain.menu.view.screen.MenuScreen
 import ru.unilms.domain.quiz.view.screen.QuestionScreen
 import ru.unilms.domain.quiz.view.screen.QuizInfoScreen
-import ru.unilms.domain.quiz.view.screen.QuizResultsScreen
 import ru.unilms.domain.settings.view.screen.SettingsScreen
 import ru.unilms.domain.task.view.screen.SubmitAnswerScreen
 import ru.unilms.domain.task.view.screen.TaskScreen
@@ -248,16 +247,6 @@ fun UniApp(
                             )
                         }
                     )
-                }
-            }
-            composable("${Screens.QuizAttemptResults}/{attemptId}") {
-                val attemptId = backStackEntry?.arguments?.getString("attemptId")
-                attemptId?.let {
-                    QuizResultsScreen(
-                        UUID.fromString(attemptId),
-                    ) {
-                        appBarState = it
-                    }
                 }
             }
             composable("${Screens.QuizAttempt.name}/{attemptId}/{questionNumber}") {

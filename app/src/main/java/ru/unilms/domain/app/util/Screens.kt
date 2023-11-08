@@ -34,5 +34,4 @@ enum class Screens(
     Lesson(R.string.screen_lesson, true, true, null, false),
     Settings(R.string.screen_settings, true, true, Icons.Filled.Settings, false),
     QuizAttempt(R.string.label_quiz_attempt, false, false, null, false),
-    QuizAttemptResults(R.string.screen_quiz_attempt_results, true, true, null, false)
 }
