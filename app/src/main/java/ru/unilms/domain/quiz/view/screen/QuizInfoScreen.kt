@@ -128,7 +128,9 @@ fun QuizInfoScreen(
                 style = MaterialTheme.typography.titleMedium
             )
 
-            quizInfo!!.attempts.forEachIndexed { ind, it ->
+            quizInfo!!.attempts.sortedBy {
+                it.startedAt
+            }.forEachIndexed { ind, it ->
                 ListItem(
                     overlineContent = {
                         Text(text = "${it.accruedPoints} / ${quizInfo!!.maximumPoints}")
