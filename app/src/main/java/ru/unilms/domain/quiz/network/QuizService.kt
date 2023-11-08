@@ -10,10 +10,14 @@ import java.util.UUID
 
 interface QuizService {
     suspend fun getQuizInfo(quizId: UUID): Response<QuizInfo, ErrorResponse>
-    suspend fun getQuestion(questionId: UUID): Response<QuestionInfo, ErrorResponse>
+    suspend fun getQuestion(
+        attemptId: UUID,
+        questionNumber: Int,
+    ): Response<QuestionInfo, ErrorResponse>
+
     suspend fun saveAnswer(
         questionId: UUID,
-        selectedChoices: List<QuestionChoice>
+        selectedChoices: List<QuestionChoice>,
     ): Response<Nothing, ErrorResponse>
 
     suspend fun startAttempt(quizId: UUID): Response<AttemptInfoDto, ErrorResponse>

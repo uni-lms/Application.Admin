@@ -32,13 +32,24 @@ class QuizServiceImpl(val token: String) : QuizService {
         }
     }
 
-    override suspend fun getQuestion(questionId: UUID): Response<QuestionInfo, ErrorResponse> {
-        TODO("Not yet implemented")
+    override suspend fun getQuestion(
+        attemptId: UUID,
+        questionNumber: Int,
+    ): Response<QuestionInfo, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/materials/quiz/${attemptId}/question/${questionNumber}")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
     }
 
     override suspend fun saveAnswer(
         questionId: UUID,
-        selectedChoices: List<QuestionChoice>
+        selectedChoices: List<QuestionChoice>,
     ): Response<Nothing, ErrorResponse> {
         TODO("Not yet implemented")
     }
