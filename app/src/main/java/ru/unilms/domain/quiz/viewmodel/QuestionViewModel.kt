@@ -43,6 +43,7 @@ class QuestionViewModel @Inject constructor(@ApplicationContext private val cont
         1,
         0,
         false,
+        listOf(),
         listOf()
     )
 

@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.common.extension.toMutableStateList
 import ru.unilms.domain.common.form.dynamic.FieldType
 import ru.unilms.domain.common.form.dynamic.FormField
 import ru.unilms.domain.quiz.model.ChosenAnswer
@@ -62,11 +63,7 @@ fun QuestionScreen(
         )
     }
 
-    fun updateQuestionInfo() = coroutineScope.launch {
-        questionInfo = viewModel.getQuestionInfo(attemptId, questionNumber)
-    }
-
-    val formState = remember { mutableStateListOf<FormField>() }
+    var formState by remember { mutableStateOf(mutableStateListOf<FormField>()) }
 
     fun saveAnswer() = coroutineScope.launch {
         viewModel.saveAnswer(attemptId, questionInfo.id, formState.map {
@@ -76,8 +73,14 @@ fun QuestionScreen(
 
 
     LaunchedEffect(questionNumber) {
-        updateQuestionInfo()
-        formState.clear()
+        questionInfo = viewModel.getQuestionInfo(attemptId, questionNumber)
+        formState = questionInfo.selectedChoices.map {
+            if (questionInfo.isMultipleChoicesAllowed) {
+                FormField(it.title, it.id, FieldType.Checkbox)
+            } else {
+                FormField(it.title, it.id, FieldType.RadioButton)
+            }
+        }.toMutableStateList()
     }
 
     LaunchedEffect(questionInfo) {

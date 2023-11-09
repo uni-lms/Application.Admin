@@ -14,4 +14,5 @@ data class QuestionInfo(
     val amountOfQuestions: Int,
     val isMultipleChoicesAllowed: Boolean,
     val choices: List<QuestionChoice>,
+    val selectedChoices: List<QuestionChoice>,
 )
