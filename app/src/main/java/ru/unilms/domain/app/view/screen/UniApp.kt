@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.unilms.data.AppBarState
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.app.util.goToScreen
 import ru.unilms.domain.app.viewmodel.UniAppViewModel
 import ru.unilms.domain.auth.view.screen.LoginOrSignUpScreen
 import ru.unilms.domain.auth.view.screen.LoginScreen
@@ -29,11 +29,11 @@ import ru.unilms.domain.common.view.component.navigation.UniAppTopBar
 import ru.unilms.domain.common.view.component.navigation.UniBottomNavigation
 import ru.unilms.domain.course.view.screen.CourseScreen
 import ru.unilms.domain.course.view.screen.CoursesScreen
+import ru.unilms.domain.file.view.screen.FileScreen
 import ru.unilms.domain.journal.view.screen.JournalScreen
 import ru.unilms.domain.menu.view.screen.MenuScreen
 import ru.unilms.domain.quiz.view.screen.QuestionScreen
 import ru.unilms.domain.quiz.view.screen.QuizInfoScreen
-import ru.unilms.domain.quiz.view.screen.QuizResultsScreen
 import ru.unilms.domain.settings.view.screen.SettingsScreen
 import ru.unilms.domain.task.view.screen.SubmitAnswerScreen
 import ru.unilms.domain.task.view.screen.TaskScreen
@@ -206,6 +206,15 @@ fun UniApp(
                         onComposing = { appBarState = it })
                 }
             }
+            composable("${Screens.File.name}/{fileId}") {
+                val fileId = backStackEntry?.arguments?.getString("fileId")
+                fileId?.let {
+                    FileScreen(
+                        fileId = UUID.fromString(fileId),
+                        navigate = { screen, id -> goToScreen(navController, screen, id) },
+                        onComposing = { appBarState = it })
+                }
+            }
             composable("${Screens.SubmitAnswer.name}/{taskId}") {
                 val taskId = backStackEntry?.arguments?.getString("taskId")
                 taskId?.let {
@@ -240,16 +249,6 @@ fun UniApp(
                     )
                 }
             }
-            composable("${Screens.QuizAttemptResults}/{attemptId}") {
-                val attemptId = backStackEntry?.arguments?.getString("attemptId")
-                attemptId?.let {
-                    QuizResultsScreen(
-                        UUID.fromString(attemptId),
-                    ) {
-                        appBarState = it
-                    }
-                }
-            }
             composable("${Screens.QuizAttempt.name}/{attemptId}/{questionNumber}") {
                 val attemptId = backStackEntry?.arguments?.getString("attemptId")
                 val questionNumber = backStackEntry?.arguments?.getString("questionNumber")
@@ -275,54 +274,4 @@ fun UniApp(
             }
         }
     }
-}
-
-fun goToScreen(
-    navController: NavHostController,
-    screen: Screens,
-    id: UUID? = null,
-    saveEntry: Boolean = true
-) {
-    val route: String = if (id == null) {
-        screen.name
-    } else {
-        "${screen.name}/$id"
-    }
-    navController.navigate(route) {
-        if (!saveEntry) {
-            popUpTo(navController.currentDestination?.route ?: "") {
-                inclusive = true
-            }
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
-}
-
-fun goToScreen(
-    navController: NavHostController,
-    screen: Screens,
-    id: UUID? = null,
-    questionNumber: Int? = null,
-    saveEntry: Boolean = true
-) {
-    if (questionNumber == null) {
-        return goToScreen(navController, screen, id, saveEntry)
-    }
-
-    navController.navigate("${screen.name}/$id/$questionNumber") {
-        if (!saveEntry) {
-            popUpTo(navController.currentDestination?.route ?: "") {
-                inclusive = false
-            }
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
-}
-
-@Preview
-@Composable
-fun UniAppPreview() {
-    UniApp()
 }

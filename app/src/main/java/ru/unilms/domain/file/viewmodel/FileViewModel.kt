@@ -1,6 +1,7 @@
-package ru.unilms.domain.text.viewmodel
+package ru.unilms.domain.file.viewmodel
 
 import android.content.Context
+import android.text.format.Formatter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,15 +11,14 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.processResponse
-import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.network.CoursesServiceImpl
+import ru.unilms.domain.file.model.FileContentInfo
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class TextViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+class FileViewModel @Inject constructor(@ApplicationContext private val context: Context) :
     ViewModel() {
-
     private var store: DataStore = DataStore(context)
     private lateinit var service: CoursesServiceImpl
 
@@ -36,22 +36,10 @@ class TextViewModel @Inject constructor(@ApplicationContext private val context:
         }
     }
 
-    suspend fun getTextContent(textId: UUID): String {
-        var result: ByteArray? = null
-        val response = service.getTextContent(textId)
+    suspend fun getFileInfo(fileId: UUID): FileContentInfo? {
+        var result: FileContentInfo? = null
 
-        viewModelScope.launch {
-            coroutineScope {
-                result = processResponse(response)
-            }
-        }
-
-        return String(result ?: byteArrayOf())
-    }
-
-    suspend fun getTextContentInfo(textId: UUID): TextContentInfo? {
-        var result: TextContentInfo? = null
-        val response = service.getTextContentInfo(textId)
+        val response = service.getFileContentInfo(fileId)
 
         viewModelScope.launch {
             coroutineScope {
@@ -62,4 +50,20 @@ class TextViewModel @Inject constructor(@ApplicationContext private val context:
         return result
     }
 
+    fun formatFileSize(fileSize: Long?): String? {
+        if (fileSize != null) {
+            return Formatter.formatFileSize(context, fileSize)
+        }
+        return null
+    }
+
+    fun buildFileDownloadUrl(fileId: String): String {
+        var url = ""
+        viewModelScope.launch {
+            store.apiUri.collect {
+                url = "$it/v1/static/${fileId}/download"
+            }
+        }
+        return url
+    }
 }

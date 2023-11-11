@@ -99,7 +99,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material:material:1.5.4")
     implementation("androidx.compose.material3:material3:1.1.2")
-    implementation("androidx.compose.material:material-icons-extended-android:1.5.4")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
     // Ktor (http client)
     implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -119,7 +119,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Images
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -139,6 +139,9 @@ dependencies {
     // RichText
     implementation("com.halilibo.compose-richtext:richtext-ui-material3:${richTextVersion}")
     implementation("com.halilibo.compose-richtext:richtext-commonmark:${richTextVersion}")
+
+    // Downloading files
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
 }
 

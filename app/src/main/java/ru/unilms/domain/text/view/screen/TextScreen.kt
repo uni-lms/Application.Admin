@@ -19,7 +19,7 @@ import com.halilibo.richtext.ui.material3.Material3RichText
 import kotlinx.coroutines.launch
 import ru.unilms.data.AppBarState
 import ru.unilms.domain.app.util.Screens
-import ru.unilms.domain.course.model.FileContentInfo
+import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.text.viewmodel.TextViewModel
 import java.util.UUID
 
@@ -30,22 +30,22 @@ fun TextScreen(
     onComposing: (AppBarState) -> Unit
 ) {
     val viewModel = hiltViewModel<TextViewModel>()
-    var fileContent: String by remember { mutableStateOf("") }
-    var fileContentInfo: FileContentInfo? by remember { mutableStateOf(null) }
+    var textContent: String by remember { mutableStateOf("") }
+    var textContentInfo: TextContentInfo? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
     fun updateTextContent() = coroutineScope.launch {
-        fileContent = viewModel.getFileContent(textId)
-        fileContentInfo = viewModel.getFileInfo(textId)
+        textContent = viewModel.getTextContent(textId)
+        textContentInfo = viewModel.getTextContentInfo(textId)
     }
 
     LaunchedEffect(key1 = true) {
         updateTextContent()
     }
 
-    LaunchedEffect(fileContentInfo) {
+    LaunchedEffect(textContentInfo) {
         onComposing(
             AppBarState(
-                title = fileContentInfo?.visibleName,
+                title = textContentInfo?.visibleName,
                 actions = { }
             )
         )
@@ -57,7 +57,7 @@ fun TextScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Material3RichText {
-            Markdown(content = fileContent)
+            Markdown(content = textContent)
         }
     }
 }

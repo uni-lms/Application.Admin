@@ -73,4 +73,15 @@
     <string name="course_block_lab_works">Лабораторные работы</string>
     <string name="course_block_final_certification">Итоговая аттестация</string>
     <string name="screen_text">Текст</string>
+    <string name="label_file_size">Размер</string>
+    <string name="label_file_type">Тип файла</string>
+    <string name="label_download_file">Скачать файл</string>
+    <string name="label_quiz_pass_attempts">Попытки</string>
+    <string name="label_continue_attempt">Продолжить попытку</string>
+    <string name="label_open_results">Посмотреть результаты</string>
+    <string name="label_attempt_name">Попытка №%1$s</string>
+    <string name="title_question_number">Вопрос №%1$d</string>
+    <string name="button_finish_attempt">Завершить</string>
+    <string name="button_question_next">Вперёд</string>
+    <string name="button_question_prev">Назад</string>
 </resources>

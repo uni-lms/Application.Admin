@@ -12,7 +12,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.unilms.domain.app.util.Screens
-import ru.unilms.domain.app.view.screen.goToScreen
+import ru.unilms.domain.app.util.goToScreen
 
 @Composable
 fun UniBottomNavigation(navController: NavHostController) {
