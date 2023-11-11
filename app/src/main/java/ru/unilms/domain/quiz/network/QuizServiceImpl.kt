@@ -13,6 +13,7 @@ import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
+import ru.unilms.domain.quiz.model.AttemptInfo
 import ru.unilms.domain.quiz.model.AttemptInfoDto
 import ru.unilms.domain.quiz.model.ChosenAnswer
 import ru.unilms.domain.quiz.model.QuestionInfo
@@ -81,8 +82,18 @@ class QuizServiceImpl(val token: String) : QuizService {
         }
     }
 
-    override suspend fun finishAttempt(attemptId: UUID): Response<Nothing, ErrorResponse> {
-        TODO("Not yet implemented")
+    override suspend fun finishAttempt(attemptId: UUID): Response<AttemptInfo, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Patch
+            url("${HttpClientFactory.baseUrl}/v1/quiz-attempt/finish")
+            setBody(BaseModel(attemptId))
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
     }
 
     override suspend fun getAttemptResults(attemptId: UUID): Response<Nothing, ErrorResponse> {

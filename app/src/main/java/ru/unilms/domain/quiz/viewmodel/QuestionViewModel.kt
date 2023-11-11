@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.unilms.data.DataStore
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.processResponse
+import ru.unilms.domain.quiz.model.AttemptInfo
 import ru.unilms.domain.quiz.model.ChosenAnswer
 import ru.unilms.domain.quiz.model.QuestionInfo
 import ru.unilms.domain.quiz.network.QuizServiceImpl
@@ -65,5 +66,16 @@ class QuestionViewModel @Inject constructor(@ApplicationContext private val cont
         viewModelScope.launch {
             processResponse(response)
         }
+    }
+
+    suspend fun finishAttempt(attemptId: UUID): AttemptInfo? {
+        var result: AttemptInfo? = null
+        val response = service.finishAttempt(attemptId)
+
+        viewModelScope.launch {
+            result = processResponse(response)
+        }
+
+        return result
     }
 }

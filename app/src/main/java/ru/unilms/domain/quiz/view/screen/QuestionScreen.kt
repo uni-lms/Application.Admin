@@ -71,6 +71,19 @@ fun QuestionScreen(
         })
     }
 
+    fun finishAttempt() {
+        coroutineScope.launch {
+            viewModel.finishAttempt(attemptId)?.let {
+                navigate(
+                    Screens.Quiz,
+                    it.quizId!!,
+                    null,
+                    false
+                )
+            }
+        }
+    }
+
 
     LaunchedEffect(questionNumber) {
         questionInfo = viewModel.getQuestionInfo(attemptId, questionNumber)
@@ -169,7 +182,9 @@ fun QuestionScreen(
                 }
             } else {
                 FilledTonalButton(
-                    onClick = { }
+                    onClick = {
+                        finishAttempt()
+                    }
                 ) {
                     Icon(imageVector = Icons.Outlined.Send, contentDescription = null)
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

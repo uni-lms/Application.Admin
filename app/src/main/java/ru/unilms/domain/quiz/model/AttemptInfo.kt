@@ -15,4 +15,6 @@ data class AttemptInfo(
     @Serializable(LocalDateTimeSerializer::class)
     val finishedAt: LocalDateTime?,
     val accruedPoints: Int,
+    @Serializable(UUIDSerializer::class)
+    val quizId: UUID? = null,
 )
