@@ -40,10 +40,12 @@ android {
             isMinifyEnabled = true
             applicationVariants.all {
                 val variant = this
+                val flavorName = variant.productFlavors.first().name
                 variant.outputs
                     .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                     .forEach { output ->
-                        val outputFileName = "${rootProject.name}_${defaultConfig.versionName}.apk"
+                        val outputFileName =
+                            "${rootProject.name}-${flavorName}-${defaultConfig.versionName}.apk"
                         output.outputFileName = outputFileName
                     }
             }
