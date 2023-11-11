@@ -17,7 +17,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.unilms.admin"
+        applicationId = "ru.unilms"
         minSdk = 28
         targetSdk = 34
         versionCode = majorVersion * 10000 + minorVersion * 100 + patchVersion
@@ -58,6 +58,21 @@ android {
             versionNameSuffix = "-debug (${gitdata.branch}@${gitdata.commit})"
         }
     }
+
+    flavorDimensions += listOf("role")
+
+    productFlavors {
+        create("admin") {
+            dimension = "role"
+            applicationIdSuffix = ".admin"
+            versionNameSuffix = "-admin"
+        }
+        create("student") {
+            dimension = "role"
+            versionNameSuffix = "-student"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
