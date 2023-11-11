@@ -51,7 +51,7 @@ jobs:
 
       - name: Get list of built files
         shell: bash
-        run: ls -la app/build/outputs/apk/release
+        run: ls -la /home/runner/work/Application.Admin/Application.Admin/app/build/outputs/apk/release
 
       # Show information about the APK's signing certificates
       - name: Verify Signature
