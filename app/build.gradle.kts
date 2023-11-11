@@ -68,6 +68,7 @@ android {
             dimension = "role"
             applicationIdSuffix = ".admin"
             versionNameSuffix = "-admin"
+            resValue("string", "app_name", "UNI Admin")
         }
         create("student") {
             dimension = "role"
