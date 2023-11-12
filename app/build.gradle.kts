@@ -67,12 +67,17 @@ android {
         create("admin") {
             dimension = "role"
             applicationIdSuffix = ".admin"
-            versionNameSuffix = "-admin"
-            resValue("string", "app_name", "UNI Admin")
+            resValue("string", "app_name", "UNI. Администрирование")
+        }
+        create("tutor") {
+            dimension = "role"
+            applicationIdSuffix = ".tutor"
+            resValue("string", "app_name", "UNI. Преподавание")
         }
         create("student") {
             dimension = "role"
-            versionNameSuffix = "-student"
+            applicationIdSuffix = ".student"
+            resValue("string", "app_name", "UNI. Обучение")
         }
     }
 
