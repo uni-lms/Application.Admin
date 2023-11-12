@@ -53,6 +53,7 @@ jobs:
       - name: Verify Signature
         run: |
           $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/admin/release/UNI-admin-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/tutor/release/UNI-tutor-${{steps.android_version.outputs.VERSION_NAME}}.apk
           $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/student/release/UNI-student-${{steps.android_version.outputs.VERSION_NAME}}.apk
 
       - name: Pull request artifacts
@@ -63,4 +64,5 @@ jobs:
           artifacts-branch: artifacts
           artifacts: |
             app/build/outputs/apk/admin/release/UNI-admin-${{steps.android_version.outputs.VERSION_NAME}}.apk
+            app/build/outputs/apk/tutor/release/UNI-tutor-${{steps.android_version.outputs.VERSION_NAME}}.apk
             app/build/outputs/apk/student/release/UNI-student-${{steps.android_version.outputs.VERSION_NAME}}.apk
