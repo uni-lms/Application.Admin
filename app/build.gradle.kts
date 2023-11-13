@@ -38,6 +38,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             applicationVariants.all {
                 val variant = this
                 val flavorName = variant.productFlavors.first().name
