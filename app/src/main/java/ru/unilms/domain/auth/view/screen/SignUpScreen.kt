@@ -24,7 +24,9 @@ import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.data.FabState
+import ru.unilms.domain.app.util.Flavor
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.app.util.getFlavor
 import ru.unilms.domain.auth.view.component.ImagePickerField
 import ru.unilms.domain.auth.viewmodel.SignUpViewModel
 import ru.unilms.domain.common.view.component.field.M3DateField
@@ -36,6 +38,12 @@ import java.util.UUID
 fun SignUpScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState, FabState) -> Unit) {
 
     val viewModel = hiltViewModel<SignUpViewModel>()
+
+    val screenToGoAfterSuccess = when (getFlavor()) {
+        Flavor.Role.Admin -> Screens.Manage
+        Flavor.Role.Student -> Screens.Courses
+        Flavor.Role.Tutor -> Screens.Courses
+    }
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -118,7 +126,7 @@ fun SignUpScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState, 
             ).Field()
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { viewModel.submit { navigate(Screens.Courses, null) } }) {
+                Button(onClick = { viewModel.submit { navigate(screenToGoAfterSuccess, null) } }) {
                     Text(text = stringResource(R.string.button_register))
                 }
             }
