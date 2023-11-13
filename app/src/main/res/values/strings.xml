@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">UNI</string>
+    <string name="app_name">UNI</string>
     <string name="label_semester">%1d семестр</string>
     <string name="screen_registration">Регистрация</string>
     <string name="screen_server_select">Выбор сервера</string>
@@ -84,4 +84,6 @@
     <string name="button_finish_attempt">Завершить</string>
     <string name="button_question_next">Вперёд</string>
     <string name="button_question_prev">Назад</string>
+    <string name="screen_manage">Управление</string>
+    <string name="screen_create_course">Создание курса</string>
 </resources>
