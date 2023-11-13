@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.LibraryBooks
+import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.unilms.R
@@ -15,15 +16,49 @@ enum class Screens(
     val showBottomAppBar: Boolean = false,
     val icon: ImageVector? = null,
     val showInBottomAppBar: Boolean = true,
-    val showInMenu: Boolean = false
+    val showInMenu: Boolean = false,
+    val showOnFlavors: List<Flavor.Role> = listOf(),
 ) {
     SelectApiUri(R.string.screen_server_select, false, showInBottomAppBar = false),
     LoginOrRegister(showInBottomAppBar = false),
     Login(R.string.screen_login, showInBottomAppBar = false),
     SignUp(R.string.screen_registration, showInBottomAppBar = false),
-    Courses(R.string.screen_courses, false, true, Icons.Outlined.LibraryBooks),
-    Calendar(R.string.screen_calendar, false, true, Icons.Outlined.CalendarMonth),
-    Menu(R.string.screen_menu, false, true, Icons.Outlined.Menu),
+    Courses(
+        R.string.screen_courses,
+        false,
+        true,
+        Icons.Outlined.LibraryBooks,
+        true,
+        false,
+        listOf(Flavor.Role.Student, Flavor.Role.Tutor)
+    ),
+    Calendar(
+        R.string.screen_calendar,
+        false,
+        true,
+        Icons.Outlined.CalendarMonth,
+        true,
+        false,
+        listOf(Flavor.Role.Student, Flavor.Role.Tutor)
+    ),
+    Manage(
+        R.string.screen_manage,
+        false,
+        true,
+        Icons.Outlined.ManageAccounts,
+        true,
+        false,
+        listOf(Flavor.Role.Admin)
+    ),
+    Menu(
+        R.string.screen_menu,
+        false,
+        true,
+        Icons.Outlined.Menu,
+        true,
+        false,
+        listOf(Flavor.Role.Student, Flavor.Role.Tutor, Flavor.Role.Admin)
+    ),
     Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
     Course(R.string.screen_course, true, true, null, false),
     Task(R.string.screen_task, true, true, null, false),
