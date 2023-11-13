@@ -79,6 +79,15 @@ android {
         }
     }
 
+    sourceSets {
+        named("tutor") {
+            kotlin.srcDirs("src/tutorAndStudent")
+        }
+        named("student") {
+            kotlin.srcDirs("src/tutorAndStudent")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
