@@ -66,7 +66,7 @@ fun MenuScreen(
                 .padding(NavigationDrawerItemDefaults.ItemPadding),
             leadingContent = {
                 when (whoami.role) {
-                    UserRole.Admin -> Icon(
+                    UserRole.Administrator -> Icon(
                         imageVector = Icons.Outlined.Shield,
                         contentDescription = null
                     )
