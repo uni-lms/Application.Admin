@@ -59,6 +59,7 @@ enum class Screens(
         false,
         listOf(Flavor.Role.Student, Flavor.Role.Tutor, Flavor.Role.Admin)
     ),
+    CreateCourse(R.string.screen_create_course, true, true, null, false),
     Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
     Course(R.string.screen_course, true, true, null, false),
     Task(R.string.screen_task, true, true, null, false),
