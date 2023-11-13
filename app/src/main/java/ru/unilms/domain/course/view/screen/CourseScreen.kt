@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.util.enums.CourseItemType
@@ -49,7 +50,7 @@ import java.util.UUID
 fun CourseScreen(
     courseId: UUID,
     navigate: (Screens, UUID) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -81,6 +82,9 @@ fun CourseScreen(
             AppBarState(
                 title = if (courseContent != null) "${courseContent?.abbreviation} (${courseContent?.semester} семестр)" else null,
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

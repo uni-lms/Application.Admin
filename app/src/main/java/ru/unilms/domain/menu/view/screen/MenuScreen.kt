@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.auth.util.enums.UserRole
 import ru.unilms.domain.menu.viewmodel.MenuViewModel
@@ -34,7 +35,7 @@ import ru.unilms.domain.menu.viewmodel.MenuViewModel
 @Composable
 fun MenuScreen(
     navigate: (Screens) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
     val viewModel = hiltViewModel<MenuViewModel>()
@@ -56,6 +57,9 @@ fun MenuScreen(
                         )
                     }
                 }
+            ),
+            FabState(
+                fab = {}
             )
         )
         updateUser()

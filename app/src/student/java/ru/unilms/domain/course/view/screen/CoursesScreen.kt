@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.util.enums.CourseType
@@ -43,7 +44,10 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CoursesScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
+fun CoursesScreen(
+    navigate: (Screens, UUID?) -> Unit,
+    onComposing: (AppBarState, FabState) -> Unit,
+) {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<CoursesViewModel>()
     var courses: List<Course> by remember { mutableStateOf(emptyList()) }
@@ -86,6 +90,9 @@ fun CoursesScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState)
         onComposing(
             AppBarState(
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
         updateCourses()

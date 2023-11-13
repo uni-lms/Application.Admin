@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.calendar.model.DayEvent
 import ru.unilms.domain.calendar.util.enums.EventType
@@ -65,7 +66,10 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (Screens, UUID) -> Unit) {
+fun CalendarScreen(
+    onComposing: (AppBarState, FabState) -> Unit,
+    navigate: (Screens, UUID) -> Unit,
+) {
 
     val viewModel = hiltViewModel<CalendarViewModel>()
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
@@ -124,6 +128,9 @@ fun CalendarScreen(onComposing: (AppBarState) -> Unit, navigate: (Screens, UUID)
                         Icon(Icons.Outlined.ChevronRight, null)
                     }
                 }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

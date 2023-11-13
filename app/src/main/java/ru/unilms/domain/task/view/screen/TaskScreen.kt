@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.task.util.enums.TaskStatus
 import ru.unilms.domain.task.viewmodel.TaskViewModel
@@ -43,7 +44,7 @@ import java.util.UUID
 fun TaskScreen(
     taskId: UUID,
     navigate: (Screens, UUID) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
     val viewModel = hiltViewModel<TaskViewModel>()
@@ -54,6 +55,9 @@ fun TaskScreen(
             AppBarState(
                 title = taskDescription.title,
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

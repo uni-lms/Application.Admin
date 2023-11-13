@@ -11,13 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import java.util.UUID
 
 @Composable
 fun LoginOrSignUpScreen(
     navigate: (Screens, UUID?) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
 
@@ -25,6 +26,9 @@ fun LoginOrSignUpScreen(
         onComposing(
             AppBarState(
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

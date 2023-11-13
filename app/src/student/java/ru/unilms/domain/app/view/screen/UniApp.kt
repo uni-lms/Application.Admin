@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.app.util.goToScreen
 import ru.unilms.domain.app.viewmodel.UniAppViewModel
@@ -74,6 +75,10 @@ fun UniApp(
         mutableStateOf(AppBarState())
     }
 
+    var fabState by remember {
+        mutableStateOf(FabState())
+    }
+
     Scaffold(
         topBar = {
             UniAppTopBar(
@@ -88,7 +93,9 @@ fun UniApp(
             if (currentScreen.showBottomAppBar) {
                 UniBottomNavigation(navController)
             }
-        }
+        },
+        floatingActionButtonPosition = fabState.position,
+        floatingActionButton = fabState.fab
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -113,16 +120,18 @@ fun UniApp(
             }
             composable(Screens.LoginOrRegister.name) {
                 LoginOrSignUpScreen(
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     },
                     navigate = { screen, id -> goToScreen(navController, screen, id) }
                 )
             }
             composable(Screens.Login.name) {
                 LoginScreen(
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     },
                     navigate = { screen, id ->
                         goToScreen(navController, screen, id)
@@ -131,8 +140,9 @@ fun UniApp(
             }
             composable(Screens.SignUp.name) {
                 SignUpScreen(
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     },
                     navigate = { screen, id ->
                         goToScreen(navController, screen, id)
@@ -144,8 +154,9 @@ fun UniApp(
                     navigate = { screen, id ->
                         goToScreen(navController, screen, id)
                     },
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     }
                 )
             }
@@ -154,24 +165,27 @@ fun UniApp(
                     navigate = { screen, id ->
                         goToScreen(navController, screen, id)
                     },
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     }
                 )
             }
             composable(Screens.Menu.name) {
                 MenuScreen(
                     { screen -> goToScreen(navController, screen) },
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     }
                 )
             }
             composable("${Screens.Journal.name}/{courseId}") {
                 val courseId = backStackEntry?.arguments?.getString("courseId")
                 courseId?.let {
-                    JournalScreen(courseId = UUID.fromString(it)) {
-                        appBarState = it
+                    JournalScreen(courseId = UUID.fromString(it)) { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     }
                 }
             }
@@ -183,8 +197,9 @@ fun UniApp(
                         navigate = { screen, id ->
                             goToScreen(navController, screen, id)
                         },
-                    ) {
-                        appBarState = it
+                    ) { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     }
                 }
             }
@@ -194,7 +209,10 @@ fun UniApp(
                     TaskScreen(
                         taskId = UUID.fromString(taskId),
                         navigate = { screen, id -> goToScreen(navController, screen, id) },
-                        onComposing = { appBarState = it })
+                        onComposing = { appBar, fab ->
+                            appBarState = appBar
+                            fabState = fab
+                        })
                 }
             }
             composable("${Screens.Text.name}/{textId}") {
@@ -203,7 +221,10 @@ fun UniApp(
                     TextScreen(
                         textId = UUID.fromString(textId),
                         navigate = { screen, id -> goToScreen(navController, screen, id) },
-                        onComposing = { appBarState = it })
+                        onComposing = { appBar, fab ->
+                            appBarState = appBar
+                            fabState = fab
+                        })
                 }
             }
             composable("${Screens.File.name}/{fileId}") {
@@ -212,7 +233,10 @@ fun UniApp(
                     FileScreen(
                         fileId = UUID.fromString(fileId),
                         navigate = { screen, id -> goToScreen(navController, screen, id) },
-                        onComposing = { appBarState = it })
+                        onComposing = { appBar, fab ->
+                            appBarState = appBar
+                            fabState = fab
+                        })
                 }
             }
             composable("${Screens.SubmitAnswer.name}/{taskId}") {
@@ -225,8 +249,9 @@ fun UniApp(
             }
             composable(Screens.Settings.name) {
                 SettingsScreen(
-                    onComposing = {
-                        appBarState = it
+                    onComposing = { appBar, fab ->
+                        appBarState = appBar
+                        fabState = fab
                     },
                 )
             }
@@ -235,8 +260,9 @@ fun UniApp(
                 quizId?.let {
                     QuizInfoScreen(
                         quizId = UUID.fromString(quizId),
-                        onComposing = {
-                            appBarState = it
+                        onComposing = { appBar, fab ->
+                            appBarState = appBar
+                            fabState = fab
                         },
                         navigate = { screen, id, qNumber ->
                             goToScreen(
@@ -257,8 +283,9 @@ fun UniApp(
                     QuestionScreen(
                         UUID.fromString(attemptId),
                         questionNumber.toInt(),
-                        onComposing = {
-                            appBarState = it
+                        onComposing = { appBar, fab ->
+                            appBarState = appBar
+                            fabState = fab
                         },
                         navigate = { screen, id, qNumber, saveState ->
                             goToScreen(

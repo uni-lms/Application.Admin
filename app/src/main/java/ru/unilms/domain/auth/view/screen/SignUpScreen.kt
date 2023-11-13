@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ch.benlu.composeform.formatters.dateShort
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.auth.view.component.ImagePickerField
 import ru.unilms.domain.auth.viewmodel.SignUpViewModel
@@ -32,7 +33,7 @@ import ru.unilms.domain.common.view.component.field.M3TextField
 import java.util.UUID
 
 @Composable
-fun SignUpScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
+fun SignUpScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState, FabState) -> Unit) {
 
     val viewModel = hiltViewModel<SignUpViewModel>()
 
@@ -40,6 +41,9 @@ fun SignUpScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState) 
         onComposing(
             AppBarState(
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

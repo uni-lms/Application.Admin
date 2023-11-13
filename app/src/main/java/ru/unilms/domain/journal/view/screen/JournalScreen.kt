@@ -9,15 +9,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import java.util.UUID
 
 @Composable
-fun JournalScreen(courseId: UUID, onComposing: (AppBarState) -> Unit) {
+fun JournalScreen(courseId: UUID, onComposing: (AppBarState, FabState) -> Unit) {
 
     LaunchedEffect(key1 = true) {
         onComposing(
             AppBarState(
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }
