@@ -13,6 +13,7 @@ import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
+import ru.unilms.domain.course.model.CourseTutor
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
@@ -27,6 +28,18 @@ class CoursesServiceImpl(
             method = HttpMethod.Get
             parameter("filter", type.value)
             url("${HttpClientFactory.baseUrl}/v2/courses/enrolled")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getOwned(): Response<List<CourseTutor>, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/courses/owned")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
