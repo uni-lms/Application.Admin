@@ -12,15 +12,21 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.app.util.getFlavor
 import ru.unilms.domain.app.util.goToScreen
 
 @Composable
 fun UniBottomNavigation(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
+    val flavor = getFlavor()
     NavigationBar {
         enumValues<Screens>().forEach { screen ->
-            if (screen.icon != null && !screen.showInMenu && screen.showInBottomAppBar) {
+            if (screen.icon != null
+                && !screen.showInMenu
+                && screen.showInBottomAppBar
+                && screen.showOnFlavors.contains(flavor)
+            ) {
                 val isSelected =
                     currentDestination?.hierarchy?.any { it.route == screen.name } == true
                 NavigationBarItem(
