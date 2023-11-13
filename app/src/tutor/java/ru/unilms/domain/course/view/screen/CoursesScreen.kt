@@ -35,13 +35,16 @@ fun CoursesScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState)
     val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<CoursesViewModel>()
     var courses: List<CourseTutor> by remember { mutableStateOf(emptyList()) }
-    val refreshing = viewModel.isLoading
+    var isRefreshing by remember { mutableStateOf(true) }
 
-    fun updateCourses() =
+    fun updateCourses() {
+        isRefreshing = true
         coroutineScope.launch { courses = viewModel.loadCourses() }
+        isRefreshing = false
+    }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = viewModel.isLoading,
+        refreshing = isRefreshing,
         onRefresh = {
             updateCourses()
         }
@@ -70,6 +73,6 @@ fun CoursesScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState)
                 }
             })
         }
-        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+        PullRefreshIndicator(isRefreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }

@@ -17,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CoursesViewModel @Inject constructor(@ApplicationContext private val context: Context) :
     ViewModel() {
-    var isLoading = false
     private var store: DataStore = DataStore(context)
     private lateinit var service: CoursesServiceImpl
 
@@ -41,11 +40,9 @@ class CoursesViewModel @Inject constructor(@ApplicationContext private val conte
         val response = service.getOwned()
 
         viewModelScope.launch {
-            isLoading = true
             coroutineScope {
                 result = processResponse(response)
             }
-            isLoading = false
         }
 
         return result ?: emptyList()
