@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -65,18 +64,6 @@ fun ManageScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState, 
                 navigate(Screens.ManageUsers, null)
             }
 
-        )
-        ListItem(
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Outlined.LibraryBooks,
-                    contentDescription = null
-                )
-            },
-            headlineContent = { Text(text = stringResource(R.string.screen_courses)) },
-            modifier = Modifier.clickable {
-                navigate(Screens.ManageCourses, null)
-            }
         )
         ListItem(
             leadingContent = {
