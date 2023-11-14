@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">UNI</string>
+    <string name="app_name_admin">UNI. Администрирование</string>
+    <string name="app_name_tutor">UNI. Преподавание</string>
+    <string name="app_name_student">UNI. Обучение</string>
     <string name="label_semester">%1d семестр</string>
     <string name="screen_registration">Регистрация</string>
     <string name="screen_server_select">Выбор сервера</string>
