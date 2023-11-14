@@ -23,4 +23,16 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
             }
         )
     }
+    composable(Screens.ManageCourses.name) {
+
+    }
+    composable(Screens.ManageUsers.name) {
+
+    }
+    composable(Screens.ManageGroups.name) {
+
+    }
+    composable(Screens.ManageSchedule.name) {
+
+    }
 }

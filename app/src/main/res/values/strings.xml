@@ -86,4 +86,7 @@
     <string name="button_question_prev">Назад</string>
     <string name="screen_manage">Управление</string>
     <string name="screen_create_course">Создание курса</string>
+    <string name="screen_users">Пользователи</string>
+    <string name="screen_groups">Группы</string>
+    <string name="screen_schedule">Расписание</string>
 </resources>
