@@ -84,10 +84,10 @@ android {
 
     sourceSets {
         named("tutor") {
-            kotlin.srcDirs("src/tutorAndStudent")
+            kotlin.srcDirs("src/tutorAndStudent/kotlin")
         }
         named("student") {
-            kotlin.srcDirs("src/tutorAndStudent")
+            kotlin.srcDirs("src/tutorAndStudent/kotlin")
         }
     }
 
