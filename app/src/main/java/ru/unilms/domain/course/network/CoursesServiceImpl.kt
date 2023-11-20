@@ -17,6 +17,7 @@ import ru.unilms.domain.course.model.CourseTutor
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
+import ru.unilms.domain.task.model.TaskInfo
 import java.util.UUID
 
 class CoursesServiceImpl(
@@ -88,6 +89,18 @@ class CoursesServiceImpl(
         return client.safeRequest {
             method = HttpMethod.Get
             url("${HttpClientFactory.baseUrl}/v1/materials/file/${fileId}/info")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getTaskInfo(taskId: UUID): Response<TaskInfo, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/assignments/${taskId}")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")

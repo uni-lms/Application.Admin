@@ -1,6 +1,5 @@
 package ru.unilms.domain.task.view.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,9 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.Checklist
-import androidx.compose.material.icons.outlined.Comment
 import androidx.compose.material.icons.outlined.DoNotDisturbAlt
-import androidx.compose.material.icons.outlined.EditCalendar
+import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material3.Button
@@ -26,18 +24,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.common.extension.formatAsString
+import ru.unilms.domain.task.model.TaskInfo
 import ru.unilms.domain.task.util.enums.TaskStatus
 import ru.unilms.domain.task.viewmodel.TaskViewModel
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import java.util.UUID
 
 @Composable
@@ -47,13 +48,22 @@ fun TaskScreen(
     onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<TaskViewModel>()
-    val taskDescription by remember { mutableStateOf(viewModel.getTaskDescription()) }
+    var taskInfo: TaskInfo? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(key1 = true) {
+    fun updateTaskInfo() = coroutineScope.launch {
+        taskInfo = viewModel.getTaskInfo(taskId)
+    }
+
+    LaunchedEffect(true) {
+        updateTaskInfo()
+    }
+
+    LaunchedEffect(taskInfo) {
         onComposing(
             AppBarState(
-                title = taskDescription.title,
+                title = taskInfo?.title,
                 actions = { }
             ),
             FabState(
@@ -72,74 +82,43 @@ fun TaskScreen(
             headlineContent = { Text(text = stringResource(R.string.label_deadline)) },
             trailingContent = {
                 Text(
-                    text = taskDescription.deadline.format(
-                        DateTimeFormatter.ofPattern(
-                            "dd.MM.yyyy HH:mm",
-                            Locale.getDefault()
-                        )
-                    )
+                    text = taskInfo?.availableUntil?.formatAsString() ?: ""
                 )
             }
         )
         ListItem(
             leadingContent = {
                 Icon(
-                    when (taskDescription.status) {
+                    when (taskInfo?.status) {
                         TaskStatus.NotSent -> Icons.Outlined.DoNotDisturbAlt
                         TaskStatus.Sent -> Icons.Outlined.Cached
                         TaskStatus.Checked -> Icons.Outlined.Checklist
                         TaskStatus.Overdue -> Icons.Outlined.TimerOff
+                        else -> Icons.Outlined.QuestionMark
                     }, null
                 )
             },
             headlineContent = { Text(text = stringResource(R.string.label_task_status)) },
             trailingContent = {
                 Text(
-                    text = when (taskDescription.status) {
+                    text = when (taskInfo?.status) {
                         TaskStatus.NotSent -> stringResource(R.string.task_status_not_sent)
                         TaskStatus.Sent -> stringResource(R.string.task_status_sent)
                         TaskStatus.Checked -> stringResource(R.string.task_status_checked)
                         TaskStatus.Overdue -> stringResource(R.string.task_status_overdue)
+                        else -> ""
                     }
                 )
             }
         )
+
         ListItem(
-            leadingContent = { Icon(Icons.Outlined.EditCalendar, null) },
-            headlineContent = { Text(text = stringResource(R.string.label_last_change)) },
+            leadingContent = { Icon(Icons.Outlined.StarRate, null) },
+            headlineContent = { Text(text = stringResource(R.string.label_mark)) },
             trailingContent = {
                 Text(
-                    text = taskDescription.deadline.format(
-                        DateTimeFormatter.ofPattern(
-                            "dd.MM.yyyy HH:mm",
-                            Locale.getDefault()
-                        )
-                    )
+                    text = "${taskInfo?.rating} / ${taskInfo?.maximumPoints}"
                 )
-            }
-        )
-        if (taskDescription.mark != null) {
-            val mark = taskDescription.mark!!
-
-            ListItem(
-                leadingContent = { Icon(Icons.Outlined.StarRate, null) },
-                headlineContent = { Text(text = stringResource(R.string.label_mark)) },
-                trailingContent = {
-                    Text(
-                        text = "${mark.rating} / ${mark.max}"
-                    )
-                }
-            )
-        }
-
-        ListItem(
-            leadingContent = { Icon(Icons.Outlined.Comment, null) },
-            modifier = Modifier.clickable(onClick = { }),
-            headlineContent = {
-                Text(text = stringResource(id = R.string.label_comments))
-            },
-            trailingContent = {
-                Text(text = taskDescription.amountOfComments.toString())
             }
         )
 
