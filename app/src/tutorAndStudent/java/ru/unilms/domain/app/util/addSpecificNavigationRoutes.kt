@@ -47,10 +47,14 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
     composable("${Screens.Journal.name}/{courseId}") {
         val courseId = backStackEntry?.arguments?.getString("courseId")
         courseId?.let {
-            JournalScreen(courseId = UUID.fromString(it)) { appBar, fab ->
-                appState.appBarState = appBar
-                appState.fabState = fab
-            }
+            JournalScreen(
+                courseId = UUID.fromString(it),
+                onComposing = { appBar, fab ->
+                    appState.appBarState = appBar
+                    appState.fabState = fab
+                }, navigate = { screen, id ->
+                    goToScreen(navController, screen, id)
+                })
         }
     }
     composable("${Screens.Course.name}/{courseId}") {

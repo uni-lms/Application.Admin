@@ -8,6 +8,7 @@ import ru.unilms.domain.course.model.CourseTutor
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
+import ru.unilms.domain.journal.model.JournalDto
 import ru.unilms.domain.task.model.TaskInfo
 import java.util.UUID
 
@@ -19,4 +20,5 @@ interface CoursesService {
     suspend fun getTextContentInfo(textId: UUID): Response<TextContentInfo, ErrorResponse>
     suspend fun getFileContentInfo(fileId: UUID): Response<FileContentInfo, ErrorResponse>
     suspend fun getTaskInfo(taskId: UUID): Response<TaskInfo, ErrorResponse>
+    suspend fun getJournal(courseId: UUID): Response<JournalDto, ErrorResponse>
 }
