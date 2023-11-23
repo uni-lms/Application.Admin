@@ -73,6 +73,7 @@ fun QuestionScreen(
     }
 
     fun finishAttempt() {
+        saveAnswer()
         coroutineScope.launch {
             viewModel.finishAttempt(attemptId)?.let {
                 navigate(
