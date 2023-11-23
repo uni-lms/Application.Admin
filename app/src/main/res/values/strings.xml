@@ -60,7 +60,7 @@
     <string name="task_status_overdue">Просрочено</string>
     <string name="label_mark">Оценка</string>
     <string name="label_comments">Комментарии</string>
-    <string name="button_send_answer">Отправить ответ</string>
+    <string name="button_send_answer">Отправить решение</string>
     <string name="screen_send_task_answer">Отправка ответа на задание</string>
     <string name="label_file_size_limit">Макс. размер одного файла</string>
     <string name="label_megabytes">%1$d МБ</string>
@@ -92,4 +92,6 @@
     <string name="screen_users">Пользователи</string>
     <string name="screen_groups">Группы</string>
     <string name="screen_schedule">Расписание</string>
+    <string name="label_task_solutions">Решения</string>
+    <string name="label_task_solution_amount_of_files">%1$s файлов</string>
 </resources>
