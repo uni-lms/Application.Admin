@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -126,6 +127,7 @@ fun TaskScreen(
         )
 
         if (taskInfo != null && taskInfo!!.solutions.isNotEmpty()) {
+            Divider()
             Text(
                 text = stringResource(R.string.label_task_solutions),
                 style = MaterialTheme.typography.titleMedium
