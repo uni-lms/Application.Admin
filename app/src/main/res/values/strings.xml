@@ -94,4 +94,6 @@
     <string name="screen_schedule">Расписание</string>
     <string name="label_task_solutions">Решения</string>
     <string name="label_task_solution_amount_of_files">%1$s файлов</string>
+    <string name="role_student">Студент</string>
+    <string name="screen_manage_user">Пользователь</string>
 </resources>
