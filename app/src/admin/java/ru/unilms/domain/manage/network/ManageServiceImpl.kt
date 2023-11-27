@@ -11,6 +11,7 @@ import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
 import ru.unilms.domain.manage.model.User
+import java.util.UUID
 
 class ManageServiceImpl(val token: String) : ManageService {
     override suspend fun getUsers(): Response<List<User>, ErrorResponse> {
@@ -18,6 +19,18 @@ class ManageServiceImpl(val token: String) : ManageService {
         return client.safeRequest {
             method = HttpMethod.Get
             url("${HttpClientFactory.baseUrl}/v1/users")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getUser(userId: UUID): Response<User, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/users/${userId}")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
