@@ -92,7 +92,9 @@ fun ManageUserScreen(
         ).Field()
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = {
+                coroutineScope.launch { viewModel.updateUser(userId) }
+            }) {
                 Text(text = stringResource(id = R.string.button_save))
             }
         }

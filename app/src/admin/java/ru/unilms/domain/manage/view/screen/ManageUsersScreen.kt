@@ -74,7 +74,7 @@ fun ManageUsersScreen(
                             Text(text = "${user.lastName} ${user.firstName[0]}. ${if (user.patronymic != null) "${user.patronymic[0]}." else ""}")
                         },
                         supportingContent = {
-                            Text(text = stringResource(user.roleName.labelId))
+                            Text(text = stringResource(user.roleName!!.labelId))
                         },
                         modifier = Modifier.clickable {
                             navigate(Screens.ManageUser, user.id)
