@@ -49,7 +49,4 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
     composable(Screens.ManageGroups.name) {
 
     }
-    composable(Screens.ManageSchedule.name) {
-
-    }
 }

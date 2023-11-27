@@ -62,7 +62,6 @@ enum class Screens(
     ManageGroups(R.string.screen_groups, true, true, null, false),
     ManageUsers(R.string.screen_users, true, true, null, false),
     ManageUser(R.string.screen_manage_user, true, true, null, false),
-    ManageSchedule(R.string.screen_schedule, true, true, null, false),
     CreateCourse(R.string.screen_create_course, true, true, null, false),
     Journal(R.string.screen_journal, true, true, Icons.Outlined.Book, false),
     Course(R.string.screen_course, true, true, null, false),
