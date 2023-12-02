@@ -4,6 +4,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import ru.unilms.domain.manage.view.screen.ManageGroupScreen
 import ru.unilms.domain.manage.view.screen.ManageGroupsScreen
 import ru.unilms.domain.manage.view.screen.ManageScreen
 import ru.unilms.domain.manage.view.screen.ManageUserScreen
@@ -57,5 +58,14 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
                 goToScreen(navController, screen, id)
             }
         )
+    }
+    composable("${Screens.ManageGroup.name}/{id}") {
+        val groupId = backStackEntry?.arguments?.getString("id")
+        groupId?.let {
+            ManageGroupScreen(UUID.fromString(groupId), onComposing = { appBar, fab ->
+                appState.appBarState = appBar
+                appState.fabState = fab
+            })
+        }
     }
 }
