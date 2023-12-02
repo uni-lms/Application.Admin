@@ -4,6 +4,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import ru.unilms.domain.manage.view.screen.ManageGroupsScreen
 import ru.unilms.domain.manage.view.screen.ManageScreen
 import ru.unilms.domain.manage.view.screen.ManageUserScreen
 import ru.unilms.domain.manage.view.screen.ManageUsersScreen
@@ -47,6 +48,14 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
         }
     }
     composable(Screens.ManageGroups.name) {
-
+        ManageGroupsScreen(
+            onComposing = { appBar, fab ->
+                appState.appBarState = appBar
+                appState.fabState = fab
+            },
+            navigate = { screen, id ->
+                goToScreen(navController, screen, id)
+            }
+        )
     }
 }

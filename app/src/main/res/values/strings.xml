@@ -96,4 +96,17 @@
     <string name="label_task_solution_amount_of_files">%1$s файлов</string>
     <string name="role_student">Студент</string>
     <string name="screen_manage_user">Пользователь</string>
+    <plurals name="label_amount_of_students">
+        <item quantity="one">
+            %d студент
+        </item>
+        <item quantity="two">
+            %d студента
+        </item>
+        <item quantity="other">
+            %d студентов
+        </item>
+    </plurals>
+    <string name="screen_group">Группа</string>
+    <string name="label_current_out_of_semester">%1$s / %2$s семестр</string>
 </resources>

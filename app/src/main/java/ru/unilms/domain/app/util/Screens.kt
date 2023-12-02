@@ -60,6 +60,7 @@ enum class Screens(
         listOf(Flavor.Role.Student, Flavor.Role.Tutor, Flavor.Role.Admin)
     ),
     ManageGroups(R.string.screen_groups, true, true, null, false),
+    ManageGroup(R.string.screen_group, true, true, null, false),
     ManageUsers(R.string.screen_users, true, true, null, false),
     ManageUser(R.string.screen_manage_user, true, true, null, false),
     CreateCourse(R.string.screen_create_course, true, true, null, false),
