@@ -2,10 +2,11 @@ package ru.unilms.domain.course.network
 
 import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.Response
-import ru.unilms.domain.course.Block
+import ru.unilms.domain.course.model.Block
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
+import ru.unilms.domain.course.model.CreateCourseRequest
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
@@ -25,4 +26,5 @@ interface CoursesService {
     suspend fun getJournal(courseId: UUID): Response<JournalDto, ErrorResponse>
     suspend fun getBlocks(): Response<List<Block>, ErrorResponse>
     suspend fun getGroups(): Response<List<Group>, ErrorResponse>
+    suspend fun createCourse(request: CreateCourseRequest): Response<Course, ErrorResponse>
 }

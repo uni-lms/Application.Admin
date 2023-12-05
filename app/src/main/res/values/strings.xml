@@ -3,7 +3,8 @@
     <string name="app_name_admin">UNI. Администрирование</string>
     <string name="app_name_tutor">UNI. Преподавание</string>
     <string name="app_name_student">UNI. Обучение</string>
-    <string name="label_semester">%1d семестр</string>
+    <string name="label_numbered_semester">%1d семестр</string>
+    <string name="label_semester">Семестр</string>
     <string name="screen_registration">Регистрация</string>
     <string name="screen_server_select">Выбор сервера</string>
     <string name="screen_login">Вход в аккаунт</string>
@@ -114,4 +115,6 @@
     <string name="label_maximum_semester">Всего семестров</string>
     <string name="button_create">Создать</string>
     <string name="screen_create_group">Создание группы</string>
+    <string name="label_abbreviation">Аббревиатура</string>
+    <string name="label_blocks">Блоки</string>
 </resources>

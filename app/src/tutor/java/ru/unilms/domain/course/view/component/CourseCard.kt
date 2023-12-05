@@ -36,7 +36,7 @@ fun CourseCard(course: CourseTutor, goToCourseScreen: () -> Unit) {
         overlineContent = {
             Text(
                 text = stringResource(
-                    id = R.string.label_semester,
+                    id = R.string.label_numbered_semester,
                     course.semester
                 )
             )

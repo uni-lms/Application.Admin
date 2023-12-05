@@ -3,18 +3,21 @@ package ru.unilms.domain.course.network
 import io.ktor.client.request.accept
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
 import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
-import ru.unilms.domain.course.Block
+import ru.unilms.domain.course.model.Block
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
+import ru.unilms.domain.course.model.CreateCourseRequest
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
@@ -144,6 +147,20 @@ class CoursesServiceImpl(
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }
+        }
+    }
+
+    override suspend fun createCourse(request: CreateCourseRequest): Response<Course, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Post
+            url("${HttpClientFactory.baseUrl}/v1/courses")
+            accept(ContentType.Application.Json)
+            contentType(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+            setBody(request)
         }
     }
 
