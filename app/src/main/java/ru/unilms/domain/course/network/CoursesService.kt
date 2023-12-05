@@ -2,6 +2,7 @@ package ru.unilms.domain.course.network
 
 import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.Response
+import ru.unilms.domain.course.Block
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
@@ -9,6 +10,7 @@ import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
 import ru.unilms.domain.journal.model.JournalDto
+import ru.unilms.domain.manage.model.Group
 import ru.unilms.domain.task.model.TaskInfo
 import java.util.UUID
 
@@ -21,4 +23,6 @@ interface CoursesService {
     suspend fun getFileContentInfo(fileId: UUID): Response<FileContentInfo, ErrorResponse>
     suspend fun getTaskInfo(taskId: UUID): Response<TaskInfo, ErrorResponse>
     suspend fun getJournal(courseId: UUID): Response<JournalDto, ErrorResponse>
+    suspend fun getBlocks(): Response<List<Block>, ErrorResponse>
+    suspend fun getGroups(): Response<List<Group>, ErrorResponse>
 }

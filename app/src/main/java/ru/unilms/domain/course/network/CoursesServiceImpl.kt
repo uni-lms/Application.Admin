@@ -11,6 +11,7 @@ import ru.unilms.domain.common.model.ErrorResponse
 import ru.unilms.domain.common.network.HttpClientFactory
 import ru.unilms.domain.common.network.Response
 import ru.unilms.domain.common.network.safeRequest
+import ru.unilms.domain.course.Block
 import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
@@ -18,6 +19,7 @@ import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
 import ru.unilms.domain.journal.model.JournalDto
+import ru.unilms.domain.manage.model.Group
 import ru.unilms.domain.task.model.TaskInfo
 import java.util.UUID
 
@@ -114,6 +116,30 @@ class CoursesServiceImpl(
         return client.safeRequest {
             method = HttpMethod.Get
             url("${HttpClientFactory.baseUrl}/v1/course/${courseId}/journal")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getBlocks(): Response<List<Block>, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/blocks")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+    }
+
+    override suspend fun getGroups(): Response<List<Group>, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+        return client.safeRequest {
+            method = HttpMethod.Get
+            url("${HttpClientFactory.baseUrl}/v1/groups")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")

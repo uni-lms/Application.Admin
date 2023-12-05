@@ -33,11 +33,11 @@ fun CreateCourseScreen(
     val coroutineScope = rememberCoroutineScope()
     val viewModel = hiltViewModel<CreateCourseViewModel>()
 
-    var blocks: List<Block>? by remember {
-        mutableStateOf(null)
+    var blocks: List<Block> by remember {
+        mutableStateOf(listOf())
     }
-    var groups: List<Group>? by remember {
-        mutableStateOf(null)
+    var groups: List<Group> by remember {
+        mutableStateOf(listOf())
     }
 
     fun updateBlocks() = coroutineScope.launch {
