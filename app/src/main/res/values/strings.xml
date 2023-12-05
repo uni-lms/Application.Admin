@@ -112,4 +112,6 @@
     <string name="label_name">Название</string>
     <string name="label_current_semester">Текущий семестр</string>
     <string name="label_maximum_semester">Всего семестров</string>
+    <string name="button_create">Создать</string>
+    <string name="screen_create_group">Создание группы</string>
 </resources>
