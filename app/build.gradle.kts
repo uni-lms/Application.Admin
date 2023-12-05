@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 val majorVersion = 1
 val minorVersion = 0
 val patchVersion = 0
@@ -16,14 +19,29 @@ android {
     namespace = "ru.unilms"
     compileSdk = 34
 
-    defaultConfig {
-        applicationId = "ru.unilms"
-        minSdk = 28
-        targetSdk = 34
-        versionCode = majorVersion * 10000 + minorVersion * 100 + patchVersion
-        versionName = "$majorVersion.$minorVersion.$patchVersion"
+    val versionPropsFile = file("version.properties")
 
-        vectorDrawables.useSupportLibrary = true
+    if (versionPropsFile.canRead()) {
+        val versionProps = Properties()
+
+        versionProps.load(FileInputStream(versionPropsFile))
+
+        val code = versionProps["VERSION_CODE"]?.toString()?.toIntOrNull()?.plus(1) ?: 1
+
+        versionProps["VERSION_CODE"] = code.toString()
+        versionProps.store(versionPropsFile.writer(), null)
+
+        defaultConfig {
+            applicationId = "ru.unilms"
+            minSdk = 28
+            targetSdk = 34
+            versionCode = code
+            versionName = "$majorVersion.$minorVersion.$patchVersion"
+
+            vectorDrawables.useSupportLibrary = true
+        }
+    } else {
+        throw GradleException("Could not read version.properties!")
     }
 
     signingConfigs {
