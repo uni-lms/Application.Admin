@@ -3,7 +3,9 @@ package ru.unilms.domain.course.view.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +13,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,9 +24,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
+import ru.unilms.R
 import ru.unilms.data.AppBarState
 import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
@@ -87,5 +93,16 @@ fun CoursesScreen(
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(onClick = { navigate(Screens.CreateCourse, null) }) {
+                Text(text = stringResource(R.string.button_create))
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import ru.unilms.domain.calendar.view.screen.CalendarScreen
 import ru.unilms.domain.course.view.screen.CourseScreen
 import ru.unilms.domain.course.view.screen.CoursesScreen
+import ru.unilms.domain.course.view.screen.CreateCourseScreen
 import ru.unilms.domain.file.view.screen.FileScreen
 import ru.unilms.domain.journal.view.screen.JournalScreen
 import ru.unilms.domain.quiz.view.screen.QuestionScreen
@@ -30,6 +31,17 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
             onComposing = { appBar, fab ->
                 appState.appBarState = appBar
                 appState.fabState = fab
+            }
+        )
+    }
+    composable(Screens.CreateCourse.name) {
+        CreateCourseScreen(
+            navigate = { screen, id ->
+                goToScreen(navController, screen, id)
+            },
+            onComposing = { appBarState, fabState ->
+                appState.appBarState = appBarState
+                appState.fabState = fabState
             }
         )
     }
