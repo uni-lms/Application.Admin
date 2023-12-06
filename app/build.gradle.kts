@@ -198,5 +198,12 @@ dependencies {
 }
 
 task("printVersionName") {
-    println(android.defaultConfig.versionName)
+    println(
+        "${
+            android.defaultConfig.versionName!!.replace(
+                ".",
+                ""
+            )
+        }-${android.defaultConfig.versionCode}"
+    )
 }
