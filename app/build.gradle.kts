@@ -10,7 +10,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
-    id("com.sarhanm.versioner") version "4.1.9"
     kotlin("kapt")
     kotlin("plugin.serialization") version "1.9.0"
 }
@@ -76,7 +75,7 @@ android {
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug (${gitdata.branch}@${gitdata.commit})"
+            versionNameSuffix = "-debug"
         }
     }
 
