@@ -63,7 +63,7 @@ android {
                     .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                     .forEach { output ->
                         val outputFileName =
-                            "${rootProject.name}-${flavorName}-${defaultConfig.versionName}-${defaultConfig.versionCode}.apk"
+                            "${rootProject.name}-${flavorName}-${project.extensions.extraProperties["fullVersion"]}.apk"
                         output.outputFileName = outputFileName
                     }
             }
@@ -197,12 +197,12 @@ dependencies {
 }
 
 task("printVersionName") {
-    println(
-        "${
-            android.defaultConfig.versionName!!.replace(
-                ".",
-                ""
-            )
-        }-${android.defaultConfig.versionCode}"
-    )
+    val versionName = "${
+        android.defaultConfig.versionName!!.replace(
+            ".",
+            ""
+        )
+    }-${android.defaultConfig.versionCode}"
+    project.extensions.extraProperties["fullVersion"] = versionName
+    println(versionName)
 }
