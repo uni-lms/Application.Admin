@@ -26,9 +26,10 @@ android {
         versionProps.load(FileInputStream(versionPropsFile))
 
         val code = versionProps["VERSION_CODE"]?.toString()?.toIntOrNull()?.plus(1) ?: 1
-
-        versionProps["VERSION_CODE"] = code.toString()
-        versionProps.store(versionPropsFile.writer(), null)
+        if (gradle.startParameter.taskNames.contains("elease")) {
+            versionProps["VERSION_CODE"] = code.toString()
+            versionProps.store(versionPropsFile.writer(), null)
+        }
 
         defaultConfig {
             applicationId = "ru.unilms"
