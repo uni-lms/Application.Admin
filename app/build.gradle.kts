@@ -64,7 +64,7 @@ android {
                     .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                     .forEach { output ->
                         val outputFileName =
-                            "${rootProject.name}-${flavorName}-${defaultConfig.versionName}.apk"
+                            "${rootProject.name}-${flavorName}-${defaultConfig.versionName}-${defaultConfig.versionCode}.apk"
                         output.outputFileName = outputFileName
                     }
             }
