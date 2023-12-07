@@ -1,11 +1,16 @@
 package ru.unilms.domain.course.network
 
+import android.webkit.MimeTypeMap
+import androidx.core.net.toFile
 import io.ktor.client.request.accept
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
@@ -18,6 +23,8 @@ import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
 import ru.unilms.domain.course.model.CreateCourseRequest
+import ru.unilms.domain.course.model.CreateFileRequest
+import ru.unilms.domain.course.model.FileResponse
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
@@ -161,6 +168,35 @@ class CoursesServiceImpl(
                 append(HttpHeaders.Authorization, "Bearer $token")
             }
             setBody(request)
+        }
+    }
+
+    override suspend fun createFile(request: CreateFileRequest): Response<FileResponse, ErrorResponse> {
+        val client = HttpClientFactory.httpClient
+
+        val file = request.fileUri.toFile()
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
+        val body = MultiPartFormDataContent(
+            formData {
+                append("blockId", request.blockId.toString())
+                append("isVisibleToStudents", request.isVisibleToStudents)
+                append("visibleName", request.visibleName)
+                append("content", file.readBytes(), Headers.build {
+                    append(HttpHeaders.ContentType, mimeType!!)
+                    append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                })
+            }
+        )
+
+        return client.safeRequest {
+            method = HttpMethod.Post
+            url("${HttpClientFactory.baseUrl}/v1/courses/${request.courseId}/file")
+            accept(ContentType.Application.Json)
+            contentType(ContentType.MultiPart.FormData)
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+            setBody(body)
         }
     }
 

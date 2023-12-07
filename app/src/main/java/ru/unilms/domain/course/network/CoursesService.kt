@@ -7,6 +7,8 @@ import ru.unilms.domain.course.model.Course
 import ru.unilms.domain.course.model.CourseContent
 import ru.unilms.domain.course.model.CourseTutor
 import ru.unilms.domain.course.model.CreateCourseRequest
+import ru.unilms.domain.course.model.CreateFileRequest
+import ru.unilms.domain.course.model.FileResponse
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.course.util.enums.CourseType
 import ru.unilms.domain.file.model.FileContentInfo
@@ -27,4 +29,5 @@ interface CoursesService {
     suspend fun getBlocks(): Response<List<Block>, ErrorResponse>
     suspend fun getGroups(): Response<List<Group>, ErrorResponse>
     suspend fun createCourse(request: CreateCourseRequest): Response<Course, ErrorResponse>
+    suspend fun createFile(request: CreateFileRequest): Response<FileResponse, ErrorResponse>
 }
