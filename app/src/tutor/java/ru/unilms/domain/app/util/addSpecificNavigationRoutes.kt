@@ -84,8 +84,13 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
             }
         }
     }
-    composable(Screens.SelectCourseMaterialType.name) {
-        SelectCourseMaterialType { screen -> goToScreen(navController, screen) }
+    composable("${Screens.SelectCourseMaterialType.name}/{courseId}") {
+        val courseId = backStackEntry?.arguments?.getString("courseId")
+        courseId?.let {
+            SelectCourseMaterialType(
+                courseId = UUID.fromString(courseId),
+                navigate = { screen, id -> goToScreen(navController, screen, id) })
+        }
     }
     composable("${Screens.Task.name}/{taskId}") {
         val taskId = backStackEntry?.arguments?.getString("taskId")

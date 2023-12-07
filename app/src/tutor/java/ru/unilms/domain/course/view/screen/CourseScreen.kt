@@ -153,7 +153,7 @@ fun CourseScreen(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.Bottom
         ) {
-            Button(onClick = { navigate(Screens.SelectCourseMaterialType, null) }) {
+            Button(onClick = { navigate(Screens.SelectCourseMaterialType, courseId) }) {
                 Text(stringResource(R.string.button_create))
             }
         }
