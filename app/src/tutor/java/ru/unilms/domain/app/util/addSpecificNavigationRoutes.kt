@@ -8,6 +8,7 @@ import ru.unilms.domain.calendar.view.screen.CalendarScreen
 import ru.unilms.domain.course.view.screen.CourseScreen
 import ru.unilms.domain.course.view.screen.CoursesScreen
 import ru.unilms.domain.course.view.screen.CreateCourseScreen
+import ru.unilms.domain.course.view.screen.CreateFileScreen
 import ru.unilms.domain.course.view.screen.SelectCourseMaterialType
 import ru.unilms.domain.file.view.screen.FileScreen
 import ru.unilms.domain.journal.view.screen.JournalScreen
@@ -88,6 +89,14 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
         val courseId = backStackEntry?.arguments?.getString("courseId")
         courseId?.let {
             SelectCourseMaterialType(
+                courseId = UUID.fromString(courseId),
+                navigate = { screen, id -> goToScreen(navController, screen, id) })
+        }
+    }
+    composable("${Screens.CreateFile}/{courseId}") {
+        val courseId = backStackEntry?.arguments?.getString("courseId")
+        courseId?.let {
+            CreateFileScreen(
                 courseId = UUID.fromString(courseId),
                 navigate = { screen, id -> goToScreen(navController, screen, id) })
         }
