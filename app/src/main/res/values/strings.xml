@@ -120,4 +120,5 @@
     <string name="screen_select_course_material_type">Тип нового материала</string>
     <string name="screen_create_file">Добавить файл</string>
     <string name="field_visible_name">Отображаемое имя</string>
+    <string name="course_block_tests">Тесты</string>
 </resources>
