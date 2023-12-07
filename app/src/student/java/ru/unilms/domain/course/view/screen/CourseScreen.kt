@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,6 +58,7 @@ fun CourseScreen(
     val viewModel = hiltViewModel<CourseViewModel>()
     var courseContent: CourseContent? by remember { mutableStateOf(null) }
     var isRefreshing by remember { mutableStateOf(true) }
+    val uriHandler = LocalUriHandler.current
 
     fun updateCourseContent() {
         isRefreshing = true
@@ -102,7 +104,10 @@ fun CourseScreen(
                         contentDescription = null
                     )
                 },
-                headlineContent = { Text(text = "Комната ВКС для лекций (Google Meet)") }
+                headlineContent = { Text(text = "Комната ВКС для лекций (Google Meet)") },
+                modifier = Modifier.clickable {
+                    uriHandler.openUri("https://meet.google.com/yre-qfzi-hvo")
+                }
             )
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Book, null) },
