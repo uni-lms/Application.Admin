@@ -117,4 +117,5 @@
     <string name="screen_create_group">Создание группы</string>
     <string name="label_abbreviation">Аббревиатура</string>
     <string name="label_blocks">Блоки</string>
+    <string name="screen_select_course_material_type">Тип нового материала</string>
 </resources>

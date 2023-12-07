@@ -8,6 +8,7 @@ import ru.unilms.domain.calendar.view.screen.CalendarScreen
 import ru.unilms.domain.course.view.screen.CourseScreen
 import ru.unilms.domain.course.view.screen.CoursesScreen
 import ru.unilms.domain.course.view.screen.CreateCourseScreen
+import ru.unilms.domain.course.view.screen.SelectCourseMaterialType
 import ru.unilms.domain.file.view.screen.FileScreen
 import ru.unilms.domain.journal.view.screen.JournalScreen
 import ru.unilms.domain.quiz.view.screen.QuestionScreen
@@ -82,6 +83,9 @@ fun NavGraphBuilder.addSpecificNavigationRoutes(
                 appState.fabState = fab
             }
         }
+    }
+    composable(Screens.SelectCourseMaterialType.name) {
+        SelectCourseMaterialType { screen -> goToScreen(navController, screen) }
     }
     composable("${Screens.Task.name}/{taskId}") {
         val taskId = backStackEntry?.arguments?.getString("taskId")
