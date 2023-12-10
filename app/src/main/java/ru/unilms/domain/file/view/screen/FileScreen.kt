@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.file.model.FileContentInfo
 import ru.unilms.domain.file.util.DownloaderImpl
@@ -39,7 +40,7 @@ import java.util.UUID
 fun FileScreen(
     fileId: UUID,
     navigate: (Screens, UUID) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -60,6 +61,9 @@ fun FileScreen(
             AppBarState(
                 title = fileContentInfo?.visibleName,
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

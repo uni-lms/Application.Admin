@@ -26,19 +26,31 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
+import ru.unilms.domain.app.util.Flavor
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.app.util.getFlavor
 import ru.unilms.domain.auth.viewmodel.LoginViewModel
 import ru.unilms.domain.common.view.component.field.M3TextField
 import java.util.UUID
 
 @Composable
-fun LoginScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState) -> Unit) {
+fun LoginScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState, FabState) -> Unit) {
     val viewModel = hiltViewModel<LoginViewModel>()
+
+    val screenToGoAfterSuccess = when (getFlavor()) {
+        Flavor.Role.Admin -> Screens.Manage
+        Flavor.Role.Student -> Screens.Courses
+        Flavor.Role.Tutor -> Screens.Courses
+    }
 
     LaunchedEffect(key1 = true) {
         onComposing(
             AppBarState(
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }
@@ -80,7 +92,7 @@ fun LoginScreen(navigate: (Screens, UUID?) -> Unit, onComposing: (AppBarState) -
                     Button(onClick = {
                         viewModel.submit {
                             navigate(
-                                Screens.Courses,
+                                screenToGoAfterSuccess,
                                 null
                             )
                         }

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 val majorVersion = 1
 val minorVersion = 0
 val patchVersion = 0
@@ -7,7 +10,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
-    id("com.sarhanm.versioner") version "4.1.9"
     kotlin("kapt")
     kotlin("plugin.serialization") version "1.9.0"
 }
@@ -16,14 +18,30 @@ android {
     namespace = "ru.unilms"
     compileSdk = 34
 
-    defaultConfig {
-        applicationId = "ru.unilms.admin"
-        minSdk = 28
-        targetSdk = 34
-        versionCode = majorVersion * 10000 + minorVersion * 100 + patchVersion
-        versionName = "$majorVersion.$minorVersion.$patchVersion"
+    val versionPropsFile = file("version.properties")
 
-        vectorDrawables.useSupportLibrary = true
+    if (versionPropsFile.canRead()) {
+        val versionProps = Properties()
+
+        versionProps.load(FileInputStream(versionPropsFile))
+
+        val code = versionProps["VERSION_CODE"]?.toString()?.toIntOrNull()?.plus(1) ?: 1
+        if (gradle.startParameter.taskNames.contains("elease")) {
+            versionProps["VERSION_CODE"] = code.toString()
+            versionProps.store(versionPropsFile.writer(), null)
+        }
+
+        defaultConfig {
+            applicationId = "ru.unilms"
+            minSdk = 28
+            targetSdk = 34
+            versionCode = code
+            versionName = "$majorVersion.$minorVersion.$patchVersion"
+
+            vectorDrawables.useSupportLibrary = true
+        }
+    } else {
+        throw GradleException("Could not read version.properties!")
     }
 
     signingConfigs {
@@ -38,12 +56,15 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             applicationVariants.all {
                 val variant = this
+                val flavorName = variant.productFlavors.first().name
                 variant.outputs
                     .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                     .forEach { output ->
-                        val outputFileName = "${rootProject.name}_${defaultConfig.versionName}.apk"
+                        val outputFileName =
+                            "${rootProject.name}-${flavorName}-${project.extensions.extraProperties["fullVersion"]}.apk"
                         output.outputFileName = outputFileName
                     }
             }
@@ -55,9 +76,39 @@ android {
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug (${gitdata.branch}@${gitdata.commit})"
+            versionNameSuffix = "-debug"
         }
     }
+
+    flavorDimensions += listOf("role")
+
+    productFlavors {
+        create("admin") {
+            dimension = "role"
+            applicationIdSuffix = ".admin"
+            resValue("string", "app_name", "@string/app_name_admin")
+        }
+        create("tutor") {
+            dimension = "role"
+            applicationIdSuffix = ".tutor"
+            resValue("string", "app_name", "@string/app_name_tutor")
+        }
+        create("student") {
+            dimension = "role"
+            applicationIdSuffix = ".student"
+            resValue("string", "app_name", "@string/app_name_student")
+        }
+    }
+
+    sourceSets {
+        named("tutor") {
+            kotlin.srcDirs("src/tutorAndStudent/java")
+        }
+        named("student") {
+            kotlin.srcDirs("src/tutorAndStudent/java")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -67,6 +118,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -146,5 +198,12 @@ dependencies {
 }
 
 task("printVersionName") {
-    println(android.defaultConfig.versionName)
+    val versionName = "${
+        android.defaultConfig.versionName!!.replace(
+            ".",
+            ""
+        )
+    }-${android.defaultConfig.versionCode}"
+    project.extensions.extraProperties["fullVersion"] = versionName
+    println(versionName)
 }

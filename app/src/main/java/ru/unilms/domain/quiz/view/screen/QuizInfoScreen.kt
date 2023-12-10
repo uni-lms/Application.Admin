@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.common.unit.minutes
 import ru.unilms.domain.quiz.model.QuizInfo
@@ -42,7 +43,7 @@ import java.util.UUID
 @Composable
 fun QuizInfoScreen(
     quizId: UUID,
-    onComposing: (AppBarState) -> Unit,
+    onComposing: (AppBarState, FabState) -> Unit,
     navigate: (Screens, UUID, Int?) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -72,6 +73,9 @@ fun QuizInfoScreen(
         onComposing(
             AppBarState(
                 title = quizInfo?.visibleName
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

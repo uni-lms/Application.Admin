@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name" translatable="false">UNI</string>
-    <string name="label_semester">%1d семестр</string>
+    <string name="app_name">UNI</string>
+    <string name="app_name_admin">UNI. Администрирование</string>
+    <string name="app_name_tutor">UNI. Преподавание</string>
+    <string name="app_name_student">UNI. Обучение</string>
+    <string name="label_numbered_semester">%1d семестр</string>
+    <string name="label_semester">Семестр</string>
     <string name="screen_registration">Регистрация</string>
     <string name="screen_server_select">Выбор сервера</string>
     <string name="screen_login">Вход в аккаунт</string>
@@ -57,7 +61,7 @@
     <string name="task_status_overdue">Просрочено</string>
     <string name="label_mark">Оценка</string>
     <string name="label_comments">Комментарии</string>
-    <string name="button_send_answer">Отправить ответ</string>
+    <string name="button_send_answer">Отправить решение</string>
     <string name="screen_send_task_answer">Отправка ответа на задание</string>
     <string name="label_file_size_limit">Макс. размер одного файла</string>
     <string name="label_megabytes">%1$d МБ</string>
@@ -84,4 +88,37 @@
     <string name="button_finish_attempt">Завершить</string>
     <string name="button_question_next">Вперёд</string>
     <string name="button_question_prev">Назад</string>
+    <string name="screen_manage">Управление</string>
+    <string name="screen_create_course">Создание курса</string>
+    <string name="screen_users">Пользователи</string>
+    <string name="screen_groups">Группы</string>
+    <string name="screen_schedule">Расписание</string>
+    <string name="label_task_solutions">Решения</string>
+    <string name="label_task_solution_amount_of_files">%1$s файлов</string>
+    <string name="role_student">Студент</string>
+    <string name="screen_manage_user">Пользователь</string>
+    <plurals name="label_amount_of_students">
+        <item quantity="one">
+            %d студент
+        </item>
+        <item quantity="two">
+            %d студента
+        </item>
+        <item quantity="other">
+            %d студентов
+        </item>
+    </plurals>
+    <string name="screen_group">Группа</string>
+    <string name="label_current_out_of_semester">%1$s / %2$s семестр</string>
+    <string name="label_name">Название</string>
+    <string name="label_current_semester">Текущий семестр</string>
+    <string name="label_maximum_semester">Всего семестров</string>
+    <string name="button_create">Создать</string>
+    <string name="screen_create_group">Создание группы</string>
+    <string name="label_abbreviation">Аббревиатура</string>
+    <string name="label_blocks">Блоки</string>
+    <string name="screen_select_course_material_type">Тип нового материала</string>
+    <string name="screen_create_file">Добавить файл</string>
+    <string name="field_visible_name">Отображаемое имя</string>
+    <string name="course_block_tests">Тесты</string>
 </resources>

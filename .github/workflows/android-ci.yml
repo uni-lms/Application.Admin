@@ -21,6 +21,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       # Here we need to decode keystore.jks from base64 string and place it
       # in the folder specified in the release signing configuration
       - name: Decode Keystore
@@ -28,7 +40,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'ru.unilms.jks'
-          fileDir: '/home/runner/work/Application.Admin/Application.Admin/app/keystore/'
+          fileDir: '/home/runner/work/Applications/Applications/app/keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
 
       # Build and sign APK ("-x test" argument is used to skip tests)
@@ -51,7 +63,10 @@ jobs:
 
       # Show information about the APK's signing certificates
       - name: Verify Signature
-        run: $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
+        run: |
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/admin/release/UNI-admin-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/tutor/release/UNI-tutor-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/student/release/UNI-student-${{steps.android_version.outputs.VERSION_NAME}}.apk
 
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
@@ -60,4 +75,6 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts-branch: artifacts
           artifacts: |
-            app/build/outputs/apk/release/UNI_${{steps.android_version.outputs.VERSION_NAME}}.apk
+            app/build/outputs/apk/admin/release/UNI-admin-${{steps.android_version.outputs.VERSION_NAME}}.apk
+            app/build/outputs/apk/tutor/release/UNI-tutor-${{steps.android_version.outputs.VERSION_NAME}}.apk
+            app/build/outputs/apk/student/release/UNI-student-${{steps.android_version.outputs.VERSION_NAME}}.apk

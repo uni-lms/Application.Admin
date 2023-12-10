@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.common.extension.toMutableStateList
 import ru.unilms.domain.common.form.dynamic.FieldType
@@ -51,7 +52,7 @@ import java.util.UUID
 fun QuestionScreen(
     attemptId: UUID,
     questionNumber: Int,
-    onComposing: (AppBarState) -> Unit,
+    onComposing: (AppBarState, FabState) -> Unit,
     navigate: (Screens, UUID, Int?, Boolean) -> Unit,
 ) {
 
@@ -72,6 +73,7 @@ fun QuestionScreen(
     }
 
     fun finishAttempt() {
+        saveAnswer()
         coroutineScope.launch {
             viewModel.finishAttempt(attemptId)?.let {
                 navigate(
@@ -101,6 +103,9 @@ fun QuestionScreen(
             AppBarState(
                 title = questionInfo.quizTitle,
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }

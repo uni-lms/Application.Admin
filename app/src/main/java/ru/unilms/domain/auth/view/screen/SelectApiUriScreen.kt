@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.unilms.R
 import ru.unilms.data.AppBarState
+import ru.unilms.domain.app.util.Flavor
 import ru.unilms.domain.app.util.Screens
+import ru.unilms.domain.app.util.getFlavor
 import ru.unilms.domain.auth.viewmodel.SelectApiUriViewModel
 import ru.unilms.domain.common.view.component.field.M3TextField
 import java.util.UUID
@@ -32,6 +34,7 @@ fun SelectApiUriScreen(
 ) {
 
     val viewModel = hiltViewModel<SelectApiUriViewModel>()
+    val flavor = getFlavor()
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -67,7 +70,10 @@ fun SelectApiUriScreen(
                 Button(onClick = {
                     viewModel.submit {
                         navigate(
-                            Screens.LoginOrRegister,
+                            when (flavor) {
+                                Flavor.Role.Student -> Screens.Login
+                                else -> Screens.LoginOrRegister
+                            },
                             null
                         )
                     }

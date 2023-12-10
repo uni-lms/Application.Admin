@@ -18,6 +18,7 @@ import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material3.Material3RichText
 import kotlinx.coroutines.launch
 import ru.unilms.data.AppBarState
+import ru.unilms.data.FabState
 import ru.unilms.domain.app.util.Screens
 import ru.unilms.domain.course.model.TextContentInfo
 import ru.unilms.domain.text.viewmodel.TextViewModel
@@ -27,7 +28,7 @@ import java.util.UUID
 fun TextScreen(
     textId: UUID,
     navigate: (Screens, UUID) -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState, FabState) -> Unit,
 ) {
     val viewModel = hiltViewModel<TextViewModel>()
     var textContent: String by remember { mutableStateOf("") }
@@ -47,6 +48,9 @@ fun TextScreen(
             AppBarState(
                 title = textContentInfo?.visibleName,
                 actions = { }
+            ),
+            FabState(
+                fab = {}
             )
         )
     }
