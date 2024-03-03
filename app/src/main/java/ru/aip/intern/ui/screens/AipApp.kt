@@ -13,6 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BottomBar
+import ru.aip.intern.ui.components.ConfirmExit
 import ru.aip.intern.ui.components.TopBar
 
 @Composable
@@ -30,6 +31,8 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
     }
 
     val currentScreen = Screen.valueOf(screenName ?: startScreen)
+
+    ConfirmExit()
 
     Scaffold(
         topBar = {
