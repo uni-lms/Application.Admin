@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 enum class Screen(
     val title: String,
     val canGoBack: Boolean = false,
+    val showBottomBar: Boolean = true,
     val icon: ImageVector? = null,
     val position: ScreenPosition
 ) {

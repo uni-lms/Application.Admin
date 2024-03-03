@@ -42,7 +42,11 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                 goUp = { navController.navigateUp() }
             )
         },
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = {
+            if (currentScreen.showBottomBar) {
+                BottomBar(navController = navController)
+            }
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
