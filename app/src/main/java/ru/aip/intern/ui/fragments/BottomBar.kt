@@ -1,4 +1,4 @@
-package ru.aip.intern.ui.components
+package ru.aip.intern.ui.fragments
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme

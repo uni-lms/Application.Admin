@@ -1,4 +1,4 @@
-package ru.aip.intern.ui.components
+package ru.aip.intern.ui.fragments
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons

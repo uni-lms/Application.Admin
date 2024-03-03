@@ -12,9 +12,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
-import ru.aip.intern.ui.components.BottomBar
 import ru.aip.intern.ui.components.ConfirmExit
-import ru.aip.intern.ui.components.TopBar
+import ru.aip.intern.ui.fragments.BottomBar
+import ru.aip.intern.ui.fragments.TopBar
 
 @Composable
 fun AipApp(navController: NavHostController = rememberNavController()) {
