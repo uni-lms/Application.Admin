@@ -5,62 +5,82 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.ConfirmExit
+import ru.aip.intern.ui.components.Greeting
 import ru.aip.intern.ui.fragments.BottomBar
+import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 
 @Composable
 fun AipApp(navController: NavHostController = rememberNavController()) {
 
-    val startScreen = Screen.Internships.name
+    var showSplashScreen by remember { mutableStateOf(true) }
+    var startScreen by remember { mutableStateOf(Screen.Notifications) } // Default start screen
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val route = backStackEntry?.destination?.route
 
-    val screenName = if (route?.contains("/") == true) {
-        route.split("/")[0]
-    } else {
-        route
-    }
+//    val backStackEntry by navController.currentBackStackEntryAsState()
+//    val route = backStackEntry?.destination?.route
 
-    val currentScreen = Screen.valueOf(screenName ?: startScreen)
+//    val screenName = if (route?.contains("/") == true) {
+//        route.split("/")[0]
+//    } else {
+//        route
+//    }
 
     ConfirmExit()
 
-    Scaffold(
-        topBar = {
-            TopBar(
-                currentScreen = currentScreen,
-                canGoBack = navController.previousBackStackEntry != null && currentScreen.canGoBack,
-                goUp = { navController.navigateUp() }
-            )
-        },
-        bottomBar = {
-            if (currentScreen.showBottomBar) {
-                BottomBar(navController = navController)
-            }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = startScreen,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            composable(Screen.Internships.name) {
-                InternshipsScreen()
-            }
+    if (showSplashScreen) {
+        SplashScreen(onLoadingComplete = { screenName ->
+            startScreen = screenName
+            showSplashScreen = false
+//            goToScreen(navController, screenName)
 
-            composable(Screen.Menu.name) {
-                MenuScreen()
+        })
+    } else {
+        Scaffold(
+            topBar = {
+                TopBar(
+                    currentScreen = startScreen,
+                    canGoBack = navController.previousBackStackEntry != null && startScreen.canGoBack,
+                    goUp = { navController.navigateUp() }
+                )
+            },
+            bottomBar = {
+                if (startScreen.showBottomBar) {
+                    BottomBar(navController = navController)
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = startScreen.name,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                composable(Screen.Internships.name) {
+                    InternshipsScreen()
+                }
+
+                composable(Screen.Menu.name) {
+                    MenuScreen()
+                }
+
+                composable(Screen.Notifications.name) {
+                    BaseScreen {
+                        Greeting(name = "notifications")
+                    }
+                }
             }
         }
     }
