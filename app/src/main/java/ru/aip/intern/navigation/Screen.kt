@@ -3,6 +3,7 @@ package ru.aip.intern.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class Screen(
@@ -22,5 +23,11 @@ enum class Screen(
         canGoBack = false,
         icon = Icons.Outlined.Menu,
         position = ScreenPosition.BottomBar
+    ),
+    Notifications(
+        title = "Уведомления",
+        canGoBack = true,
+        icon = Icons.Outlined.Notifications,
+        position = ScreenPosition.Menu
     )
 }
