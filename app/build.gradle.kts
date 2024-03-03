@@ -65,8 +65,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     implementation("com.google.firebase:firebase-analytics")
 
-    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.google.dagger:hilt-android:2.49")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation("androidx.compose.runtime:runtime-livedata")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
