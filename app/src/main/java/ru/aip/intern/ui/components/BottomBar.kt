@@ -31,7 +31,7 @@ fun BottomBar(navController: NavHostController) {
                         )
                     },
                     selected = isSelected,
-                    onClick = { goToScreen(navController, screen) },
+                    onClick = { goToScreen(navController, screen, saveEntry = false) },
                     icon = {
                         if (screen.icon != null) {
                             Icon(
