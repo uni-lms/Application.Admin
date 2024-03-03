@@ -11,6 +11,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.util.goToScreen
 
 @Composable
@@ -18,7 +19,7 @@ fun BottomBar(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
     NavigationBar {
-        enumValues<Screen>().filter { screen -> screen.icon != null && screen.showInBottomBar }
+        enumValues<Screen>().filter { screen -> screen.icon != null && screen.position == ScreenPosition.BottomBar }
             .forEach { screen ->
                 val isSelected =
                     currentDestination?.hierarchy?.any { it.route == screen.name } == true

@@ -9,18 +9,18 @@ enum class Screen(
     val title: String,
     val canGoBack: Boolean = false,
     val icon: ImageVector? = null,
-    val showInBottomBar: Boolean = false
+    val position: ScreenPosition
 ) {
     Internships(
         title = "Стажировки",
         canGoBack = false,
         icon = Icons.Outlined.LibraryBooks,
-        showInBottomBar = true
+        position = ScreenPosition.BottomBar,
     ),
     Menu(
         title = "Меню",
         canGoBack = false,
         icon = Icons.Outlined.Menu,
-        showInBottomBar = true
+        position = ScreenPosition.BottomBar
     )
 }
