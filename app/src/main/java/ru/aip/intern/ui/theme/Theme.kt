@@ -83,9 +83,9 @@ private val darkColors = darkColorScheme(
 
 @Composable
 fun AltenarInternshipTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        dynamicColor: Boolean = true,
-        content: @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
