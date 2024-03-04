@@ -50,6 +50,8 @@ android {
 
 dependencies {
 
+    val ktorVersion = "2.3.8"
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -73,6 +75,14 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion") // Базовая клиентская библиотека
+    implementation("io.ktor:ktor-client-android:$ktorVersion") // Плагин для работы в Android
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion") // Плагины для парсинга JSON в модели и обратно
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion") // Плагин для логгирования
+    implementation("ch.qos.logback:logback-classic:1.2.11")  // Драйвер логгирования (последняя подддерживаемая в Android версия)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
