@@ -17,10 +17,14 @@ class InternshipsViewModel @Inject constructor(private val dataStoreRepository: 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
+    init {
+        refresh()
+    }
+
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.value = true
-            delay(5000)
+            delay(300)
             _isRefreshing.value = false
         }
     }
