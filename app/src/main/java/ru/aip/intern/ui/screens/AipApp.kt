@@ -27,6 +27,8 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
     var showSplashScreen by remember { mutableStateOf(true) }
     var startScreen by remember { mutableStateOf(Screen.Notifications) } // Default start screen
 
+    val title = remember { mutableStateOf("AIP") }
+
 
 //    val backStackEntry by navController.currentBackStackEntryAsState()
 //    val route = backStackEntry?.destination?.route
@@ -43,7 +45,6 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
         SplashScreen(onLoadingComplete = { screenName ->
             startScreen = screenName
             showSplashScreen = false
-//            goToScreen(navController, screenName)
 
         })
     } else {
@@ -52,7 +53,8 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                 TopBar(
                     currentScreen = startScreen,
                     canGoBack = navController.previousBackStackEntry != null && startScreen.canGoBack,
-                    goUp = { navController.navigateUp() }
+                    goUp = { navController.navigateUp() },
+                    title = title
                 )
             },
             bottomBar = {
@@ -69,11 +71,11 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     .padding(innerPadding)
             ) {
                 composable(Screen.Internships.name) {
-                    InternshipsScreen()
+                    InternshipsScreen(title)
                 }
 
                 composable(Screen.Menu.name) {
-                    MenuScreen()
+                    MenuScreen(title)
                 }
 
                 composable(Screen.Notifications.name) {
