@@ -77,6 +77,10 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     MenuScreen(title)
                 }
 
+                composable(Screen.Calendar.name) {
+                    CalendarScreen(title)
+                }
+
                 composable(Screen.Notifications.name) {
                     BaseScreen {
                         Greeting(name = "notifications")

@@ -1,6 +1,7 @@
 package ru.aip.intern.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Notifications
@@ -18,6 +19,12 @@ enum class Screen(
         canGoBack = false,
         icon = Icons.Outlined.LibraryBooks,
         position = ScreenPosition.BottomBar,
+    ),
+    Calendar(
+        title = "Календарь",
+        canGoBack = false,
+        icon = Icons.Outlined.CalendarMonth,
+        position = ScreenPosition.BottomBar
     ),
     Menu(
         title = "Меню",
