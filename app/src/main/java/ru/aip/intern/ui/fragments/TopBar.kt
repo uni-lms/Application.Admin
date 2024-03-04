@@ -20,7 +20,6 @@ import ru.aip.intern.navigation.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    currentScreen: Screen,
     canGoBack: Boolean,
     goUp: () -> Unit,
     modifier: Modifier = Modifier,

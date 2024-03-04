@@ -51,7 +51,6 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
         Scaffold(
             topBar = {
                 TopBar(
-                    currentScreen = startScreen,
                     canGoBack = navController.previousBackStackEntry != null && startScreen.canGoBack,
                     goUp = { navController.navigateUp() },
                     title = title
