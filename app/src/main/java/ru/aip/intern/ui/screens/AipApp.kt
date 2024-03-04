@@ -27,6 +27,9 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
     var showSplashScreen by remember { mutableStateOf(true) }
     var startScreen by remember { mutableStateOf(Screen.Notifications) } // Default start screen
 
+    // TODO real API call to get notifications count
+    val hasUnreadNotifications by remember { mutableStateOf(1 > 0) }
+
     val title = remember { mutableStateOf("AIP") }
 
 
@@ -58,7 +61,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
             },
             bottomBar = {
                 if (startScreen.showBottomBar) {
-                    BottomBar(navController = navController)
+                    BottomBar(navController = navController, hasUnreadNotifications)
                 }
             }
         ) { innerPadding ->
