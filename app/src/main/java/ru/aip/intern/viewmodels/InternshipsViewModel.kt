@@ -1,8 +1,11 @@
 package ru.aip.intern.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
@@ -11,9 +14,14 @@ import javax.inject.Inject
 class InternshipsViewModel @Inject constructor(private val dataStoreRepository: DataStoreRepository) :
     ViewModel() {
 
-    fun dummyApiKey() {
+    private val _isRefreshing = MutableLiveData(false)
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
+
+    fun refresh() {
         viewModelScope.launch {
-            dataStoreRepository.saveApiKey("123")
+            _isRefreshing.value = true
+            delay(5000)
+            _isRefreshing.value = false
         }
     }
 
