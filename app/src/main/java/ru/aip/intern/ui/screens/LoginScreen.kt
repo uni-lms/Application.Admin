@@ -45,6 +45,8 @@ fun LoginScreen(title: MutableState<String>) {
         val formEnabledState = viewModel.formEnabled.observeAsState(true)
         val isEmailWithError = viewModel.isEmailWithError.observeAsState(false)
         val emailErrorMessage = viewModel.emailErrorMessage.observeAsState("")
+        val isPasswordWithError = viewModel.isPasswordWithError.observeAsState(false)
+        val passwordErrorMessage = viewModel.passwordErrorMessage.observeAsState("")
 
         val refreshing = viewModel.isRefreshing.observeAsState(false)
         val pullRefreshState = rememberPullRefreshState(
@@ -91,6 +93,12 @@ fun LoginScreen(title: MutableState<String>) {
                             submit()
                         }
                     ),
+                    isError = isPasswordWithError.value,
+                    supportingText = {
+                        if (isPasswordWithError.value) {
+                            Text(text = passwordErrorMessage.value)
+                        }
+                    },
                     enabled = formEnabledState.value,
                     label = {
                         Text(

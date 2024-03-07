@@ -30,6 +30,12 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     private val _emailErrorMessage = MutableLiveData("")
     val emailErrorMessage: LiveData<String> = _emailErrorMessage
 
+    private val _isPasswordWithError = MutableLiveData(false)
+    val isPasswordWithError: LiveData<Boolean> = _isPasswordWithError
+
+    private val _passwordErrorMessage = MutableLiveData("")
+    val passwordErrorMessage: LiveData<String> = _passwordErrorMessage
+
     fun setEmail(email: String) {
         _email.value = email
     }
@@ -43,6 +49,10 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         return email.matches(emailRegex.toRegex())
     }
 
+    private fun validatePassword(password: String): Boolean {
+        return password.isNotBlank()
+    }
+
     fun validate(): Boolean {
 
         var isValid = true
@@ -53,9 +63,18 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             isValid = false
         }
 
+        if (!validatePassword(_password.value ?: "")) {
+            _isPasswordWithError.value = true
+            _passwordErrorMessage.value = "Пароль не может быть пустым"
+            isValid = false
+        }
+
         if (isValid) {
             _isEmailWithError.value = false
             _emailErrorMessage.value = ""
+
+            _isPasswordWithError.value = false
+            _passwordErrorMessage.value = ""
         }
         return isValid
     }
