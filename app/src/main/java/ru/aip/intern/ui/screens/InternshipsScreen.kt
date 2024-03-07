@@ -20,6 +20,7 @@ import ru.aip.intern.viewmodels.InternshipsViewModel
 fun InternshipsScreen(title: MutableState<String>) {
     val viewModel: InternshipsViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
+    var internshipData = viewModel.internshipData.observeAsState()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
