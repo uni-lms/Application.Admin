@@ -12,8 +12,13 @@ enum class Screen(
     val canGoBack: Boolean = false,
     val showBottomBar: Boolean = true,
     val icon: ImageVector? = null,
-    val position: ScreenPosition
+    val position: ScreenPosition? = null
 ) {
+    Login(
+        title = "Вход",
+        canGoBack = false,
+        showBottomBar = false,
+    ),
     Internships(
         title = "Стажировки",
         canGoBack = false,

@@ -72,6 +72,9 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
+                composable(Screen.Login.name) {
+                    LoginScreen(title)
+                }
                 composable(Screen.Internships.name) {
                     InternshipsScreen(title)
                 }
