@@ -7,11 +7,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class MenuViewModel @Inject constructor() : ViewModel() {
+class MenuViewModel @Inject constructor(val storage: DataStoreRepository) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
     private val _unreadNotificationsCount = MutableLiveData(0)
@@ -29,6 +30,12 @@ class MenuViewModel @Inject constructor() : ViewModel() {
             delay(300)
             _unreadNotificationsCount.value = Random.nextInt(0, 3)
             _isRefreshing.value = false
+        }
+    }
+
+    fun logOut() {
+        viewModelScope.launch {
+            storage.saveApiKey("")
         }
     }
 

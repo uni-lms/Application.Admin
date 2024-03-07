@@ -87,7 +87,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                 }
 
                 composable(Screen.Menu.name) {
-                    MenuScreen(title)
+                    MenuScreen(title) { screen -> goToScreen(navController, screen) }
                 }
 
                 composable(Screen.Calendar.name) {

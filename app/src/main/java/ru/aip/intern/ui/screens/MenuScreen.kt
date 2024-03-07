@@ -1,7 +1,10 @@
 package ru.aip.intern.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -22,7 +25,7 @@ import ru.aip.intern.viewmodels.MenuViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MenuScreen(title: MutableState<String>) {
+fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
     // TODO real API call to get notifications count
     title.value = "Меню"
 
@@ -56,6 +59,18 @@ fun MenuScreen(title: MutableState<String>) {
                     }
                 )
             }
+
+            ListItem(
+                headlineContent = { Text(text = "Выйти из аккаунта") },
+                leadingContent = {
+                    Icon(Icons.AutoMirrored.Outlined.Logout, null)
+                },
+                modifier = Modifier.clickable {
+                    viewModel.logOut()
+                    navigateTo(Screen.Login)
+                }
+            )
+
         }
         PullRefreshIndicator(
             refreshing.value,
