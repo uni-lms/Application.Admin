@@ -36,6 +36,11 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     private val _passwordErrorMessage = MutableLiveData("")
     val passwordErrorMessage: LiveData<String> = _passwordErrorMessage
 
+    object FieldsValidationState {
+        var email: Boolean = true
+        var password: Boolean = true
+    }
+
     fun setEmail(email: String) {
         _email.value = email
     }
@@ -55,28 +60,32 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     fun validate(): Boolean {
 
-        var isValid = true
-
         if (!validateEmail(_email.value ?: "")) {
             _isEmailWithError.value = true
             _emailErrorMessage.value = "Некорректный формат электропочты"
-            isValid = false
+            FieldsValidationState.email = false
+        } else {
+            FieldsValidationState.email = true
         }
 
         if (!validatePassword(_password.value ?: "")) {
             _isPasswordWithError.value = true
             _passwordErrorMessage.value = "Пароль не может быть пустым"
-            isValid = false
+            FieldsValidationState.password = false
+        } else {
+            FieldsValidationState.password = true
         }
 
-        if (isValid) {
+        if (FieldsValidationState.email) {
             _isEmailWithError.value = false
             _emailErrorMessage.value = ""
+        }
 
+        if (FieldsValidationState.password) {
             _isPasswordWithError.value = false
             _passwordErrorMessage.value = ""
         }
-        return isValid
+        return FieldsValidationState.email && FieldsValidationState.password
     }
 
     fun login() {
