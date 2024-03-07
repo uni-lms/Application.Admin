@@ -3,6 +3,8 @@ package ru.aip.intern.ui.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
 
     val title = remember { mutableStateOf("AIP") }
 
+    val snackbarHostState = remember { SnackbarHostState() }
 
 //    val backStackEntry by navController.currentBackStackEntryAsState()
 //    val route = backStackEntry?.destination?.route
@@ -63,6 +66,9 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                 if (startScreen.showBottomBar) {
                     BottomBar(navController = navController, hasUnreadNotifications)
                 }
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
             }
         ) { innerPadding ->
             NavHost(
@@ -76,7 +82,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     LoginScreen(title)
                 }
                 composable(Screen.Internships.name) {
-                    InternshipsScreen(title)
+                    InternshipsScreen(title, snackbarHostState)
                 }
 
                 composable(Screen.Menu.name) {
