@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.data.LoginRequest
+import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 
@@ -42,6 +43,11 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
 
     private val _askedForNotificationPermission = MutableLiveData(false)
     val askedForNotificationPermission: LiveData<Boolean> = _askedForNotificationPermission
+
+    private val _snackbarMessage = MutableSharedFlow<String>()
+    val snackbarMessage = _snackbarMessage
+
+    private val _service = AuthService("")
 
     init {
         viewModelScope.launch {
@@ -110,12 +116,11 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
         return FieldsValidationState.email && FieldsValidationState.password
     }
 
-    fun login() {
+    fun login(redirect: () -> Unit) {
+
         viewModelScope.launch {
             _isRefreshing.value = true
             _formEnabled.value = false
-
-            delay(3500)
 
             val request = LoginRequest(email.value!!, password.value!!)
             var fcmToken = ""
@@ -133,10 +138,25 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
                 fcmToken = token
             }
 
-            storage.saveApiKey("not-empty")
+            val response = _service.logIn(request, fcmToken)
+
+            if (response.isSuccess) {
+                storage.saveApiKey(response.value!!.accessToken)
+                redirect()
+            } else {
+                triggerSnackbar(response.errorMessage!!)
+            }
 
             _isRefreshing.value = false
             _formEnabled.value = true
+
+        }
+
+    }
+
+    private fun triggerSnackbar(message: String) {
+        viewModelScope.launch {
+            _snackbarMessage.emit(message)
         }
     }
 
