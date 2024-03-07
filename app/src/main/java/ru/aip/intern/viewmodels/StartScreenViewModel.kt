@@ -26,7 +26,7 @@ class StartScreenViewModel @Inject constructor(private val dataStoreRepository: 
 
     val startScreen: LiveData<Screen> = liveData {
         val screenName = if (apiKey == "" || apiKey == null) {
-            Screen.Notifications // TODO real login screen
+            Screen.Login
         } else {
             Screen.Internships
         }
