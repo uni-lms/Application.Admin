@@ -133,7 +133,7 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
                 fcmToken = token
             }
 
-
+            storage.saveApiKey("not-empty")
 
             _isRefreshing.value = false
             _formEnabled.value = true
