@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -24,6 +23,7 @@ import ru.aip.intern.ui.fragments.BottomBar
 import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
+import kotlin.random.Random
 
 @Composable
 fun AipApp(navController: NavHostController = rememberNavController()) {
@@ -32,7 +32,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
     var startScreen by remember { mutableStateOf(Screen.Login) } // Default start screen
 
     // TODO real API call to get notifications count
-    val hasUnreadNotifications by remember { mutableStateOf(1 > 0) }
+    val hasUnreadNotifications by remember { mutableStateOf(Random.nextInt(0, 3) > 0) }
 
     val title = remember { mutableStateOf("AIP") }
 
