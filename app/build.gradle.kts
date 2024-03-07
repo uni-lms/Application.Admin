@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     val ktorVersion = "2.3.8"
 
     implementation("androidx.core:core-ktx:1.12.0")
