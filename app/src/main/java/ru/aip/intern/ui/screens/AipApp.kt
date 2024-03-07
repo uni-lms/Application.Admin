@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -37,14 +38,17 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-//    val backStackEntry by navController.currentBackStackEntryAsState()
-//    val route = backStackEntry?.destination?.route
+    if (!showSplashScreen) {
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val route = backStackEntry?.destination?.route
 
-//    val screenName = if (route?.contains("/") == true) {
-//        route.split("/")[0]
-//    } else {
-//        route
-//    }
+        val screenName = if (route?.contains("/") == true) {
+            route.split("/")[0]
+        } else route ?: "Login"
+
+        startScreen = Screen.valueOf(screenName)
+
+    }
 
     ConfirmExit()
 
