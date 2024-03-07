@@ -84,7 +84,12 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     .padding(innerPadding)
             ) {
                 composable(Screen.Login.name) {
-                    LoginScreen(title) { screen -> goToScreen(navController, screen) }
+                    LoginScreen(title, snackbarHostState) { screen ->
+                        goToScreen(
+                            navController,
+                            screen
+                        )
+                    }
                 }
                 composable(Screen.Internships.name) {
                     InternshipsScreen(title, snackbarHostState)

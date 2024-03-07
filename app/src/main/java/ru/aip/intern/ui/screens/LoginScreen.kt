@@ -13,6 +13,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +37,11 @@ import ru.aip.intern.viewmodels.PermissionManagerViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LoginScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
+fun LoginScreen(
+    title: MutableState<String>,
+    snackbarHostState: SnackbarHostState,
+    navigateTo: (Screen) -> Unit
+) {
 
     title.value = "Вход в аккаунт"
 
@@ -45,8 +50,14 @@ fun LoginScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
 
     fun submit() {
         if (viewModel.validate()) {
-            viewModel.login()
-            navigateTo(Screen.Internships)
+            viewModel.login { navigateTo(Screen.Internships) }
+
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.snackbarMessage.collect { message ->
+            snackbarHostState.showSnackbar(message)
         }
     }
 
