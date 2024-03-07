@@ -22,6 +22,7 @@ import ru.aip.intern.ui.components.Greeting
 import ru.aip.intern.ui.fragments.BottomBar
 import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
+import ru.aip.intern.util.goToScreen
 
 @Composable
 fun AipApp(navController: NavHostController = rememberNavController()) {
@@ -79,7 +80,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     .padding(innerPadding)
             ) {
                 composable(Screen.Login.name) {
-                    LoginScreen(title)
+                    LoginScreen(title) { screen -> goToScreen(navController, screen) }
                 }
                 composable(Screen.Internships.name) {
                     InternshipsScreen(title, snackbarHostState)

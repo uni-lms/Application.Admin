@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.navigation.Screen
 import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.dialogs.RequestingNotificationPermissionDialog
@@ -35,7 +36,7 @@ import ru.aip.intern.viewmodels.PermissionManagerViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LoginScreen(title: MutableState<String>) {
+fun LoginScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
 
     title.value = "Вход в аккаунт"
 
@@ -45,6 +46,7 @@ fun LoginScreen(title: MutableState<String>) {
     fun submit() {
         if (viewModel.validate()) {
             viewModel.login()
+            navigateTo(Screen.Internships)
         }
     }
 
