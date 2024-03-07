@@ -1,8 +1,8 @@
 package ru.aip.intern.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,7 +22,7 @@ enum class Screen(
     Internships(
         title = "Стажировки",
         canGoBack = false,
-        icon = Icons.Outlined.LibraryBooks,
+        icon = Icons.AutoMirrored.Outlined.LibraryBooks,
         position = ScreenPosition.BottomBar,
     ),
     Calendar(

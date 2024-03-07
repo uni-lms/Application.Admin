@@ -3,10 +3,8 @@ package ru.aip.intern.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.storage.DataStoreRepository
@@ -31,11 +29,5 @@ class StartScreenViewModel @Inject constructor(private val dataStoreRepository: 
             Screen.Internships
         }
         emit(screenName)
-    }
-
-    fun saveApiKey(key: String) {
-        viewModelScope.launch {
-            dataStoreRepository.saveApiKey(key)
-        }
     }
 }
