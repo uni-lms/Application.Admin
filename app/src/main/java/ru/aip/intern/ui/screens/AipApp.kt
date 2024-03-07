@@ -28,7 +28,7 @@ import ru.aip.intern.util.goToScreen
 fun AipApp(navController: NavHostController = rememberNavController()) {
 
     var showSplashScreen by remember { mutableStateOf(true) }
-    var startScreen by remember { mutableStateOf(Screen.Notifications) } // Default start screen
+    var startScreen by remember { mutableStateOf(Screen.Login) } // Default start screen
 
     // TODO real API call to get notifications count
     val hasUnreadNotifications by remember { mutableStateOf(1 > 0) }
