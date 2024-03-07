@@ -3,6 +3,7 @@ package ru.aip.intern.storage
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -13,11 +14,12 @@ import javax.inject.Inject
 
 class DataStoreRepository @Inject constructor(@ApplicationContext private val context: Context) {
     companion object {
-        private val Context.datastore: DataStore<Preferences> by preferencesDataStore("auth")
+        private val Context.datastore: DataStore<Preferences> by preferencesDataStore("aip")
     }
 
     private object PreferenceKeys {
         val apiKey = stringPreferencesKey("apiKey")
+        val hasNotificationPermission = booleanPreferencesKey("hasNotificationsPermission")
     }
 
     suspend fun saveApiKey(key: String) {
@@ -26,8 +28,19 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         }
     }
 
+    suspend fun saveNotificationPermissionStatus(value: Boolean) {
+        context.datastore.edit { prefs ->
+            prefs[PreferenceKeys.hasNotificationPermission] = value
+        }
+    }
+
     val apiKey: Flow<String?> = context.datastore.data
         .map { prefs ->
             prefs[PreferenceKeys.apiKey] ?: ""
+        }
+
+    val hasNotificationPermission: Flow<Boolean> = context.datastore.data
+        .map { prefs ->
+            prefs[PreferenceKeys.hasNotificationPermission] ?: false
         }
 }
