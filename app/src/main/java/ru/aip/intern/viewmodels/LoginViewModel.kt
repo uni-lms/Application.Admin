@@ -1,9 +1,11 @@
 package ru.aip.intern.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -116,7 +118,22 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
             delay(3500)
 
             val request = LoginRequest(email.value!!, password.value!!)
-            val fcmToken = ""
+            var fcmToken = ""
+
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                    return@addOnCompleteListener
+
+                }
+
+                val token = task.result
+                Log.d("FCM", token)
+
+                fcmToken = token
+            }
+
+
 
             _isRefreshing.value = false
             _formEnabled.value = true
