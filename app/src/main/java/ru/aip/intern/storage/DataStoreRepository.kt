@@ -28,7 +28,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         }
     }
 
-    suspend fun saveNotificationPermissionStatus(value: Boolean) {
+    suspend fun saveAskedForNotificationPermissionStatus(value: Boolean) {
         context.datastore.edit { prefs ->
             prefs[PreferenceKeys.hasNotificationPermission] = value
         }
@@ -39,7 +39,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
             prefs[PreferenceKeys.apiKey] ?: ""
         }
 
-    val hasNotificationPermission: Flow<Boolean> = context.datastore.data
+    val askedForNotificationPermission: Flow<Boolean> = context.datastore.data
         .map { prefs ->
             prefs[PreferenceKeys.hasNotificationPermission] ?: false
         }
