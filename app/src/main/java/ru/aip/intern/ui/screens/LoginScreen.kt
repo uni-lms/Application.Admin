@@ -165,7 +165,7 @@ fun LoginScreen(title: MutableState<String>) {
             )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (notificationPermissionStatus.value == PermissionStatus.DENIED && notificationPermissionDialogStatus.value) {
+                if (notificationPermissionDialogStatus.value) {
                     RequestingNotificationPermissionDialog(
                         onDismissRequest = { },
                         onConfirmation = {
