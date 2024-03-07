@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.aip.intern.domain.auth.data.LoginRequest
+import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
@@ -36,6 +38,17 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     private val _passwordErrorMessage = MutableLiveData("")
     val passwordErrorMessage: LiveData<String> = _passwordErrorMessage
 
+    private val _askedForNotificationPermission = MutableLiveData(false)
+    val askedForNotificationPermission: LiveData<Boolean> = _askedForNotificationPermission
+
+    init {
+        viewModelScope.launch {
+            storage.askedForNotificationPermission.collect {
+                _askedForNotificationPermission.value = it
+            }
+        }
+    }
+
     object FieldsValidationState {
         var email: Boolean = true
         var password: Boolean = true
@@ -47,6 +60,13 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     fun setPassword(password: String) {
         _password.value = password
+    }
+
+    fun setAskedForNotificationPermission(value: Boolean) {
+        _askedForNotificationPermission.value = value
+        viewModelScope.launch {
+            storage.saveAskedForNotificationPermissionStatus(value)
+        }
     }
 
     private fun validateEmail(email: String): Boolean {
@@ -94,6 +114,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             _formEnabled.value = false
 
             delay(3500)
+
+            val request = LoginRequest(email.value!!, password.value!!)
+            val fcmToken = ""
 
             _isRefreshing.value = false
             _formEnabled.value = true
