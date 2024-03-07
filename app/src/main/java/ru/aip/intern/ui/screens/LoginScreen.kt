@@ -33,7 +33,9 @@ fun LoginScreen(title: MutableState<String>) {
     val viewModel: LoginViewModel = hiltViewModel()
 
     fun submit() {
-        viewModel.login()
+        if (viewModel.validate()) {
+            viewModel.login()
+        }
     }
 
     BaseScreen {
@@ -41,6 +43,8 @@ fun LoginScreen(title: MutableState<String>) {
         val email = viewModel.email.observeAsState("")
         val password = viewModel.password.observeAsState("")
         val formEnabledState = viewModel.formEnabled.observeAsState(true)
+        val isEmailWithError = viewModel.isEmailWithError.observeAsState(false)
+        val emailErrorMessage = viewModel.emailErrorMessage.observeAsState("")
 
         val refreshing = viewModel.isRefreshing.observeAsState(false)
         val pullRefreshState = rememberPullRefreshState(
@@ -60,6 +64,12 @@ fun LoginScreen(title: MutableState<String>) {
                         imeAction = ImeAction.Next
                     ),
                     enabled = formEnabledState.value,
+                    isError = isEmailWithError.value,
+                    supportingText = {
+                        if (isEmailWithError.value) {
+                            Text(text = emailErrorMessage.value)
+                        }
+                    },
                     label = {
                         Text(
                             text = "Электропочта"

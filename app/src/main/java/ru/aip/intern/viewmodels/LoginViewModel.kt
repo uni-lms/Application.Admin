@@ -24,12 +24,40 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     private val _formEnabled = MutableLiveData(true)
     val formEnabled: LiveData<Boolean> = _formEnabled
 
+    private val _isEmailWithError = MutableLiveData(false)
+    val isEmailWithError: LiveData<Boolean> = _isEmailWithError
+
+    private val _emailErrorMessage = MutableLiveData("")
+    val emailErrorMessage: LiveData<String> = _emailErrorMessage
+
     fun setEmail(email: String) {
         _email.value = email
     }
 
     fun setPassword(password: String) {
         _password.value = password
+    }
+
+    private fun validateEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return email.matches(emailRegex.toRegex())
+    }
+
+    fun validate(): Boolean {
+
+        var isValid = true
+
+        if (!validateEmail(_email.value ?: "")) {
+            _isEmailWithError.value = true
+            _emailErrorMessage.value = "Некорректный формат электропочты"
+            isValid = false
+        }
+
+        if (isValid) {
+            _isEmailWithError.value = false
+            _emailErrorMessage.value = ""
+        }
+        return isValid
     }
 
     fun login() {
