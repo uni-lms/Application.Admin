@@ -1,5 +1,8 @@
 package ru.aip.intern.networking
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ResponseWrapper<T>(
     val value: T?,
     val status: Int,
