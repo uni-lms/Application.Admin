@@ -13,13 +13,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.InternshipCard
 import ru.aip.intern.viewmodels.InternshipsViewModel
+import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InternshipsScreen(title: MutableState<String>, snackbarHostState: SnackbarHostState) {
+fun InternshipsScreen(
+    title: MutableState<String>,
+    snackbarHostState: SnackbarHostState,
+    goToScreen: (Screen, UUID) -> Unit
+) {
 
     val viewModel: InternshipsViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
@@ -41,8 +47,8 @@ fun InternshipsScreen(title: MutableState<String>, snackbarHostState: SnackbarHo
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             internshipData.value.forEach {
-                InternshipCard(internship = it) {
-
+                InternshipCard(internship = it) { id ->
+                    goToScreen(Screen.Internship, id)
                 }
             }
         }
