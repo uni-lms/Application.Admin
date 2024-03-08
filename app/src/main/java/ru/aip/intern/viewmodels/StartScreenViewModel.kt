@@ -1,11 +1,13 @@
 package ru.aip.intern.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
@@ -14,20 +16,30 @@ import javax.inject.Inject
 class StartScreenViewModel @Inject constructor(private val dataStoreRepository: DataStoreRepository) :
     ViewModel() {
 
-    private var apiKey: String? = null
+    private val _startScreen = MutableLiveData<Screen>()
+    val startScreen: LiveData<Screen> = _startScreen
 
     init {
-        runBlocking {
-            apiKey = dataStoreRepository.apiKey.first() ?: "hui"
+        viewModelScope.launch {
+            // Use a coroutine to fetch both apiKey and startScreenName concurrently
+            val apiKey =
+                async { dataStoreRepository.apiKey.first() }
+
+            // Await both values
+            val apiKeyValue = apiKey.await()
+
+            // Determine the start screen based on the fetched values
+            val determinedScreen = when (apiKeyValue) {
+                "", null -> Screen.Login
+                else -> Screen.Internships
+            }
+
+            // Assign the determined start screen to _startScreen
+            _startScreen.value = determinedScreen
         }
     }
 
-    val startScreen: LiveData<Screen> = liveData {
-        val screenName = if (apiKey == "" || apiKey == null) {
-            Screen.Login
-        } else {
-            Screen.Internships
-        }
-        emit(screenName)
+    fun updateStartScreen(value: Screen) {
+        _startScreen.value = value
     }
 }

@@ -22,6 +22,7 @@ import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.viewmodels.MenuViewModel
+import ru.aip.intern.viewmodels.StartScreenViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -30,6 +31,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
     title.value = "Меню"
 
     val viewModel: MenuViewModel = hiltViewModel()
+    val startScreenViewModel: StartScreenViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
     val unreadNotificationsCount = viewModel.unreadNotificationsCount.observeAsState(0)
 
@@ -68,6 +70,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
                 modifier = Modifier.clickable {
                     viewModel.logOut()
                     navigateTo(Screen.Login)
+                    startScreenViewModel.updateStartScreen(Screen.Login)
                 }
             )
 

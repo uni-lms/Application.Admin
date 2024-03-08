@@ -34,6 +34,7 @@ import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.dialogs.RequestingNotificationPermissionDialog
 import ru.aip.intern.viewmodels.LoginViewModel
 import ru.aip.intern.viewmodels.PermissionManagerViewModel
+import ru.aip.intern.viewmodels.StartScreenViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,11 +48,12 @@ fun LoginScreen(
 
     val viewModel: LoginViewModel = hiltViewModel()
     val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
+    val startScreenViewModel: StartScreenViewModel = hiltViewModel()
 
     fun submit() {
         if (viewModel.validate()) {
             viewModel.login { navigateTo(Screen.Internships) }
-
+            startScreenViewModel.updateStartScreen(Screen.Internships)
         }
     }
 

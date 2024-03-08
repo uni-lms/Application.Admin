@@ -7,10 +7,12 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,13 +25,13 @@ import ru.aip.intern.ui.fragments.BottomBar
 import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
+import ru.aip.intern.viewmodels.StartScreenViewModel
 import kotlin.random.Random
 
 @Composable
 fun AipApp(navController: NavHostController = rememberNavController()) {
 
     var showSplashScreen by remember { mutableStateOf(true) }
-    var startScreen by remember { mutableStateOf(Screen.Login) } // Default start screen
 
     // TODO real API call to get notifications count
     val hasUnreadNotifications by remember { mutableStateOf(Random.nextInt(0, 3) > 0) }
@@ -38,23 +40,16 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    if (!showSplashScreen) {
-        val backStackEntry by navController.currentBackStackEntryAsState()
-        val route = backStackEntry?.destination?.route
 
-        val screenName = if (route?.contains("/") == true) {
-            route.split("/")[0]
-        } else route ?: "Login"
+    // FIXME эта ебаная хуйня почему-то не обновляет экран после логина, из-за чего не работает нижний док
+    val viewModel: StartScreenViewModel = hiltViewModel()
 
-        startScreen = Screen.valueOf(screenName)
-
-    }
+    val startScreen = viewModel.startScreen.observeAsState(Screen.Login)
 
     ConfirmExit()
 
     if (showSplashScreen) {
         SplashScreen(onLoadingComplete = { screenName ->
-            startScreen = screenName
             showSplashScreen = false
 
         })
@@ -62,13 +57,13 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
         Scaffold(
             topBar = {
                 TopBar(
-                    canGoBack = navController.previousBackStackEntry != null && startScreen.canGoBack,
+                    canGoBack = navController.previousBackStackEntry != null && startScreen.value.canGoBack,
                     goUp = { navController.navigateUp() },
                     title = title
                 )
             },
             bottomBar = {
-                if (startScreen.showBottomBar) {
+                if (startScreen.value.showBottomBar) {
                     BottomBar(navController = navController, hasUnreadNotifications)
                 }
             },
@@ -78,7 +73,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = startScreen.name,
+                startDestination = startScreen.value.name,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
