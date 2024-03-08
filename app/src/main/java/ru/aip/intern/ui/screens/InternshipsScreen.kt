@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.ui.components.Greeting
+import ru.aip.intern.ui.components.InternshipCard
 import ru.aip.intern.viewmodels.InternshipsViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -23,7 +23,7 @@ fun InternshipsScreen(title: MutableState<String>, snackbarHostState: SnackbarHo
 
     val viewModel: InternshipsViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
-    var internshipData = viewModel.internshipData.observeAsState()
+    val internshipData = viewModel.internshipData.observeAsState(emptyList())
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
@@ -40,7 +40,11 @@ fun InternshipsScreen(title: MutableState<String>, snackbarHostState: SnackbarHo
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            Greeting(name = "internships")
+            internshipData.value.forEach {
+                InternshipCard(internship = it) {
+
+                }
+            }
         }
         PullRefreshIndicator(
             refreshing.value,
