@@ -25,6 +25,12 @@ enum class Screen(
         icon = Icons.AutoMirrored.Outlined.LibraryBooks,
         position = ScreenPosition.BottomBar,
     ),
+    Internship(
+        title = "Стажировка",
+        canGoBack = true,
+        icon = null,
+        position = null,
+    ),
     Calendar(
         title = "Календарь",
         canGoBack = false,

@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -26,6 +27,7 @@ import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
 import ru.aip.intern.viewmodels.StartScreenViewModel
+import java.util.UUID
 import kotlin.random.Random
 
 @Composable
@@ -45,6 +47,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
     val viewModel: StartScreenViewModel = hiltViewModel()
 
     val startScreen = viewModel.startScreen.observeAsState(Screen.Login)
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
     ConfirmExit()
 
@@ -87,9 +90,28 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     }
                 }
                 composable(Screen.Internships.name) {
-                    InternshipsScreen(title, snackbarHostState)
+                    InternshipsScreen(title, snackbarHostState) { screen, id ->
+                        goToScreen(
+                            navController,
+                            screen,
+                            id
+                        )
+                    }
                 }
-
+                composable("${Screen.Internship.name}/{id}") {
+                    val internshipId = backStackEntry?.arguments?.getString("id")
+                    InternshipScreen(
+                        title,
+                        UUID.fromString(internshipId),
+                        snackbarHostState
+                    ) { screen, id ->
+                        goToScreen(
+                            navController,
+                            screen,
+                            id
+                        )
+                    }
+                }
                 composable(Screen.Menu.name) {
                     MenuScreen(title) { screen -> goToScreen(navController, screen) }
                 }
