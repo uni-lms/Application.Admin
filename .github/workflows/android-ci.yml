@@ -135,7 +135,7 @@ jobs:
           draft: false
           prerelease: true
           make_latest: true
-          target_commitish: ${{github.ref}}
+          target_commitish: ${{env.GITHUB_REF}}
           body: ${{steps.generate_release_notes.outputs.release_notes}}
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
