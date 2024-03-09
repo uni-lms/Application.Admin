@@ -90,7 +90,7 @@ jobs:
 
       - name: Generate Release Notes
         id: generate_release_notes
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         with:
           script: |
             const { data: commits } = await github.repos.listCommits({
@@ -103,12 +103,13 @@ jobs:
             core.setOutput('release_notes', releaseNotes);
 
       - name: Create Pre-release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: false
           prerelease: true
-          name: ${{steps.android_version.outputs.VERSION_NAME}}
+          name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           body: ${{steps.generate_release_notes.outputs.release_notes}}
+          tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
           files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
