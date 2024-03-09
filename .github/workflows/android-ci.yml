@@ -75,13 +75,13 @@ jobs:
       # Show information about the APK's signing certificates
       - name: Verify Signature
         run: |
-          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
-          path: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          path: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
           compression-level: 0
           retention-days: 20
           overwrite: true
