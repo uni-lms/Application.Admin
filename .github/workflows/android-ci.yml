@@ -99,6 +99,7 @@ jobs:
                 pull_number: context.issue.number,
             });
 
+            const linkHeader = response.headers.link;
             let lastPageURL = '';
 
             if (linkHeader) {
