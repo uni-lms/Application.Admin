@@ -93,7 +93,6 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const { context } = require('@actions/github');
             const { data: commits } = await github.repos.listCommits({
               owner: context.repo.owner,
               repo: context.repo.repo,
