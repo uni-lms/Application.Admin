@@ -60,8 +60,7 @@ jobs:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
 
       - name: Retrieve Version
-        run: |
-          echo "::set-output name=VERSION_NAME::$(./gradlew -q printVersionName)"
+        run: echo "VERSION_NAME=$(./gradlew -q printVersionName)" >> $GITHUB_OUTPUT
         id: android_version
 
       - name: Extract branch name
