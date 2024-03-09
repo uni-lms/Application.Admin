@@ -44,7 +44,7 @@ jobs:
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode google-services.json
-        id: decode_keystore
+        id: decode_google
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'google-services.json'
