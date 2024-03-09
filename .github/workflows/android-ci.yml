@@ -68,16 +68,20 @@ jobs:
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
 
+      - name: List built files
+        shell: bash
+        run: ls -la /home/runner/work/Applications/Applications/app/build/outputs/apk/release
+
       # Show information about the APK's signing certificates
       - name: Verify Signature
         run: |
-          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
-          path: app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          path: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
           compression-level: 0
           retention-days: 20
           overwrite: true
