@@ -145,10 +145,12 @@ kapt {
 }
 
 task("printVersionName") {
-    val versionName = android.defaultConfig.versionName!!.replace(
-        ".",
-        ""
-    )
+    val versionName = "${
+        android.defaultConfig.versionName!!.replace(
+            ".",
+            ""
+        )
+    }-${gitCommitCount()}"
     project.extensions.extraProperties["fullVersion"] = versionName
     println(versionName)
 }
