@@ -88,12 +88,29 @@ jobs:
           retention-days: 20
           overwrite: true
 
+      - name: Generate Release Notes
+        id: generate_release_notes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: commits } = await github.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            let releaseNotes = commits.map(commit => `- ${commit.commit.message}`).join("\n");
+            console.log(`Release notes:\n${releaseNotes}`);
+            core.setOutput('release_notes', releaseNotes);
+
       - name: Create Pre-release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
           prerelease: true
+          make_latest: true
+          target_commitish: ${{env.GITHUB_REF}}
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
+          body: ${{steps.generate_release_notes.outputs.release_notes}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
           files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
         env:
