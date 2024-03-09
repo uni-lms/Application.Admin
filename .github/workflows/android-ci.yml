@@ -100,7 +100,7 @@ jobs:
             });
             let releaseNotes = commits.map(commit => `- ${commit.commit.message}`).join("\n");
             console.log(`Release notes:\n${releaseNotes}`);
-            core.setOutput('release_notes', releaseNotes);
+            core.setOutput('release_notes', `## Release notes:\n${releaseNotes}`);
 
       - name: Create Pre-release
         uses: softprops/action-gh-release@v2
