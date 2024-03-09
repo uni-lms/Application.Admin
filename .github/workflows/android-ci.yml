@@ -43,6 +43,14 @@ jobs:
           fileDir: '/home/runner/work/Applications/Applications/app/keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
 
+      - name: Decode google-services.json
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'google-services.json'
+          fileDir: '/home/runner/work/Applications/Applications/app/src/google-services.json'
+          encodedString: ${{ secrets.GOOGLE_SERVICES }}
+
       # Build and sign APK ("-x test" argument is used to skip tests)
       - name: Build APK
         run: ./gradlew :app:assembleRelease -x test
