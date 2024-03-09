@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,6 +8,10 @@ plugins {
     kotlin("plugin.serialization")
     id("com.google.dagger.hilt.android")
 }
+
+val majorVersion = 2
+val minorVersion = 0
+val patchVersion = 0
 
 android {
     namespace = "ru.aip.intern"
@@ -16,17 +22,50 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 2
-        versionName = "2.0"
+        versionName = "$majorVersion.$minorVersion.$patchVersion"
 
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/ru.unilms.jks")
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+            applicationVariants.all {
+                val variant = this
+                variant.outputs
+                    .map { it as BaseVariantOutputImpl }
+                    .forEach { output ->
+                        val outputFileName =
+                            "${
+                                rootProject.name.replace(
+                                    " ",
+                                    ""
+                                )
+                            }-${project.extensions.extraProperties["fullVersion"]}.apk"
+                        output.outputFileName = outputFileName
+                    }
+            }
+        }
+
+        getByName("debug") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -93,4 +132,13 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+task("printVersionName") {
+    val versionName = android.defaultConfig.versionName!!.replace(
+        ".",
+        ""
+    )
+    project.extensions.extraProperties["fullVersion"] = versionName
+    println(versionName)
 }
