@@ -48,7 +48,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'google-services.json'
-          fileDir: '/home/runner/work/Applications/Applications/app/src/google-services.json'
+          fileDir: '/home/runner/work/Applications/Applications/app/src/'
           encodedString: ${{ secrets.GOOGLE_SERVICES }}
 
       # Build and sign APK ("-x test" argument is used to skip tests)
