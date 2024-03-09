@@ -129,13 +129,13 @@ jobs:
       #            }
 
       - name: Create Pre-release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@master
         with:
           draft: false
           prerelease: true
           make_latest: true
           target_commitish: ${{env.GITHUB_REF}}
-          generate_relase_notes: true
+          generate_release_notes: true
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
           files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
