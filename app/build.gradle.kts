@@ -1,7 +1,14 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.io.ByteArrayOutputStream
+
+fun Project.gitCommitCount(): Int {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine("git", "rev-list", "--count", "HEAD")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim().toInt()
+}
 
 plugins {
     id("com.android.application")
@@ -16,9 +23,6 @@ val majorVersion = 2
 val minorVersion = 0
 val patchVersion = 0
 
-val formatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneId.of("UTC"))
-
 android {
     namespace = "ru.aip.intern"
     compileSdk = 34
@@ -27,7 +31,7 @@ android {
         applicationId = "ru.aip.intern"
         minSdk = 28
         targetSdk = 34
-        versionCode = formatter.format(Instant.now()).toInt()
+        versionCode = gitCommitCount()
         versionName = "$majorVersion.$minorVersion.$patchVersion"
 
         vectorDrawables {
