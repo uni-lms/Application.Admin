@@ -24,7 +24,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - uses: actions/cache@v4
         with:
