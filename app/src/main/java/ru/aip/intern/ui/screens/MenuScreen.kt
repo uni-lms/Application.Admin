@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -18,6 +19,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.ui.components.BaseScreen
@@ -33,6 +35,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
     val viewModel: MenuViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
+    val whoami = viewModel.whoamiData.observeAsState(WhoamiResponse(email = "", fullName = ""))
     val unreadNotificationsCount = viewModel.unreadNotificationsCount.observeAsState(0)
 
     val pullRefreshState = rememberPullRefreshState(
@@ -42,6 +45,15 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
+
+            ListItem(
+                headlineContent = { Text(text = whoami.value.fullName) },
+                supportingContent = { Text(text = whoami.value.email) },
+                leadingContent = {
+                    Icon(Icons.Outlined.Person, null)
+                }
+            )
+
             enumValues<Screen>().filter { screen ->
                 screen.icon != null && screen.position == ScreenPosition.Menu
             }.forEach { screen ->
