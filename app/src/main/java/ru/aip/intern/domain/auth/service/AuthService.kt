@@ -35,10 +35,9 @@ class AuthService(private val token: String) {
         return httpClient.safeRequest {
             method = HttpMethod.Get
             url("/auth/whoami")
-            contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
             headers {
-                append(HttpHeaders.Authorization, token)
+                append(HttpHeaders.Authorization, "Bearer $token")
             }
         }
     }
