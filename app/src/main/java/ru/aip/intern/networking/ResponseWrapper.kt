@@ -10,5 +10,5 @@ data class ResponseWrapper<T>(
     val successMessage: String,
     val correlationId: String,
     val errors: List<String>,
-    val validationErrors: List<String>
+    val validationErrors: List<ValidationError>
 )
