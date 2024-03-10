@@ -29,7 +29,7 @@ fun SplashScreen(onLoadingComplete: (Screen) -> Unit) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 
