@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
@@ -26,7 +27,15 @@ class StartScreenViewModel @Inject constructor(private val dataStoreRepository: 
                 async { dataStoreRepository.apiKey.first() }
 
             // Await both values
-            val apiKeyValue = apiKey.await()
+            var apiKeyValue = apiKey.await()
+
+            val service = AuthService(apiKeyValue ?: "")
+
+            val response = service.whoami()
+
+            if (!response.isSuccess) {
+                apiKeyValue = ""
+            }
 
             // Determine the start screen based on the fetched values
             val determinedScreen = when (apiKeyValue) {
