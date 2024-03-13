@@ -115,7 +115,6 @@ fun AipApp(
                         InternshipScreen(
                             title,
                             UUID.fromString(internshipId),
-                            snackbarHostState
                         ) { screen, id ->
                             goToScreen(
                                 navController,

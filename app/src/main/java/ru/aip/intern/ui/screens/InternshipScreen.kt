@@ -1,6 +1,5 @@
 package ru.aip.intern.ui.screens
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import ru.aip.intern.navigation.Screen
@@ -12,7 +11,6 @@ import java.util.UUID
 fun InternshipScreen(
     title: MutableState<String>,
     internshipId: UUID,
-    snackbarHostState: SnackbarHostState,
     goToScreen: (Screen, UUID) -> Unit
 ) {
 
