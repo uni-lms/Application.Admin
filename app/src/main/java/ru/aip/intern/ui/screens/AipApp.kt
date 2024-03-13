@@ -101,7 +101,7 @@ fun AipApp(
                     }
                 }
                 composable(Screen.Internships.name) {
-                    InternshipsScreen(title, snackbarHostState) { screen, id ->
+                    InternshipsScreen(title) { screen, id ->
                         goToScreen(
                             navController,
                             screen,

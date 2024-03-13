@@ -5,9 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -23,7 +21,6 @@ import java.util.UUID
 @Composable
 fun InternshipsScreen(
     title: MutableState<String>,
-    snackbarHostState: SnackbarHostState,
     goToScreen: (Screen, UUID) -> Unit
 ) {
 
@@ -35,12 +32,6 @@ fun InternshipsScreen(
         refreshing = refreshing.value,
         onRefresh = { viewModel.refresh() }
     )
-
-    LaunchedEffect(key1 = true) {
-        viewModel.snackbarMessage.collect { message ->
-            snackbarHostState.showSnackbar(message)
-        }
-    }
 
     title.value = "Стажировки"
 
