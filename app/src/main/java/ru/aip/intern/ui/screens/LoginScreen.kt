@@ -13,7 +13,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,7 +39,6 @@ import ru.aip.intern.viewmodels.StartScreenViewModel
 @Composable
 fun LoginScreen(
     title: MutableState<String>,
-    snackbarHostState: SnackbarHostState,
     navigateTo: (Screen) -> Unit
 ) {
 
@@ -54,12 +52,6 @@ fun LoginScreen(
         if (viewModel.validate()) {
             viewModel.login { navigateTo(Screen.Internships) }
             startScreenViewModel.updateStartScreen(Screen.Internships)
-        }
-    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.snackbarMessage.collect { message ->
-            snackbarHostState.showSnackbar(message)
         }
     }
 

@@ -11,11 +11,15 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    val storage: DataStoreRepository,
+    private val snackbarMessageHandler: SnackbarMessageHandler
+) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
@@ -144,7 +148,7 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
                 storage.saveApiKey(response.value!!.accessToken)
                 redirect()
             } else {
-                triggerSnackbar(response.errorMessage!!)
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
             _isRefreshing.value = false
@@ -152,12 +156,6 @@ class LoginViewModel @Inject constructor(val storage: DataStoreRepository) : Vie
 
         }
 
-    }
-
-    private fun triggerSnackbar(message: String) {
-        viewModelScope.launch {
-            _snackbarMessage.emit(message)
-        }
     }
 
 }
