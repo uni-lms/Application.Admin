@@ -35,6 +35,12 @@ suspend inline fun <reified T> HttpClient.safeRequest(block: HttpRequestBuilder.
                 value = null
             )
 
+            HttpStatusCode.Forbidden -> Response(
+                isSuccess = false,
+                errorMessage = "Доступ запрещён",
+                value = null
+            )
+
             HttpStatusCode.NotFound -> Response(
                 isSuccess = false,
                 errorMessage = "Не найдено: ${response.parseBody<T>()!!.errors[0]}",
