@@ -8,12 +8,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.domain.auth.service.AuthService
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class MenuViewModel @Inject constructor(val storage: DataStoreRepository) : ViewModel() {
+class MenuViewModel @Inject constructor(
+    val storage: DataStoreRepository,
+    private val snackbarMessageHandler: SnackbarMessageHandler
+) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
     private val _unreadNotificationsCount = MutableLiveData(0)
@@ -45,6 +49,8 @@ class MenuViewModel @Inject constructor(val storage: DataStoreRepository) : View
 
             if (response.isSuccess) {
                 _whoamiData.value = response.value
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
             _unreadNotificationsCount.value = Random.nextInt(0, 3)
