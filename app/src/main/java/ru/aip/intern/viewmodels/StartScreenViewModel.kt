@@ -10,13 +10,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class StartScreenViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val snackbarMessageHandler: SnackbarMessageHandler,
 ) :
     ViewModel() {
 
@@ -36,6 +38,7 @@ class StartScreenViewModel @Inject constructor(
 
             if (!response.isSuccess) {
                 apiKeyValue = ""
+                snackbarMessageHandler.postMessage("Истёк срок действия токена")
             }
 
             // Determine the start screen based on the fetched values
