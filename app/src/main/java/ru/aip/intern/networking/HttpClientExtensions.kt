@@ -1,5 +1,6 @@
 package ru.aip.intern.networking
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
@@ -69,6 +70,8 @@ suspend inline fun <reified T> HttpResponse.parseBody(): ResponseWrapper<T>? {
         val stringBody = bodyAsText()
         json.decodeFromString<ResponseWrapper<T>>(stringBody)
     } catch (e: SerializationException) {
+        Log.d("http", e.message.toString())
+        Log.d("http", e.stackTrace.toString())
         null
     }
 }
