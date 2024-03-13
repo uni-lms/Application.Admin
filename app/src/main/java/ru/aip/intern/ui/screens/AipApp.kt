@@ -100,16 +100,18 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                 }
                 composable("${Screen.Internship.name}/{id}") {
                     val internshipId = backStackEntry?.arguments?.getString("id")
-                    InternshipScreen(
-                        title,
-                        UUID.fromString(internshipId),
-                        snackbarHostState
-                    ) { screen, id ->
-                        goToScreen(
-                            navController,
-                            screen,
-                            id
-                        )
+                    if (internshipId != null) {
+                        InternshipScreen(
+                            title,
+                            UUID.fromString(internshipId),
+                            snackbarHostState
+                        ) { screen, id ->
+                            goToScreen(
+                                navController,
+                                screen,
+                                id
+                            )
+                        }
                     }
                 }
                 composable(Screen.Menu.name) {
