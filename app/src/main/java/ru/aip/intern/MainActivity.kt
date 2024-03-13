@@ -6,15 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import dagger.hilt.android.AndroidEntryPoint
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.screens.AipApp
 import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
+    @Inject
+    lateinit var snackbarMessageHandler: SnackbarMessageHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Locale.setDefault(Locale("ru", "RU"))
@@ -32,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AltenarInternshipTheme {
-                AipApp()
+                AipApp(snackbarMessageHandler = snackbarMessageHandler)
             }
         }
     }

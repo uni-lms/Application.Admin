@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.ConfirmExit
 import ru.aip.intern.ui.components.Greeting
@@ -31,7 +33,10 @@ import java.util.UUID
 import kotlin.random.Random
 
 @Composable
-fun AipApp(navController: NavHostController = rememberNavController()) {
+fun AipApp(
+    navController: NavHostController = rememberNavController(),
+    snackbarMessageHandler: SnackbarMessageHandler
+) {
 
     var showSplashScreen by remember { mutableStateOf(true) }
 
@@ -48,6 +53,12 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
 
     val startScreen = viewModel.startScreen.observeAsState(Screen.Login)
     val backStackEntry by navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(snackbarMessageHandler) {
+        snackbarMessageHandler.message.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     ConfirmExit()
 
@@ -82,7 +93,7 @@ fun AipApp(navController: NavHostController = rememberNavController()) {
                     .padding(innerPadding)
             ) {
                 composable(Screen.Login.name) {
-                    LoginScreen(title, snackbarHostState) { screen ->
+                    LoginScreen(title) { screen ->
                         goToScreen(
                             navController,
                             screen
