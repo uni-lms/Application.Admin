@@ -14,7 +14,10 @@ import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class StartScreenViewModel @Inject constructor(private val dataStoreRepository: DataStoreRepository) :
+class StartScreenViewModel @Inject constructor(
+    private val dataStoreRepository: DataStoreRepository,
+    private val authService: AuthService
+) :
     ViewModel() {
 
     private val _startScreen = MutableLiveData<Screen>()
@@ -29,9 +32,7 @@ class StartScreenViewModel @Inject constructor(private val dataStoreRepository: 
             // Await both values
             var apiKeyValue = apiKey.await()
 
-            val service = AuthService(apiKeyValue ?: "")
-
-            val response = service.whoami()
+            val response = authService.whoami()
 
             if (!response.isSuccess) {
                 apiKeyValue = ""

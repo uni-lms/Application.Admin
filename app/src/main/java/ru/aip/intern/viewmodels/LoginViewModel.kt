@@ -18,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     val storage: DataStoreRepository,
-    private val snackbarMessageHandler: SnackbarMessageHandler
+    private val snackbarMessageHandler: SnackbarMessageHandler,
+    private val authService: AuthService
 ) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -50,8 +51,6 @@ class LoginViewModel @Inject constructor(
 
     private val _snackbarMessage = MutableSharedFlow<String>()
     val snackbarMessage = _snackbarMessage
-
-    private val _service = AuthService("")
 
     init {
         viewModelScope.launch {
@@ -142,7 +141,7 @@ class LoginViewModel @Inject constructor(
                 fcmToken = token
             }
 
-            val response = _service.logIn(request, fcmToken)
+            val response = authService.logIn(request, fcmToken)
 
             if (response.isSuccess) {
                 storage.saveApiKey(response.value!!.accessToken)

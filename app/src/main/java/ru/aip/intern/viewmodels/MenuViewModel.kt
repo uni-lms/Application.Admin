@@ -16,7 +16,8 @@ import kotlin.random.Random
 @HiltViewModel
 class MenuViewModel @Inject constructor(
     val storage: DataStoreRepository,
-    private val snackbarMessageHandler: SnackbarMessageHandler
+    private val snackbarMessageHandler: SnackbarMessageHandler,
+    private val authService: AuthService
 ) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -28,15 +29,7 @@ class MenuViewModel @Inject constructor(
     val isRefreshing: LiveData<Boolean> = _isRefreshing
     val whoamiData: LiveData<WhoamiResponse> = _whoamiData
 
-    private lateinit var service: AuthService
-
     init {
-
-        viewModelScope.launch {
-            storage.apiKey.collect {
-                service = AuthService(it ?: "")
-            }
-        }
 
         refresh()
     }
@@ -45,7 +38,7 @@ class MenuViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.value = true
 
-            val response = service.whoami()
+            val response = authService.whoami()
 
             if (response.isSuccess) {
                 _whoamiData.value = response.value

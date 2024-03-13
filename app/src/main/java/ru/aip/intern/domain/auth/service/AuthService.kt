@@ -8,14 +8,16 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
+import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.data.LoginResponse
 import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.networking.Response
 import ru.aip.intern.networking.safeRequest
+import javax.inject.Inject
 
-class AuthService(private val token: String) {
+class AuthService @Inject constructor(private val authManager: AuthManager) {
     suspend fun logIn(request: LoginRequest, fcmToken: String): Response<LoginResponse> {
         val httpClient = HttpClientFactory.httpClient
         return httpClient.safeRequest {
@@ -32,12 +34,13 @@ class AuthService(private val token: String) {
 
     suspend fun whoami(): Response<WhoamiResponse> {
         val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
         return httpClient.safeRequest {
             method = HttpMethod.Get
             url("/auth/whoami")
             accept(ContentType.Application.Json)
             headers {
-                append(HttpHeaders.Authorization, "Bearer $token")
+                append(HttpHeaders.Authorization, authHeaderValue)
             }
         }
     }
