@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
@@ -48,9 +47,6 @@ class LoginViewModel @Inject constructor(
 
     private val _askedForNotificationPermission = MutableLiveData(false)
     val askedForNotificationPermission: LiveData<Boolean> = _askedForNotificationPermission
-
-    private val _snackbarMessage = MutableSharedFlow<String>()
-    val snackbarMessage = _snackbarMessage
 
     init {
         viewModelScope.launch {
