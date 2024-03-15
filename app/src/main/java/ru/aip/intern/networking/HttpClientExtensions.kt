@@ -72,6 +72,6 @@ suspend inline fun <reified T> HttpResponse.parseBody(): ResponseWrapper<T>? {
     } catch (e: SerializationException) {
         Log.d("http", e.message.toString())
         Log.d("http", e.stackTrace.toString())
-        null
+        throw e
     }
 }
