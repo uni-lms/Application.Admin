@@ -39,3 +39,12 @@ data class LinkContentItem(
     val link: String,
     val title: String
 ) : BaseContentItem()
+
+@Serializable
+data class AssignmentContentItem(
+    @Serializable(UuidSerializer::class) val id: UUID,
+
+    override val contentType: ContentType = ContentType.Assignment,
+
+    val title: String
+) : BaseContentItem()
