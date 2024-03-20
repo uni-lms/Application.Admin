@@ -5,6 +5,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -15,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.domain.internships.data.Content
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.ui.components.Greeting
+import ru.aip.intern.ui.components.content.ContentCard
 import ru.aip.intern.viewmodels.InternshipViewModel
 import java.util.UUID
 
@@ -41,13 +43,27 @@ fun InternshipScreen(
         onRefresh = { viewModel.refresh(internshipId) }
     )
 
-    LaunchedEffect(internshipData) {
+    LaunchedEffect(internshipData.value) {
         title.value = internshipData.value.title
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            Greeting(name = "Стажировка")
+
+            internshipData.value.sections.forEach { section ->
+                if (section.items.isNotEmpty()) {
+                    Text(
+                        text = section.name,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    section.items.forEach { content ->
+                        ContentCard(content = content) { screen, id ->
+                            goToScreen(screen, id)
+                        }
+                    }
+                }
+            }
+
         }
         PullRefreshIndicator(
             refreshing.value,
