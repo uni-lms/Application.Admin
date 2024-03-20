@@ -48,5 +48,11 @@ enum class Screen(
         canGoBack = true,
         icon = Icons.Outlined.Notifications,
         position = ScreenPosition.Menu
+    ),
+    File(
+        title = "Файл",
+        canGoBack = true,
+        icon = null,
+        position = null
     )
 }
