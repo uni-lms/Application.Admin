@@ -54,5 +54,11 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = null
+    ),
+    Assignment(
+        title = "Задание",
+        canGoBack = true,
+        icon = null,
+        position = null
     )
 }
