@@ -36,5 +36,6 @@ data class LinkContentItem(
 
     override val contentType: ContentType = ContentType.Link,
 
-    val link: String
+    val link: String,
+    val title: String
 ) : BaseContentItem()
