@@ -15,5 +15,5 @@ data class AssignmentInfo(
     @Serializable(LocalDateTimeSerializer::class)
     val deadline: LocalDateTime,
     @Serializable(UuidSerializer::class)
-    val fileId: UUID
+    val fileId: UUID?
 )
