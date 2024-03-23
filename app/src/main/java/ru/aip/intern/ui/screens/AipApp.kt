@@ -137,6 +137,13 @@ fun AipApp(
                         Greeting(name = "notifications")
                     }
                 }
+
+                composable("${Screen.File.name}/{id}") {
+                    val fileId = backStackEntry?.arguments?.getString("id")
+                    if (fileId != null) {
+                        FileScreen(title, UUID.fromString(fileId))
+                    }
+                }
             }
         }
     }
