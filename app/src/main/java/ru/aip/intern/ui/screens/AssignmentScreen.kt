@@ -1,16 +1,15 @@
 package ru.aip.intern.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AttachFile
+import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Scale
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -77,15 +76,25 @@ fun AssignmentScreen(
                     )
                 }
             )
-
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                Button(
-                    onClick = {
-                        navigate(Screen.File, assignmentData.value.fileId)
+            if (assignmentData.value.fileId != null) {
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.AttachFile,
+                            contentDescription = null
+                        )
+                    },
+                    headlineContent = { Text(text = "Задание файлом") },
+                    trailingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.ChevronRight,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.clickable {
+                        navigate(Screen.File, assignmentData.value.fileId!!)
                     }
-                ) {
-                    Text(text = "Открыть файл")
-                }
+                )
             }
 
         }
