@@ -144,6 +144,15 @@ fun AipApp(
                         FileScreen(title, UUID.fromString(fileId))
                     }
                 }
+
+                composable("${Screen.Assignment.name}/{id}") {
+                    val assignmentId = backStackEntry?.arguments?.getString("id")
+                    if (assignmentId != null) {
+                        AssignmentScreen(title, UUID.fromString(assignmentId)) { screen, id ->
+                            goToScreen(navController, screen, id)
+                        }
+                    }
+                }
             }
         }
     }
