@@ -46,8 +46,16 @@ fun AssignmentScreen(
         onRefresh = { viewModel.refresh() }
     )
 
-    LaunchedEffect(assignmentData.value) {
-        title.value = assignmentData.value.title
+    LaunchedEffect(Unit) {
+        if (assignmentData.value.title.isEmpty()) {
+            title.value = "Задание"
+        }
+    }
+
+    LaunchedEffect(assignmentData.value.title) {
+        if (assignmentData.value.title.isNotEmpty()) {
+            title.value = assignmentData.value.title
+        }
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
