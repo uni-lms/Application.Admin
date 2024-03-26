@@ -9,6 +9,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.aip.intern.domain.calendar.data.DayEvents
 import ru.aip.intern.domain.calendar.data.MonthEvents
 import ru.aip.intern.domain.calendar.service.CalendarService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
@@ -37,8 +38,18 @@ class CalendarViewModel @AssistedInject constructor(
         days = emptyList()
     )
 
+    val defaultEvents = DayEvents(
+        year = now.year,
+        month = now.monthValue,
+        day = now.dayOfMonth,
+        events = emptyList()
+    )
+
     private val _data = MutableLiveData(defaultContent)
     val data: LiveData<MonthEvents> = _data
+
+    private val _dayEvents = MutableLiveData(defaultEvents)
+    val dayEvents: LiveData<DayEvents> = _dayEvents
 
     init {
         refresh()
@@ -52,6 +63,21 @@ class CalendarViewModel @AssistedInject constructor(
 
             if (response.isSuccess) {
                 _data.value = response.value!!
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            _isRefreshing.value = false
+        }
+    }
+
+    fun getDayEvents(day: Int) {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            val response = calendarService.getDayEvents(yearMonth.year, yearMonth.monthValue, day)
+
+            if (response.isSuccess) {
+                _dayEvents.value = response.value!!
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }

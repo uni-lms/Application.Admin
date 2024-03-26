@@ -1,18 +1,34 @@
 package ru.aip.intern.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,16 +38,20 @@ import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.flow.filterNotNull
+import ru.aip.intern.domain.calendar.data.DeadlineEvent
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.calendar.Day
 import ru.aip.intern.ui.components.calendar.DaysOfWeek
+import ru.aip.intern.ui.components.calendar.events.DeadlineCard
 import ru.aip.intern.viewmodels.CalendarViewModel
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -51,6 +71,8 @@ fun CalendarScreen(title: MutableState<String>) {
         endMonth = endMonth,
         outDateStyle = OutDateStyle.EndOfGrid
     )
+    var isModelOpened by remember { mutableStateOf(false) }
+    var selectedDay by remember { mutableStateOf<CalendarDay?>(null) }
 
     val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
 
@@ -60,6 +82,8 @@ fun CalendarScreen(title: MutableState<String>) {
 
     val refreshing = viewModel.isRefreshing.observeAsState(false)
     val data = viewModel.data.observeAsState(viewModel.defaultContent)
+
+    val dayEvents = viewModel.dayEvents.observeAsState(viewModel.defaultEvents)
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
@@ -74,6 +98,8 @@ fun CalendarScreen(title: MutableState<String>) {
 
     LaunchedEffect(visibleMonth) {
         title.value = buildTitle(visibleMonth.yearMonth)
+        isModelOpened = false
+        selectedDay = null
         viewModel.yearMonth = visibleMonth.yearMonth
         viewModel.refresh()
     }
@@ -85,7 +111,9 @@ fun CalendarScreen(title: MutableState<String>) {
                     Day(
                         day = it,
                         dayEventsOverview = data.value.days.firstOrNull { day -> day.dayOfMonth == it.date.dayOfMonth }) {
-                        // TODO
+                        selectedDay = it
+                        isModelOpened = true
+                        viewModel.getDayEvents(it.date.dayOfMonth)
                     }
                 },
                 state = calendarState,
@@ -99,6 +127,49 @@ fun CalendarScreen(title: MutableState<String>) {
             refreshing.value,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
+        )
+    }
+
+    if (isModelOpened) {
+        val onModalDismiss = {
+            isModelOpened = false
+            selectedDay = null
+        }
+        AlertDialog(
+            onDismissRequest = onModalDismiss,
+            confirmButton = {
+                TextButton(onClick = onModalDismiss) {
+                    Text(text = "Закрыть")
+                }
+            },
+            title = {
+                Text(
+                    selectedDay?.date?.format(DateTimeFormatter.ofPattern("d MMMM, EEE")) ?: ""
+                )
+            },
+            text = {
+                if (dayEvents.value.events.isEmpty()) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Outlined.Inbox, null, modifier = Modifier.size(30.dp))
+                        Text(
+                            text = "Нет событий",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.padding(3.dp)) {
+                        items(items = dayEvents.value.events, itemContent = {
+                            if (it is DeadlineEvent) {
+                                DeadlineCard(it)
+                            }
+                        })
+                    }
+                }
+            }
         )
     }
 }
