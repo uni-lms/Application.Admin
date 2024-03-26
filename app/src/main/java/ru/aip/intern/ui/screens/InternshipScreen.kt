@@ -29,8 +29,6 @@ fun InternshipScreen(
     goToScreen: (Screen, UUID) -> Unit
 ) {
 
-    title.value = "Стажировка"
-
     val viewModel = hiltViewModel<InternshipViewModel, InternshipViewModel.Factory>(
         creationCallback = { factory -> factory.create(internshipId) }
     )
@@ -43,8 +41,17 @@ fun InternshipScreen(
         onRefresh = { viewModel.refresh(internshipId) }
     )
 
-    LaunchedEffect(internshipData.value) {
-        title.value = internshipData.value.title
+
+    LaunchedEffect(Unit) {
+        if (internshipData.value.title.isEmpty()) {
+            title.value = "Стажировка"
+        }
+    }
+
+    LaunchedEffect(internshipData.value.title) {
+        if (internshipData.value.title.isNotEmpty()) {
+            title.value = internshipData.value.title
+        }
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
