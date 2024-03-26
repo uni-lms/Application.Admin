@@ -3,6 +3,7 @@ package ru.aip.intern.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,11 +13,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ChevronLeft
+import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -44,7 +49,10 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import ru.aip.intern.domain.calendar.data.DeadlineEvent
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -97,6 +105,8 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
         }
     )
 
+    val scope = rememberCoroutineScope()
+
     title.value = buildTitle(visibleMonth.yearMonth)
 
 
@@ -126,6 +136,36 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = {
+                        scope.launch {
+                            calendarState.animateScrollToMonth(visibleMonth.yearMonth.previousMonth)
+                        }
+                    }
+                ) {
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
+                        Text(text = "В прошлое")
+                    }
+                }
+                Button(
+                    onClick = {
+                        scope.launch {
+                            calendarState.animateScrollToMonth(visibleMonth.yearMonth.nextMonth)
+                        }
+                    }
+                ) {
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(text = "В будущее")
+                        Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
+
+                    }
+                }
+            }
         }
         PullRefreshIndicator(
             refreshing.value,
