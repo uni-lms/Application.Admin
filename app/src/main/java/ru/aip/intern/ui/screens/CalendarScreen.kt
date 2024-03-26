@@ -138,7 +138,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = {
@@ -147,7 +147,10 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                         }
                     }
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
                         Text(text = "В прошлое")
                     }
@@ -159,7 +162,10 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                         }
                     }
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(text = "В будущее")
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
 
