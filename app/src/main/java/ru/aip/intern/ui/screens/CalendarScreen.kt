@@ -39,11 +39,6 @@ import java.util.Locale
 @Composable
 fun CalendarScreen(title: MutableState<String>) {
 
-    val viewModel: CalendarViewModel = hiltViewModel()
-
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val data = viewModel.data.observeAsState(viewModel.defaultContent)
-
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val daysOfWeek = daysOfWeek()
     val currentMonth = remember { YearMonth.now() }
@@ -59,16 +54,28 @@ fun CalendarScreen(title: MutableState<String>) {
 
     val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
 
+    val viewModel: CalendarViewModel = hiltViewModel<CalendarViewModel, CalendarViewModel.Factory>(
+        creationCallback = { factory -> factory.create(visibleMonth.yearMonth) }
+    )
+
+    val refreshing = viewModel.isRefreshing.observeAsState(false)
+    val data = viewModel.data.observeAsState(viewModel.defaultContent)
+
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
         onRefresh = {
             title.value = buildTitle(visibleMonth.yearMonth)
-            viewModel.refresh(visibleMonth.yearMonth)
+            viewModel.refresh()
         }
     )
 
+    title.value = buildTitle(visibleMonth.yearMonth)
+
+
     LaunchedEffect(visibleMonth) {
-        viewModel.refresh(visibleMonth.yearMonth)
+        title.value = buildTitle(visibleMonth.yearMonth)
+        viewModel.yearMonth = visibleMonth.yearMonth
+        viewModel.refresh()
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
