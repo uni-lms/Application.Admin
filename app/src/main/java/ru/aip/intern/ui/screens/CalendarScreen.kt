@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -81,6 +82,7 @@ fun CalendarScreen(title: MutableState<String>) {
     )
 
     val refreshing = viewModel.isRefreshing.observeAsState(false)
+    val dayRefreshing = viewModel.isDayRefreshing.observeAsState(false)
     val data = viewModel.data.observeAsState(viewModel.defaultContent)
 
     val dayEvents = viewModel.dayEvents.observeAsState(viewModel.defaultEvents)
@@ -148,7 +150,16 @@ fun CalendarScreen(title: MutableState<String>) {
                 )
             },
             text = {
-                if (dayEvents.value.events.isEmpty()) {
+                if (dayRefreshing.value) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                if (dayEvents.value.events.isEmpty() && dayRefreshing.value.not()) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(10.dp),

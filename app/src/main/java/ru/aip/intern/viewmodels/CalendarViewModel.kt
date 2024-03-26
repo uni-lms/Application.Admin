@@ -31,6 +31,9 @@ class CalendarViewModel @AssistedInject constructor(
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
+    private val _isDayRefreshing = MutableLiveData(false)
+    val isDayRefreshing: LiveData<Boolean> = _isDayRefreshing
+
     private val now = LocalDateTime.now()
     val defaultContent = MonthEvents(
         year = now.year,
@@ -73,7 +76,7 @@ class CalendarViewModel @AssistedInject constructor(
 
     fun getDayEvents(day: Int) {
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _isDayRefreshing.value = true
             val response = calendarService.getDayEvents(yearMonth.year, yearMonth.monthValue, day)
 
             if (response.isSuccess) {
@@ -82,7 +85,7 @@ class CalendarViewModel @AssistedInject constructor(
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _isDayRefreshing.value = false
         }
     }
 
