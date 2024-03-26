@@ -129,7 +129,7 @@ fun AipApp(
                 }
 
                 composable(Screen.Calendar.name) {
-                    CalendarScreen(title)
+                    CalendarScreen(title) { screen, id -> goToScreen(navController, screen, id) }
                 }
 
                 composable(Screen.Notifications.name) {

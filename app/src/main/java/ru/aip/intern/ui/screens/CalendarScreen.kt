@@ -46,6 +46,7 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.flow.filterNotNull
 import ru.aip.intern.domain.calendar.data.DeadlineEvent
+import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.calendar.Day
 import ru.aip.intern.ui.components.calendar.DaysOfWeek
@@ -55,10 +56,11 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CalendarScreen(title: MutableState<String>) {
+fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
 
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val daysOfWeek = daysOfWeek()
@@ -175,7 +177,10 @@ fun CalendarScreen(title: MutableState<String>) {
                     LazyColumn(modifier = Modifier.padding(3.dp)) {
                         items(items = dayEvents.value.events, itemContent = {
                             if (it is DeadlineEvent) {
-                                DeadlineCard(it)
+                                DeadlineCard(it) { screen, id ->
+                                    isModelOpened = false
+                                    navigate(screen, id)
+                                }
                             }
                         })
                     }
