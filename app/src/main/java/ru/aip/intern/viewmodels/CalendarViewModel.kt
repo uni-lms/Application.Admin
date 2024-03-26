@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.calendar.data.MonthEvents
@@ -11,13 +14,18 @@ import ru.aip.intern.domain.calendar.service.CalendarService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import java.time.LocalDateTime
 import java.time.YearMonth
-import javax.inject.Inject
 
-@HiltViewModel
-class CalendarViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = CalendarViewModel.Factory::class)
+class CalendarViewModel @AssistedInject constructor(
     private val calendarService: CalendarService,
     private val snackbarMessageHandler: SnackbarMessageHandler,
+    @Assisted var yearMonth: YearMonth
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(yearMonth: YearMonth): CalendarViewModel
+    }
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
@@ -32,7 +40,11 @@ class CalendarViewModel @Inject constructor(
     private val _data = MutableLiveData(defaultContent)
     val data: LiveData<MonthEvents> = _data
 
-    fun refresh(yearMonth: YearMonth) {
+    init {
+        refresh()
+    }
+
+    fun refresh() {
 
         viewModelScope.launch {
             _isRefreshing.value = true
