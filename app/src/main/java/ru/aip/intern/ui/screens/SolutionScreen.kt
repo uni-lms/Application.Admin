@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Comment
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -24,6 +25,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -130,6 +132,18 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
             CommentTree(comments = solutionInfo.value.comments) { commentId ->
                 showBottomSheet = true
                 replyCommentId = commentId
+            }
+
+            TextButton(onClick = {
+                showBottomSheet = true
+                replyCommentId = null
+            }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.Comment,
+                    contentDescription = null,
+                    Modifier.padding(10.dp)
+                )
+                Text(text = "Оставить комментарий")
             }
 
             if (showBottomSheet) {
