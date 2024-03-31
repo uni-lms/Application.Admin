@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.comments.CommentTree
 import ru.aip.intern.ui.components.content.FileContentCard
 import ru.aip.intern.viewmodels.SolutionViewModel
 import java.time.ZoneId
@@ -96,6 +97,12 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 navigate(Screen.File, id)
             }
         }
+
+        if (solutionInfo.value.comments.isNotEmpty()) {
+            Text(text = "Комментарии")
+        }
+
+        CommentTree(comments = solutionInfo.value.comments)
 
     }
 
