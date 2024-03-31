@@ -153,6 +153,15 @@ fun AipApp(
                         }
                     }
                 }
+
+                composable("${Screen.Solution.name}/{id}") {
+                    val solutionId = backStackEntry?.arguments?.getString("id")
+                    if (solutionId != null) {
+                        SolutionScreen(title, UUID.fromString(solutionId)) { screen, id ->
+                            goToScreen(navController, screen, id)
+                        }
+                    }
+                }
             }
         }
     }

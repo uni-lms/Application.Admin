@@ -116,6 +116,9 @@ fun AssignmentScreen(
 
             solutionsData.value.solutions.forEachIndexed { ind, it ->
                 ListItem(
+                    modifier = Modifier.clickable {
+                        navigate(Screen.Solution, it.id)
+                    },
                     headlineContent = {
                         Text(text = "Решение №${ind + 1}")
                     },

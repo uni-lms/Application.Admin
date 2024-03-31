@@ -60,5 +60,11 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = null
+    ),
+    Solution(
+        title = "Решение",
+        canGoBack = true,
+        icon = null,
+        position = null
     )
 }
