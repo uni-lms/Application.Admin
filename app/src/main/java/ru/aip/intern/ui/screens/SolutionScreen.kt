@@ -125,9 +125,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 }
             }
 
-            if (solutionInfo.value.comments.isNotEmpty()) {
-                Text(text = "Комментарии")
-            }
+            Text(text = "Комментарии")
 
             CommentTree(comments = solutionInfo.value.comments) { commentId ->
                 showBottomSheet = true
