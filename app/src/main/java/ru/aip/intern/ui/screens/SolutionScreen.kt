@@ -93,8 +93,8 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
         }
 
         solutionInfo.value.files.forEach {
-            FileContentCard(content = it) {
-                navigate(Screen.File, id)
+            FileContentCard(content = it) { fileId ->
+                navigate(Screen.File, fileId)
             }
         }
 
