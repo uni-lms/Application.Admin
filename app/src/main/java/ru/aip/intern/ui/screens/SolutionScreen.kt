@@ -159,7 +159,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                                 onValueChange = { viewModel.updateCommentText(it) },
                                 Modifier.fillMaxWidth(0.9f)
                             )
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = { viewModel.createComment(replyCommentId) }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Outlined.Send,
                                     contentDescription = null

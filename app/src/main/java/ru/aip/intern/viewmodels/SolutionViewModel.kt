@@ -1,5 +1,6 @@
 package ru.aip.intern.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -66,6 +67,11 @@ class SolutionViewModel @AssistedInject constructor(
 
     fun updateCommentText(newText: String) {
         _commentText.value = newText
+    }
+
+    fun createComment(replyToCommentId: UUID?) {
+        Log.d("Comment", commentText.value!!)
+        Log.d("Comment", replyToCommentId.toString())
     }
 
 
