@@ -25,10 +25,8 @@ import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.comments.CommentTree
 import ru.aip.intern.ui.components.content.FileContentCard
+import ru.aip.intern.util.format
 import ru.aip.intern.viewmodels.SolutionViewModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -62,14 +60,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 },
                 trailingContent = {
                     Text(
-                        text = solutionInfo.value.createdAt.atZone(ZoneId.of("UTC"))
-                            .withZoneSameInstant(
-                                ZoneId.systemDefault()
-                            ).format(
-                                DateTimeFormatter.ofLocalizedDateTime(
-                                    FormatStyle.SHORT
-                                )
-                            )
+                        text = solutionInfo.value.createdAt.format()
                     )
                 }
             )

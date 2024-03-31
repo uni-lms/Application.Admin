@@ -26,10 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.util.format
 import ru.aip.intern.viewmodels.AssignmentViewModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -78,14 +76,7 @@ fun AssignmentScreen(
                 headlineContent = { Text(text = "Дедлайн") },
                 trailingContent = {
                     Text(
-                        text = assignmentData.value.deadline.atZone(ZoneId.of("UTC"))
-                            .withZoneSameInstant(
-                                ZoneId.systemDefault()
-                            ).format(
-                                DateTimeFormatter.ofLocalizedDateTime(
-                                    FormatStyle.SHORT
-                                )
-                            )
+                        text = assignmentData.value.deadline.format()
                     )
                 }
             )
@@ -124,14 +115,7 @@ fun AssignmentScreen(
                     },
                     supportingContent = {
                         Text(
-                            text = it.createdAt.atZone(ZoneId.of("UTC"))
-                                .withZoneSameInstant(
-                                    ZoneId.systemDefault()
-                                ).format(
-                                    DateTimeFormatter.ofLocalizedDateTime(
-                                        FormatStyle.SHORT
-                                    )
-                                )
+                            text = it.createdAt.format()
                         )
                     },
                     trailingContent = {
