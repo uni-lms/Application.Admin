@@ -16,9 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.aip.intern.domain.content.assignment.data.Comment
 import java.time.ZoneId
+import java.util.UUID
 
 @Composable
-fun CommentItem(comment: Comment, level: Int) {
+fun CommentItem(comment: Comment, level: Int, onReplyClick: (UUID) -> Unit) {
     val indent = buildString { repeat(level) { append("• ") } }
 
     Column(modifier = Modifier.padding(PaddingValues(start = (8 * level).dp))) {
@@ -41,7 +42,7 @@ fun CommentItem(comment: Comment, level: Int) {
                 Text(text = comment.text)
             },
             supportingContent = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onReplyClick(comment.id) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.Comment,
                         contentDescription = null,

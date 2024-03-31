@@ -106,7 +106,9 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 Text(text = "Комментарии")
             }
 
-            CommentTree(comments = solutionInfo.value.comments)
+            CommentTree(comments = solutionInfo.value.comments) {
+
+            }
 
         }
         PullRefreshIndicator(
