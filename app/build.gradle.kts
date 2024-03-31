@@ -68,7 +68,7 @@ android {
                                     " ",
                                     ""
                                 )
-                            }-${project.extensions.extraProperties["fullVersion"]}.apk"
+                            }.apk"
                         output.outputFileName = outputFileName
                     }
             }

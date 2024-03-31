@@ -77,13 +77,13 @@ jobs:
       # Show information about the APK's signing certificates
       - name: Verify Signature
         run: |
-          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.1/apksigner verify --print-certs /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: AltenarInternships-${{steps.android_version.outputs.VERSION_NAME}}.apk
-          path: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          path: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
           compression-level: 0
           retention-days: 20
           overwrite: true
@@ -138,6 +138,6 @@ jobs:
           body: ${{steps.generate_release_notes.outputs.release_notes}}
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
-          files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship-${{steps.android_version.outputs.VERSION_NAME}}.apk
+          files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
