@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.aip.intern.domain.content.assignment.data.Comment
+import ru.aip.intern.util.format
 
 @Composable
 fun CommentItem(comment: Comment, level: Int) {
@@ -24,6 +25,11 @@ fun CommentItem(comment: Comment, level: Int) {
             },
             headlineContent = {
                 Text(text = comment.text)
+            },
+            supportingContent = {
+                Text(
+                    text = comment.createdAt.format()
+                )
             }
         )
     }
