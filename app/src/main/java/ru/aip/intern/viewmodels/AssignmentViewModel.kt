@@ -10,6 +10,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.content.assignment.data.AssignmentInfo
+import ru.aip.intern.domain.content.assignment.data.SolutionsList
 import ru.aip.intern.domain.content.assignment.service.AssignmentService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import java.time.LocalDateTime
@@ -38,8 +39,13 @@ class AssignmentViewModel @AssistedInject constructor(
         fileId = id
     )
 
+    val defaultSolutions = SolutionsList(emptyList())
+
     private val _assignmentData = MutableLiveData(defaultContent)
     val assignmentData: LiveData<AssignmentInfo> = _assignmentData
+
+    private val _solutionsData = MutableLiveData(defaultSolutions)
+    val solutionsData: LiveData<SolutionsList> = _solutionsData
 
     init {
         refresh()
@@ -55,6 +61,14 @@ class AssignmentViewModel @AssistedInject constructor(
                 _assignmentData.value = response.value!!
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            val solutionsResponse = assignmentService.getSolutionsInfo(id)
+
+            if (solutionsResponse.isSuccess) {
+                _solutionsData.value = solutionsResponse.value!!
+            } else {
+                snackbarMessageHandler.postMessage(solutionsResponse.errorMessage!!)
             }
 
             _isRefreshing.value = false

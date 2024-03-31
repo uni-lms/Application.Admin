@@ -1,7 +1,9 @@
 package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AttachFile
@@ -10,8 +12,10 @@ import androidx.compose.material.icons.outlined.Scale
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +44,7 @@ fun AssignmentScreen(
     )
     val refreshing = viewModel.isRefreshing.observeAsState(false)
     val assignmentData = viewModel.assignmentData.observeAsState(viewModel.defaultContent)
+    val solutionsData = viewModel.solutionsData.observeAsState(viewModel.defaultSolutions)
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
@@ -104,6 +109,52 @@ fun AssignmentScreen(
                     }
                 )
             }
+
+            if (solutionsData.value.solutions.isNotEmpty()) {
+                Text(text = "Решения")
+            }
+
+            solutionsData.value.solutions.forEachIndexed { ind, it ->
+                ListItem(
+                    headlineContent = {
+                        Text(text = "Решение №${ind + 1}")
+                    },
+                    supportingContent = {
+                        Text(
+                            text = it.createdAt.atZone(ZoneId.of("UTC"))
+                                .withZoneSameInstant(
+                                    ZoneId.systemDefault()
+                                ).format(
+                                    DateTimeFormatter.ofLocalizedDateTime(
+                                        FormatStyle.SHORT
+                                    )
+                                )
+                        )
+                    },
+                    trailingContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (it.amountOfComments > 0) {
+                                Badge(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                ) {
+                                    Text(text = "${it.amountOfComments} комментариев")
+                                }
+                            }
+
+                            Icon(
+                                imageVector = Icons.Outlined.ChevronRight,
+                                contentDescription = null
+                            )
+
+                        }
+                    }
+                )
+            }
+
 
         }
         PullRefreshIndicator(

@@ -8,6 +8,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.content.assignment.data.AssignmentInfo
+import ru.aip.intern.domain.content.assignment.data.SolutionsList
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.networking.Response
 import ru.aip.intern.networking.safeRequest
@@ -21,6 +22,19 @@ class AssignmentService @Inject constructor(private val authManager: AuthManager
         return httpClient.safeRequest {
             method = HttpMethod.Get
             url("/content/assignments/${id}")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
+
+    suspend fun getSolutionsInfo(id: UUID): Response<SolutionsList> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Get
+            url("/content/assignments/${id}/solutions")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, authHeaderValue)
