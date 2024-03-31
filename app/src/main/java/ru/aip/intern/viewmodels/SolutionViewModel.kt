@@ -41,6 +41,9 @@ class SolutionViewModel @AssistedInject constructor(
     private val _solutionData = MutableLiveData(defaultSolution)
     val solutionData: LiveData<SolutionInfo> = _solutionData
 
+    private val _commentText = MutableLiveData("")
+    val commentText: LiveData<String> = _commentText
+
     init {
         refresh()
     }
@@ -59,6 +62,10 @@ class SolutionViewModel @AssistedInject constructor(
 
             _isRefreshing.value = false
         }
+    }
+
+    fun updateCommentText(newText: String) {
+        _commentText.value = newText
     }
 
 
