@@ -1,6 +1,5 @@
 package ru.aip.intern.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -70,8 +69,21 @@ class SolutionViewModel @AssistedInject constructor(
     }
 
     fun createComment(replyToCommentId: UUID?) {
-        Log.d("Comment", commentText.value!!)
-        Log.d("Comment", replyToCommentId.toString())
+        viewModelScope.launch {
+            _isRefreshing.value = true
+
+            val response =
+                assignmentService.createComment(id, _commentText.value!!, replyToCommentId)
+
+            if (response.isSuccess) {
+                refresh()
+                updateCommentText("")
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            _isRefreshing.value = false
+        }
     }
 
 

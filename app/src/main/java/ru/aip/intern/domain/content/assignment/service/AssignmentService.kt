@@ -2,12 +2,16 @@ package ru.aip.intern.domain.content.assignment.service
 
 import io.ktor.client.request.accept
 import io.ktor.client.request.headers
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
 import ru.aip.intern.auth.AuthManager
+import ru.aip.intern.domain.common.IdModel
 import ru.aip.intern.domain.content.assignment.data.AssignmentInfo
+import ru.aip.intern.domain.content.assignment.data.CreateCommentRequest
 import ru.aip.intern.domain.content.assignment.data.SolutionInfo
 import ru.aip.intern.domain.content.assignment.data.SolutionsList
 import ru.aip.intern.networking.HttpClientFactory
@@ -49,6 +53,21 @@ class AssignmentService @Inject constructor(private val authManager: AuthManager
         return httpClient.safeRequest {
             method = HttpMethod.Get
             url("/content/solutions/${id}")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
+
+    suspend fun createComment(id: UUID, text: String, replyToCommentId: UUID?): Response<IdModel> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Post
+            url("/content/solutions/${id}/comments")
+            setBody(CreateCommentRequest(text, replyToCommentId))
+            contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, authHeaderValue)
