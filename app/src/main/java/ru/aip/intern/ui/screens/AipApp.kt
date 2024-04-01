@@ -51,8 +51,19 @@ fun AipApp(
     // FIXME эта ебаная хуйня почему-то не обновляет экран после логина, из-за чего не работает нижний док
     val viewModel: StartScreenViewModel = hiltViewModel()
 
-    val startScreen = viewModel.startScreen.observeAsState(Screen.Login)
+    val startScreen by viewModel.startScreen.observeAsState(Screen.Login)
     val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val route = backStackEntry?.destination?.route
+
+    val screenName = if (route?.contains("/") == true) {
+        route.split("/")[0]
+    } else {
+        route
+    }
+
+    val currentScreen = Screen.valueOf(screenName ?: startScreen.name)
+
 
     LaunchedEffect(snackbarMessageHandler) {
         snackbarMessageHandler.message.collect { message ->
@@ -71,13 +82,13 @@ fun AipApp(
         Scaffold(
             topBar = {
                 TopBar(
-                    canGoBack = navController.previousBackStackEntry != null && startScreen.value.canGoBack,
+                    canGoBack = navController.previousBackStackEntry != null && currentScreen.canGoBack,
                     goUp = { navController.navigateUp() },
                     title = title
                 )
             },
             bottomBar = {
-                if (startScreen.value.showBottomBar) {
+                if (currentScreen.showBottomBar) {
                     BottomBar(navController = navController, hasUnreadNotifications)
                 }
             },
@@ -87,7 +98,7 @@ fun AipApp(
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = startScreen.value.name,
+                startDestination = startScreen.name,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
