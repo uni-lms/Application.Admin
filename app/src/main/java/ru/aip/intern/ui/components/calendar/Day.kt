@@ -68,7 +68,7 @@ fun Day(
                         }
 
                         if (it.hasEvents) {
-                            Badge(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                            Badge(containerColor = MaterialTheme.colorScheme.errorContainer)
                         }
                     }
                 }
