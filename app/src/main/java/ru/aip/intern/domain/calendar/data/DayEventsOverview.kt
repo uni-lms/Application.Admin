@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class DayEventsOverview(
     val dayOfMonth: Int,
     val hasDeadlines: Boolean,
+    val hasEvents: Boolean,
 )

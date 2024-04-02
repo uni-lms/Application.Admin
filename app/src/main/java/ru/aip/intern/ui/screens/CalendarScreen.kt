@@ -54,11 +54,13 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.calendar.data.DeadlineEvent
+import ru.aip.intern.domain.calendar.data.MeetingEvent
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.calendar.Day
 import ru.aip.intern.ui.components.calendar.DaysOfWeek
 import ru.aip.intern.ui.components.calendar.events.DeadlineCard
+import ru.aip.intern.ui.components.calendar.events.MeetingCard
 import ru.aip.intern.viewmodels.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -231,6 +233,14 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                                     navigate(screen, id)
                                 }
                             }
+
+                            if (it is MeetingEvent) {
+                                MeetingCard(it) { screen, id ->
+                                    isModelOpened = false
+                                    navigate(screen, id)
+                                }
+                            }
+
                         })
                     }
                 }

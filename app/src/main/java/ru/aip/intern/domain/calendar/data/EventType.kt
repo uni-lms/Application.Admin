@@ -5,5 +5,6 @@ import ru.aip.intern.serialization.EventTypeSerializer
 
 @Serializable(EventTypeSerializer::class)
 enum class EventType {
-    Deadline
+    Deadline,
+    Meeting,
 }

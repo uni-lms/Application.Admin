@@ -8,11 +8,13 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ru.aip.intern.domain.calendar.data.BaseDayEvent
 import ru.aip.intern.domain.calendar.data.DeadlineEvent
+import ru.aip.intern.domain.calendar.data.MeetingEvent
 
 object EventsSerializer : JsonContentPolymorphicSerializer<BaseDayEvent>(BaseDayEvent::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<BaseDayEvent> {
         return when (element.jsonObject["type"]?.jsonPrimitive?.content) {
             "deadline" -> DeadlineEvent.serializer()
+            "meeting" -> MeetingEvent.serializer()
             else -> throw SerializationException("No serializer was found")
         }
     }

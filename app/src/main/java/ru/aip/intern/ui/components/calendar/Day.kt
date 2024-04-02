@@ -66,6 +66,10 @@ fun Day(
                         if (it.hasDeadlines) {
                             Badge(containerColor = MaterialTheme.colorScheme.primaryContainer)
                         }
+
+                        if (it.hasEvents) {
+                            Badge(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                        }
                     }
                 }
             }

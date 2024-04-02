@@ -25,3 +25,12 @@ data class DeadlineEvent(
 
     val title: String
 ) : BaseDayEvent()
+
+@Serializable
+data class MeetingEvent(
+    @Serializable(UuidSerializer::class) val id: UUID,
+
+    override val eventType: EventType = EventType.Meeting,
+
+    val title: String
+) : BaseDayEvent()
