@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -104,6 +105,9 @@ fun EventScreen(
 
             if (data.value.link != null) {
                 ListItem(
+                    leadingContent = {
+                        Icon(Icons.Outlined.Link, null)
+                    },
                     headlineContent = {
                         Text(text = "Ссылка")
                     },
