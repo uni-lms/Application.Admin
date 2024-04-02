@@ -60,6 +60,7 @@ import ru.aip.intern.ui.components.calendar.Day
 import ru.aip.intern.ui.components.calendar.DaysOfWeek
 import ru.aip.intern.ui.components.calendar.events.DeadlineCard
 import ru.aip.intern.viewmodels.CalendarViewModel
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -82,6 +83,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
         endMonth = endMonth,
         outDateStyle = OutDateStyle.EndOfGrid
     )
+    val today = remember { LocalDate.now() }
     var isModelOpened by remember { mutableStateOf(false) }
     var selectedDay by remember { mutableStateOf<CalendarDay?>(null) }
 
@@ -124,6 +126,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                 dayContent = {
                     Day(
                         day = it,
+                        today = today,
                         dayEventsOverview = data.value.days.firstOrNull { day -> day.dayOfMonth == it.date.dayOfMonth }) {
                         selectedDay = it
                         isModelOpened = true
