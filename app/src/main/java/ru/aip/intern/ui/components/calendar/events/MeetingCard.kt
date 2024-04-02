@@ -23,7 +23,7 @@ fun MeetingCard(event: MeetingEvent, navigate: (Screen, UUID) -> Unit) {
         },
         headlineContent = { Text(text = event.title) },
         modifier = Modifier.clickable {
-            navigate(Screen.Assignment, event.id)
+            navigate(Screen.Event, event.id)
         }
     )
 }

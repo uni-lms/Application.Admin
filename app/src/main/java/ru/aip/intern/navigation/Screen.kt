@@ -66,5 +66,11 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = null
+    ),
+    Event(
+        title = "Событие",
+        canGoBack = true,
+        icon = null,
+        position = null
     )
 }

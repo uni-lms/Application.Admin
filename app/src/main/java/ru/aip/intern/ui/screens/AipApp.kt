@@ -173,6 +173,13 @@ fun AipApp(
                         }
                     }
                 }
+
+                composable("${Screen.Event.name}/{id}") {
+                    val eventId = backStackEntry?.arguments?.getString("id")
+                    if (eventId != null) {
+                        EventScreen(title, UUID.fromString(eventId))
+                    }
+                }
             }
         }
     }

@@ -15,3 +15,21 @@ fun LocalDateTime.format(): String {
             )
         )
 }
+
+fun LocalDateTime.formatTime(): String {
+    return this.atZone(ZoneId.of("UTC"))
+        .withZoneSameInstant(
+            ZoneId.systemDefault()
+        ).format(
+            DateTimeFormatter.ofPattern("HH:mm")
+        )
+}
+
+fun LocalDateTime.formatDate(): String {
+    return this.atZone(ZoneId.of("UTC"))
+        .withZoneSameInstant(
+            ZoneId.systemDefault()
+        ).format(
+            DateTimeFormatter.ofPattern("d.MM.y")
+        )
+}
