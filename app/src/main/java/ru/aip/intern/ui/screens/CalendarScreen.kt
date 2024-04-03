@@ -72,7 +72,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
+fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Unit) {
 
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val daysOfWeek = daysOfWeek()
@@ -142,39 +142,65 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(
-                    onClick = {
-                        scope.launch {
-                            calendarState.animateScrollToMonth(visibleMonth.yearMonth.previousMonth)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                calendarState.animateScrollToMonth(visibleMonth.yearMonth.previousMonth)
+                            }
+                        }
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.ChevronLeft,
+                                contentDescription = null
+                            )
+                            Text(text = "В прошлое")
                         }
                     }
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                calendarState.animateScrollToMonth(visibleMonth.yearMonth.nextMonth)
+                            }
+                        }
                     ) {
-                        Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
-                        Text(text = "В прошлое")
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "В будущее")
+                            Icon(
+                                imageVector = Icons.Outlined.ChevronRight,
+                                contentDescription = null
+                            )
+
+                        }
                     }
                 }
-                Button(
-                    onClick = {
-                        scope.launch {
-                            calendarState.animateScrollToMonth(visibleMonth.yearMonth.nextMonth)
-                        }
-                    }
-                ) {
+                Button(onClick = {
+                    isDayEventsModalOpened = false
+                    navigate(Screen.CreateEvent, null)
+                }) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "В будущее")
-                        Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
-
+                        Icon(
+                            imageVector = Icons.Outlined.EditCalendar,
+                            contentDescription = null
+                        )
+                        Text(text = "Запланировать событие")
                     }
                 }
             }
@@ -236,17 +262,6 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                                 }
                             })
                         }
-                    }
-
-                    Button(onClick = {
-                        isDayEventsModalOpened = false
-                    }) {
-                        Icon(
-                            imageVector = Icons.Outlined.EditCalendar,
-                            contentDescription = null,
-                            Modifier.padding(10.dp)
-                        )
-                        Text(text = "Запланировать событие")
                     }
                 }
             }
