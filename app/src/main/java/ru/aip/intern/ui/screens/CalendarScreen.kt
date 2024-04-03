@@ -15,6 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -203,45 +204,49 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                 )
             },
             text = {
-                if (dayRefreshing.value) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (dayRefreshing.value) {
                         CircularProgressIndicator()
                     }
-                }
-                if (dayEvents.value.events.isEmpty() && dayRefreshing.value.not()) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    if (dayEvents.value.events.isEmpty() && dayRefreshing.value.not()) {
                         Icon(Icons.Outlined.Inbox, null, modifier = Modifier.size(30.dp))
                         Text(
                             text = "Нет событий",
                             style = MaterialTheme.typography.titleMedium
                         )
+                    } else {
+                        LazyColumn(modifier = Modifier.padding(3.dp)) {
+                            items(items = dayEvents.value.events, itemContent = {
+                                if (it is DeadlineEvent) {
+                                    DeadlineCard(it) { screen, id ->
+                                        isModelOpened = false
+                                        navigate(screen, id)
+                                    }
+                                }
+
+                                if (it is MeetingEvent) {
+                                    MeetingCard(it) { screen, id ->
+                                        isModelOpened = false
+                                        navigate(screen, id)
+                                    }
+                                }
+                            })
+                        }
                     }
-                } else {
-                    LazyColumn(modifier = Modifier.padding(3.dp)) {
-                        items(items = dayEvents.value.events, itemContent = {
-                            if (it is DeadlineEvent) {
-                                DeadlineCard(it) { screen, id ->
-                                    isModelOpened = false
-                                    navigate(screen, id)
-                                }
-                            }
 
-                            if (it is MeetingEvent) {
-                                MeetingCard(it) { screen, id ->
-                                    isModelOpened = false
-                                    navigate(screen, id)
-                                }
-                            }
-
-                        })
+                    Button(onClick = {
+                        isModelOpened = false
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.EditCalendar,
+                            contentDescription = null,
+                            Modifier.padding(10.dp)
+                        )
+                        Text(text = "Запланировать событие")
                     }
                 }
             }
