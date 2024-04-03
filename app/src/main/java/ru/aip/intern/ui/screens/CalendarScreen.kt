@@ -87,7 +87,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
         outDateStyle = OutDateStyle.EndOfGrid
     )
     val today = remember { LocalDate.now() }
-    var isModelOpened by remember { mutableStateOf(false) }
+    var isDayEventsModalOpened by remember { mutableStateOf(false) }
     var selectedDay by remember { mutableStateOf<CalendarDay?>(null) }
 
     val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
@@ -117,7 +117,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
 
     LaunchedEffect(visibleMonth) {
         title.value = buildTitle(visibleMonth.yearMonth)
-        isModelOpened = false
+        isDayEventsModalOpened = false
         selectedDay = null
         viewModel.yearMonth = visibleMonth.yearMonth
         viewModel.refresh()
@@ -132,7 +132,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                         today = today,
                         dayEventsOverview = data.value.days.firstOrNull { day -> day.dayOfMonth == it.date.dayOfMonth }) {
                         selectedDay = it
-                        isModelOpened = true
+                        isDayEventsModalOpened = true
                         viewModel.getDayEvents(it.date.dayOfMonth)
                     }
                 },
@@ -186,9 +186,9 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
         )
     }
 
-    if (isModelOpened) {
+    if (isDayEventsModalOpened) {
         val onModalDismiss = {
-            isModelOpened = false
+            isDayEventsModalOpened = false
             selectedDay = null
         }
         AlertDialog(
@@ -223,14 +223,14 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                             items(items = dayEvents.value.events, itemContent = {
                                 if (it is DeadlineEvent) {
                                     DeadlineCard(it) { screen, id ->
-                                        isModelOpened = false
+                                        isDayEventsModalOpened = false
                                         navigate(screen, id)
                                     }
                                 }
 
                                 if (it is MeetingEvent) {
                                     MeetingCard(it) { screen, id ->
-                                        isModelOpened = false
+                                        isDayEventsModalOpened = false
                                         navigate(screen, id)
                                     }
                                 }
@@ -239,7 +239,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit
                     }
 
                     Button(onClick = {
-                        isModelOpened = false
+                        isDayEventsModalOpened = false
                     }) {
                         Icon(
                             imageVector = Icons.Outlined.EditCalendar,
