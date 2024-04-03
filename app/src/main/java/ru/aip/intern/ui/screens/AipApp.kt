@@ -180,6 +180,10 @@ fun AipApp(
                         EventScreen(title, UUID.fromString(eventId))
                     }
                 }
+
+                composable(Screen.CreateEvent.name) {
+                    CreateEventScreen(title)
+                }
             }
         }
     }

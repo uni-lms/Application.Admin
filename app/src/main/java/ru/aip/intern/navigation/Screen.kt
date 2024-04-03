@@ -72,5 +72,11 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = null
+    ),
+    CreateEvent(
+        title = "Создать событие",
+        canGoBack = true,
+        icon = null,
+        position = null
     )
 }
