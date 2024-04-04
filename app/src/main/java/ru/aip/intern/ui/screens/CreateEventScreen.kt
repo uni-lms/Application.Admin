@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -75,6 +78,7 @@ fun CreateEventScreen(title: MutableState<String>) {
         BaseScreen {
 
             SingleValueDisplay(
+                icon = Icons.Outlined.CalendarMonth,
                 title = "Дата события",
                 value = datePickerState.selectedDateMillis.epochDateToNullableString()
             ) {
@@ -82,6 +86,7 @@ fun CreateEventScreen(title: MutableState<String>) {
             }
 
             DoubleValueDisplay(
+                icon = Icons.Outlined.AccessTime,
                 title = "Время события",
                 leftValue = Pair(startTimePickerState.hour, startTimePickerState.minute)
                     .formatTimeFromPair(
