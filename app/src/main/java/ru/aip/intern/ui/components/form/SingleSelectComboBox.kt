@@ -44,8 +44,10 @@ fun SingleSelectComboBox(
 
     var expanded by remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateOf<ComboBoxItem?>(null) }
-    var textBoxText by remember {
-        mutableStateOf("Выбрать…")
+
+    fun onSelectedUpdate(item: ComboBoxItem) {
+        selectedItem.value = item
+        onSelectionChange(item.id)
     }
 
     Column(modifier = modifier) {
@@ -115,12 +117,12 @@ fun SingleSelectComboBox(
                     DropdownMenuItem(
                         text = { Text(text = item.name) },
                         onClick = {
-                            selectedItem.value = item
+                            onSelectedUpdate(item)
                         },
                         leadingIcon = {
                             RadioButton(
                                 selected = selectedItem.value == item,
-                                onClick = { selectedItem.value = item })
+                                onClick = { onSelectedUpdate(item) })
                         }
                     )
                 }
