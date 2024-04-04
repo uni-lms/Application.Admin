@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.PeopleOutline
@@ -40,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.form.DoubleValueDisplay
 import ru.aip.intern.ui.components.form.MultiSelectComboBox
+import ru.aip.intern.ui.components.form.SingleSelectComboBox
 import ru.aip.intern.ui.components.form.SingleValueDisplay
 import ru.aip.intern.ui.components.form.TimePickerDialog
 import ru.aip.intern.ui.components.form.toComboBoxItemList
@@ -58,6 +60,7 @@ fun CreateEventScreen(title: MutableState<String>) {
     val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
     val selectedInternships = remember { mutableStateListOf<UUID>() }
     val selectedUsers = remember { mutableStateListOf<UUID>() }
+    val selectedEventType = remember { mutableStateOf<UUID?>(null) }
 
     val refreshing = viewModel.isRefreshing.observeAsState(false)
 
@@ -127,6 +130,14 @@ fun CreateEventScreen(title: MutableState<String>) {
             ) {
                 selectedUsers.clear()
                 selectedUsers.addAll(it)
+            }
+
+            SingleSelectComboBox(
+                icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
+                title = "Тип события",
+                items = eventCreatingInfo.eventTypes.toComboBoxItemList({ it.id }, { it.name })
+            ) {
+                selectedEventType.value = it
             }
 
             if (showDatePicker) {
