@@ -44,9 +44,6 @@ fun MultiSelectComboBox(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<ComboBoxItem>() }
-    var textBoxText by remember {
-        mutableStateOf("Выбрать…")
-    }
 
     fun toggleItemSelection(itemId: ComboBoxItem) {
         if (selectedItems.contains(itemId)) {
