@@ -35,8 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.form.DoubleValueDisplay
 import ru.aip.intern.ui.components.form.MultiSelectComboBox
+import ru.aip.intern.ui.components.form.SingleValueDisplay
 import ru.aip.intern.ui.components.form.TimePickerDialog
-import ru.aip.intern.ui.components.form.ValueDisplayWithButton
 import ru.aip.intern.ui.components.form.toComboBoxItemList
 import ru.aip.intern.util.epochDateToNullableString
 import ru.aip.intern.util.formatTimeFromPair
@@ -74,7 +74,7 @@ fun CreateEventScreen(title: MutableState<String>) {
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
 
-            ValueDisplayWithButton(
+            SingleValueDisplay(
                 title = "Дата события",
                 value = datePickerState.selectedDateMillis.epochDateToNullableString()
             ) {
