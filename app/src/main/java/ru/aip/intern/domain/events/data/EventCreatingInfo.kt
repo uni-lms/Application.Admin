@@ -6,5 +6,6 @@ import ru.aip.intern.domain.internships.data.Internship
 @Serializable
 data class EventCreatingInfo(
     val internships: List<Internship>,
-    val users: List<User>
+    val users: List<User>,
+    val eventTypes: List<EventTypeInfo>
 )

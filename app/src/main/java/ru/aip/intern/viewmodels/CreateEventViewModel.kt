@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.events.data.EventCreatingInfo
+import ru.aip.intern.domain.events.data.EventTypeInfo
 import ru.aip.intern.domain.events.data.User
 import ru.aip.intern.domain.events.service.EventsService
 import ru.aip.intern.domain.internships.data.Internship
@@ -32,6 +33,9 @@ class CreateEventViewModel @Inject constructor(
             User(UUID.randomUUID(), "dvrvd"),
             User(UUID.randomUUID(), "fdvd"),
             User(UUID.randomUUID(), "vdsvcd"),
+        ),
+        listOf(
+            EventTypeInfo(UUID.randomUUID(), "Созвон")
         )
     )
 
