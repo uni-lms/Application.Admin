@@ -7,6 +7,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.PeopleOutline
+import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -110,6 +112,7 @@ fun CreateEventScreen(title: MutableState<String>) {
             )
 
             MultiSelectComboBox(
+                icon = Icons.Outlined.School,
                 title = "Выберите участвующие стажировки",
                 items = eventCreatingInfo.internships.toComboBoxItemList({ it.id }, { it.name })
             ) {
@@ -118,6 +121,7 @@ fun CreateEventScreen(title: MutableState<String>) {
             }
 
             MultiSelectComboBox(
+                icon = Icons.Outlined.PeopleOutline,
                 title = "Выберите приглашённых преподавателей",
                 items = eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
             ) {

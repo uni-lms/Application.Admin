@@ -30,11 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import java.util.UUID
 
 @Composable
 fun MultiSelectComboBox(
+    icon: ImageVector,
     title: String,
     items: List<ComboBoxItem>,
     modifier: Modifier = Modifier,
@@ -65,7 +67,14 @@ fun MultiSelectComboBox(
     }
 
     Column(modifier = modifier) {
-        Text(text = title, modifier = Modifier.padding(vertical = 16.dp))
+        Row(modifier = Modifier.padding(vertical = 16.dp)) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 10.dp)
+            )
+            Text(text = title)
+        }
         BoxWithConstraints(
             modifier = Modifier.clickable {
                 expanded = !expanded
