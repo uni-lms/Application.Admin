@@ -11,6 +11,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -96,6 +97,7 @@ fun CreateEventScreen(title: MutableState<String>) {
                             .padding(horizontal = 16.dp)
                             .width(10.dp),
                         thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outline
                     )
                 },
                 onLeftClick = { showStartTimePicker = true },
