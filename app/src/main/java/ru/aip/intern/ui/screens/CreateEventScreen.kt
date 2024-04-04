@@ -162,7 +162,16 @@ fun CreateEventScreen(title: MutableState<String>) {
                 TimePickerDialog(
                     title = "Выберите время",
                     onDismissRequest = { showStartTimePicker = false },
-                    onConfirm = { showStartTimePicker = false }
+                    confirmButton = {
+                        TextButton(onClick = { showStartTimePicker = false }) {
+                            Text("Выбрать")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showStartTimePicker = false }) {
+                            Text("Отменить")
+                        }
+                    }
                 ) {
                     TimePicker(
                         state = startTimePickerState,
@@ -177,7 +186,16 @@ fun CreateEventScreen(title: MutableState<String>) {
                 TimePickerDialog(
                     title = "Выберите время",
                     onDismissRequest = { showEndTimePicker = false },
-                    onConfirm = { showEndTimePicker = false }
+                    confirmButton = {
+                        TextButton(onClick = { showEndTimePicker = false }) {
+                            Text("Выбрать")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showEndTimePicker = false }) {
+                            Text("Отменить")
+                        }
+                    }
                 ) {
                     TimePicker(
                         state = endTimePickerState,

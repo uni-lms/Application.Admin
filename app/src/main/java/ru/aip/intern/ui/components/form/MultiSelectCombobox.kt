@@ -44,6 +44,17 @@ fun MultiSelectComboBox(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<ComboBoxItem>() }
+    var textBoxText by remember {
+        mutableStateOf("Выбрать…")
+    }
+
+    fun updateText() {
+        textBoxText = if (selectedItems.isEmpty()) {
+            "Выберите…"
+        } else {
+            selectedItems.joinToString(", ") { it.name }
+        }
+    }
 
     fun toggleItemSelection(itemId: ComboBoxItem) {
         if (selectedItems.contains(itemId)) {
@@ -52,6 +63,7 @@ fun MultiSelectComboBox(
             selectedItems.add(itemId)
         }
         onSelectionChange(selectedItems.map { it.id })
+        updateText()
     }
 
     Column(modifier = modifier) {

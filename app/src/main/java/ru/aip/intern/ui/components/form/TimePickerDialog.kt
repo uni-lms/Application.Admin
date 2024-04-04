@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,8 @@ import androidx.compose.ui.window.DialogProperties
 fun TimePickerDialog(
     title: String = "Select Time",
     onDismissRequest: () -> Unit,
-    onConfirm: () -> Unit,
+    confirmButton: @Composable () -> Unit,
+    dismissButton: @Composable () -> Unit,
     toggle: @Composable () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -62,12 +62,8 @@ fun TimePickerDialog(
                 ) {
                     toggle()
                     Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = onDismissRequest) {
-                        Text("Отменить")
-                    }
-                    TextButton(onClick = onConfirm) {
-                        Text("Сохранить")
-                    }
+                    dismissButton()
+                    confirmButton()
                 }
             }
         }
