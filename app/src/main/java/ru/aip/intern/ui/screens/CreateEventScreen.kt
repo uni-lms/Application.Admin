@@ -113,7 +113,7 @@ fun CreateEventScreen(title: MutableState<String>) {
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.School,
-                title = "Выберите участвующие стажировки",
+                title = "Стажировки",
                 items = eventCreatingInfo.internships.toComboBoxItemList({ it.id }, { it.name })
             ) {
                 selectedInternships.clear()
@@ -122,7 +122,7 @@ fun CreateEventScreen(title: MutableState<String>) {
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.PeopleOutline,
-                title = "Выберите приглашённых преподавателей",
+                title = "Преподаватели",
                 items = eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
             ) {
                 selectedUsers.clear()
