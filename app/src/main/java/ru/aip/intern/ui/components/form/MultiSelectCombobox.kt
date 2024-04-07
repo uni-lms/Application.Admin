@@ -32,18 +32,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import java.util.UUID
 
 @Composable
-fun MultiSelectComboBox(
+fun <TId> MultiSelectComboBox(
     icon: ImageVector,
     title: String,
-    items: List<ComboBoxItem>,
+    items: List<ComboBoxItem<TId>>,
     modifier: Modifier = Modifier,
-    onSelectionChange: (List<UUID>) -> Unit
+    onSelectionChange: (List<TId>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedItems = remember { mutableStateListOf<ComboBoxItem>() }
+    val selectedItems = remember { mutableStateListOf<ComboBoxItem<TId>>() }
     var textBoxText by remember {
         mutableStateOf("Выбрать…")
     }
@@ -56,7 +55,7 @@ fun MultiSelectComboBox(
         }
     }
 
-    fun toggleItemSelection(itemId: ComboBoxItem) {
+    fun toggleItemSelection(itemId: ComboBoxItem<TId>) {
         if (selectedItems.contains(itemId)) {
             selectedItems.remove(itemId)
         } else {

@@ -1,6 +1,8 @@
 package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
@@ -8,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.PeopleOutline
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -17,7 +20,9 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -38,7 +43,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.domain.calendar.data.EventType
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.form.ComboBoxItem
 import ru.aip.intern.ui.components.form.DoubleValueDisplay
 import ru.aip.intern.ui.components.form.MultiSelectComboBox
 import ru.aip.intern.ui.components.form.SingleSelectComboBox
@@ -58,9 +65,10 @@ fun CreateEventScreen(title: MutableState<String>) {
 
     val viewModel: CreateEventViewModel = hiltViewModel()
     val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
+    var eventTitle by rememberSaveable { mutableStateOf("") }
     val selectedInternships = remember { mutableStateListOf<UUID>() }
     val selectedUsers = remember { mutableStateListOf<UUID>() }
-    val selectedEventType = remember { mutableStateOf<UUID?>(null) }
+    val selectedEventType = rememberSaveable { mutableStateOf<Int?>(null) }
 
     val refreshing = viewModel.isRefreshing.observeAsState(false)
 
@@ -81,6 +89,21 @@ fun CreateEventScreen(title: MutableState<String>) {
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = eventTitle,
+                    onValueChange = { eventTitle = it },
+                    label = {
+                        Text(text = "Название события")
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
 
             SingleValueDisplay(
                 icon = Icons.Outlined.CalendarMonth,
@@ -135,7 +158,9 @@ fun CreateEventScreen(title: MutableState<String>) {
             SingleSelectComboBox(
                 icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
                 title = "Тип события",
-                items = eventCreatingInfo.eventTypes.toComboBoxItemList({ it.id }, { it.name })
+                items = EventType.entries.filter { it.name != "Deadline" }.mapIndexed { ind, item ->
+                    ComboBoxItem(ind, item.label)
+                }
             ) {
                 selectedEventType.value = it
             }

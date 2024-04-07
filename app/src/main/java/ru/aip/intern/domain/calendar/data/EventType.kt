@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import ru.aip.intern.serialization.EventTypeSerializer
 
 @Serializable(EventTypeSerializer::class)
-enum class EventType {
-    Deadline,
-    Meeting,
+enum class EventType(val label: String) {
+    Deadline("Дедлайн"),
+    Meeting("Созвон"),
 }

@@ -31,21 +31,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import java.util.UUID
 
 @Composable
-fun SingleSelectComboBox(
+fun <TId> SingleSelectComboBox(
     icon: ImageVector,
     title: String,
-    items: List<ComboBoxItem>,
+    items: List<ComboBoxItem<TId>>,
     modifier: Modifier = Modifier,
-    onSelectionChange: (UUID) -> Unit
+    onSelectionChange: (TId) -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
-    val selectedItem = remember { mutableStateOf<ComboBoxItem?>(null) }
+    val selectedItem = remember { mutableStateOf<ComboBoxItem<TId>?>(null) }
 
-    fun onSelectedUpdate(item: ComboBoxItem) {
+    fun onSelectedUpdate(item: ComboBoxItem<TId>) {
         selectedItem.value = item
         onSelectionChange(item.id)
     }
