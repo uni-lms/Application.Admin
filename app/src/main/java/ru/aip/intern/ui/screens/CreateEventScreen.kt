@@ -1,8 +1,6 @@
 package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
@@ -11,6 +9,7 @@ import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.PeopleOutline
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -20,9 +19,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -50,6 +47,7 @@ import ru.aip.intern.ui.components.form.DoubleValueDisplay
 import ru.aip.intern.ui.components.form.MultiSelectComboBox
 import ru.aip.intern.ui.components.form.SingleSelectComboBox
 import ru.aip.intern.ui.components.form.SingleValueDisplay
+import ru.aip.intern.ui.components.form.TextField
 import ru.aip.intern.ui.components.form.TimePickerDialog
 import ru.aip.intern.ui.components.form.toComboBoxItemList
 import ru.aip.intern.util.epochDateToNullableString
@@ -66,6 +64,7 @@ fun CreateEventScreen(title: MutableState<String>) {
     val viewModel: CreateEventViewModel = hiltViewModel()
     val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
     var eventTitle by rememberSaveable { mutableStateOf("") }
+    var eventLink by rememberSaveable { mutableStateOf("") }
     val selectedInternships = remember { mutableStateListOf<UUID>() }
     val selectedUsers = remember { mutableStateListOf<UUID>() }
     val selectedEventType = rememberSaveable { mutableStateOf<Int?>(null) }
@@ -89,20 +88,20 @@ fun CreateEventScreen(title: MutableState<String>) {
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                OutlinedTextField(
-                    value = eventTitle,
-                    onValueChange = { eventTitle = it },
-                    label = {
-                        Text(text = "Название события")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = null
-                        )
-                    }
-                )
+            TextField(
+                label = "Название события",
+                icon = Icons.Outlined.Edit,
+                value = eventTitle
+            ) {
+                eventTitle = it
+            }
+
+            TextField(
+                label = "Ссылка на событие",
+                icon = Icons.Outlined.Link,
+                value = eventLink
+            ) {
+                eventLink = it
             }
 
             SingleValueDisplay(
