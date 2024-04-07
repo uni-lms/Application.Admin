@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.domain.calendar.data.EventType
+import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.form.ComboBoxItem
 import ru.aip.intern.ui.components.form.DoubleValueDisplay
@@ -58,11 +59,12 @@ import ru.aip.intern.util.epochDateToNullableString
 import ru.aip.intern.util.formatTimeFromPair
 import ru.aip.intern.util.is24HourFormat
 import ru.aip.intern.viewmodels.CreateEventViewModel
+import java.util.TimeZone
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEventScreen(title: MutableState<String>) {
+fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
     title.value = "Запланировать событие"
 
     val viewModel: CreateEventViewModel = hiltViewModel()
@@ -162,7 +164,7 @@ fun CreateEventScreen(title: MutableState<String>) {
                 icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
                 title = "Тип события",
                 items = EventType.entries.filter { it.name != "Deadline" }.mapIndexed { ind, item ->
-                    ComboBoxItem(ind, item.label)
+                    ComboBoxItem(ind + 1, item.label)
                 }
             ) {
                 selectedEventType.value = it
@@ -174,7 +176,19 @@ fun CreateEventScreen(title: MutableState<String>) {
                     .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { viewModel.createEvent() }) {
+                Button(onClick = {
+                    viewModel.createEvent(
+                        eventTitle,
+                        eventLink,
+                        datePickerState,
+                        startTimePickerState,
+                        endTimePickerState,
+                        selectedInternships,
+                        selectedUsers,
+                        selectedEventType.value,
+                        TimeZone.getDefault().toZoneId()
+                    ) { screen, id -> navigate(screen, id) }
+                }) {
                     Text(text = "Создать")
                 }
             }

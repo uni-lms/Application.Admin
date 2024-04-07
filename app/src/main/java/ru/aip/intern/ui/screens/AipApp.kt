@@ -182,7 +182,9 @@ fun AipApp(
                 }
 
                 composable(Screen.CreateEvent.name) {
-                    CreateEventScreen(title)
+                    CreateEventScreen(title) { screen, id ->
+                        goToScreen(navController, screen, id)
+                    }
                 }
             }
         }
