@@ -1,6 +1,9 @@
 package ru.aip.intern.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
@@ -15,6 +18,7 @@ import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -162,6 +166,17 @@ fun CreateEventScreen(title: MutableState<String>) {
                 }
             ) {
                 selectedEventType.value = it
+            }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(onClick = { viewModel.createEvent() }) {
+                    Text(text = "Создать")
+                }
             }
 
             if (showDatePicker) {
