@@ -103,7 +103,7 @@ fun EventScreen(
                 }
             )
 
-            if (data.value.link != null) {
+            if (data.value.link?.isNotBlank() == true) {
                 ListItem(
                     leadingContent = {
                         Icon(Icons.Outlined.Link, null)
