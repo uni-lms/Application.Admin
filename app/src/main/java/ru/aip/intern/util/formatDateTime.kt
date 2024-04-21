@@ -1,5 +1,6 @@
 package ru.aip.intern.util
 
+import android.text.format.DateUtils
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -32,4 +33,15 @@ fun LocalDateTime.formatDate(): String {
         ).format(
             DateTimeFormatter.ofPattern("d.MM.y")
         )
+}
+
+fun LocalDateTime.formatRelative(): String {
+    return DateUtils.getRelativeTimeSpanString(
+        this.atZone(ZoneId.of("UTC"))
+            .withZoneSameInstant(
+                ZoneId.systemDefault()
+            ).toInstant()
+            .toEpochMilli(),
+        System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+    ).toString()
 }
