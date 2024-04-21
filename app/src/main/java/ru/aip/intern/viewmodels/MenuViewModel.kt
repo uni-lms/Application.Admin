@@ -8,16 +8,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.domain.auth.service.AuthService
+import ru.aip.intern.domain.notifications.service.NotificationsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
     val storage: DataStoreRepository,
     private val snackbarMessageHandler: SnackbarMessageHandler,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val notificationsService: NotificationsService
 ) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -38,15 +39,22 @@ class MenuViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.value = true
 
-            val response = authService.whoami()
+            val whoamiResponse = authService.whoami()
 
-            if (response.isSuccess) {
-                _whoamiData.value = response.value
+            if (whoamiResponse.isSuccess) {
+                _whoamiData.value = whoamiResponse.value
             } else {
-                snackbarMessageHandler.postMessage(response.errorMessage!!)
+                snackbarMessageHandler.postMessage(whoamiResponse.errorMessage!!)
             }
 
-            _unreadNotificationsCount.value = Random.nextInt(0, 3)
+            val notificationsResponse = notificationsService.getUnreadAmount()
+
+            if (notificationsResponse.isSuccess) {
+                _unreadNotificationsCount.value = notificationsResponse.value
+            } else {
+                snackbarMessageHandler.postMessage(notificationsResponse.errorMessage!!)
+            }
+
             _isRefreshing.value = false
         }
     }

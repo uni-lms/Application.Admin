@@ -26,4 +26,17 @@ class NotificationsService @Inject constructor(private val authManager: AuthMana
             }
         }
     }
+
+    suspend fun getUnreadAmount(): Response<Int> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Get
+            url("/notifications/amount-of-unread")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
 }
