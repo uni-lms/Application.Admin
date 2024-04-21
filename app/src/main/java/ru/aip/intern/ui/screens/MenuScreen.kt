@@ -70,6 +70,16 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
                                 Text(text = unreadNotificationsCount.value.toString())
                             }
                         }
+                    },
+                    modifier = Modifier.clickable {
+                        val screenToGo = when (screen) {
+                            Screen.Notifications -> Screen.Notifications
+                            else -> null
+                        }
+
+                        if (screenToGo != null) {
+                            navigateTo(screenToGo)
+                        }
                     }
                 )
             }

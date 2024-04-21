@@ -21,9 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.ConfirmExit
-import ru.aip.intern.ui.components.Greeting
 import ru.aip.intern.ui.fragments.BottomBar
 import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
@@ -144,8 +142,12 @@ fun AipApp(
                 }
 
                 composable(Screen.Notifications.name) {
-                    BaseScreen {
-                        Greeting(name = "notifications")
+                    NotificationsScreen(title) { screen, id ->
+                        goToScreen(
+                            navController,
+                            screen,
+                            id
+                        )
                     }
                 }
 
