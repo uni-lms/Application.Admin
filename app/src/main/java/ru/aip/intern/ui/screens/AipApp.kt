@@ -45,8 +45,6 @@ fun AipApp(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-
-    // FIXME эта ебаная хуйня почему-то не обновляет экран после логина, из-за чего не работает нижний док
     val viewModel: StartScreenViewModel = hiltViewModel()
 
     val startScreen by viewModel.startScreen.observeAsState(Screen.Login)
