@@ -2,6 +2,7 @@ package ru.aip.intern.ui.components.notifications
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.outlined.AddComment
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.HourglassBottom
@@ -24,6 +25,7 @@ fun NotificationCard(notification: Notification, navigate: (Screen, UUID) -> Uni
                 NotificationType.Deadline -> Icons.Outlined.HourglassBottom
                 NotificationType.Meeting -> Icons.Outlined.Call
                 NotificationType.Comment -> Icons.Outlined.AddComment
+                NotificationType.Solution -> Icons.AutoMirrored.Outlined.Assignment
             }
 
             Icon(imageVector = icon, contentDescription = null)
@@ -44,6 +46,7 @@ fun NotificationCard(notification: Notification, navigate: (Screen, UUID) -> Uni
                 NotificationType.Deadline -> Screen.Assignment
                 NotificationType.Meeting -> Screen.Event
                 NotificationType.Comment -> Screen.Solution
+                NotificationType.Solution -> Screen.Solution
             }
 
             navigate(screenToGo, notification.triggerId)
