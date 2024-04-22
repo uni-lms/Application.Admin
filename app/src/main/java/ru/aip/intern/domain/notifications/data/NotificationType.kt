@@ -4,4 +4,5 @@ enum class NotificationType {
     Deadline,
     Meeting,
     Comment,
+    Solution
 }
