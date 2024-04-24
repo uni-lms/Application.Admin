@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
+import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,14 +38,14 @@ class LoginViewModel @Inject constructor(
     private val _isEmailWithError = MutableLiveData(false)
     val isEmailWithError: LiveData<Boolean> = _isEmailWithError
 
-    private val _emailErrorMessage = MutableLiveData("")
-    val emailErrorMessage: LiveData<String> = _emailErrorMessage
+    var emailErrorMessage = MutableLiveData(UiText.StringResource(R.string.empty))
+        private set
 
     private val _isPasswordWithError = MutableLiveData(false)
     val isPasswordWithError: LiveData<Boolean> = _isPasswordWithError
 
-    private val _passwordErrorMessage = MutableLiveData("")
-    val passwordErrorMessage: LiveData<String> = _passwordErrorMessage
+    var passwordErrorMessage = MutableLiveData(UiText.StringResource(R.string.empty))
+        private set
 
     private val _askedForNotificationPermission = MutableLiveData(false)
     val askedForNotificationPermission: LiveData<Boolean> = _askedForNotificationPermission
@@ -89,7 +91,7 @@ class LoginViewModel @Inject constructor(
 
         if (!validateEmail(_email.value ?: "")) {
             _isEmailWithError.value = true
-            _emailErrorMessage.value = "Некорректный формат электропочты"
+            emailErrorMessage.value = UiText.StringResource(R.string.invalid_email_format)
             FieldsValidationState.email = false
         } else {
             FieldsValidationState.email = true
@@ -97,7 +99,7 @@ class LoginViewModel @Inject constructor(
 
         if (!validatePassword(_password.value ?: "")) {
             _isPasswordWithError.value = true
-            _passwordErrorMessage.value = "Пароль не может быть пустым"
+            passwordErrorMessage.value = UiText.StringResource(R.string.password_must_not_be_empty)
             FieldsValidationState.password = false
         } else {
             FieldsValidationState.password = true
@@ -105,12 +107,12 @@ class LoginViewModel @Inject constructor(
 
         if (FieldsValidationState.email) {
             _isEmailWithError.value = false
-            _emailErrorMessage.value = ""
+            emailErrorMessage.value = UiText.StringResource(R.string.empty)
         }
 
         if (FieldsValidationState.password) {
             _isPasswordWithError.value = false
-            _passwordErrorMessage.value = ""
+            passwordErrorMessage.value = UiText.StringResource(R.string.empty)
         }
         return FieldsValidationState.email && FieldsValidationState.password
     }

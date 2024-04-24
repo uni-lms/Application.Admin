@@ -38,8 +38,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.comments.CommentTree
@@ -52,7 +54,7 @@ import java.util.UUID
 @Composable
 fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUID) -> Unit) {
 
-    title.value = "Решение"
+    title.value = stringResource(R.string.solution)
 
     val viewModel = hiltViewModel<SolutionViewModel, SolutionViewModel.Factory>(
         creationCallback = { factory -> factory.create(id) }
@@ -79,7 +81,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
 
                 },
                 headlineContent = {
-                    Text(text = "Отправлено")
+                    Text(text = stringResource(R.string.sent))
                 },
                 trailingContent = {
                     Text(
@@ -92,7 +94,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                     Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
                 },
                 headlineContent = {
-                    Text(text = "Автор")
+                    Text(text = stringResource(R.string.author))
                 },
                 trailingContent = {
                     Text(text = solutionInfo.value.author)
@@ -104,7 +106,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                         Icon(imageVector = Icons.Outlined.Link, contentDescription = null)
                     },
                     headlineContent = {
-                        Text(text = "Решение ссылкой")
+                        Text(text = stringResource(R.string.solution_as_link))
                     },
                     trailingContent = {
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
@@ -116,7 +118,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
             }
 
             if (solutionInfo.value.files.isNotEmpty()) {
-                Text(text = "Решение файлами")
+                Text(text = stringResource(R.string.solution_as_files))
             }
 
             solutionInfo.value.files.forEach {
@@ -125,7 +127,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 }
             }
 
-            Text(text = "Комментарии")
+            Text(text = stringResource(R.string.comments))
 
             CommentTree(comments = solutionInfo.value.comments) { commentId ->
                 showBottomSheet = true
@@ -141,7 +143,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                     contentDescription = null,
                     Modifier.padding(10.dp)
                 )
-                Text(text = "Оставить комментарий")
+                Text(text = stringResource(R.string.comment_send))
             }
 
             if (showBottomSheet) {
@@ -159,7 +161,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Text(
-                            text = "Отправить комментарий",
+                            text = stringResource(R.string.comment_send),
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Row(

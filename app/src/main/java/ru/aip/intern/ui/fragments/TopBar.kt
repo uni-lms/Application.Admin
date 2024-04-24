@@ -2,7 +2,7 @@ package ru.aip.intern.ui.fragments
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +34,10 @@ fun TopBar(
         navigationIcon = {
             if (canGoBack) {
                 IconButton(onClick = { goUp() }) {
-                    Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = null
+                    )
                 }
             }
         },

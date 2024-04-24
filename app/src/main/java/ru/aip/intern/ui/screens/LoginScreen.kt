@@ -31,16 +31,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.dialogs.RequestingNotificationPermissionDialog
+import ru.aip.intern.util.UiText
 import ru.aip.intern.viewmodels.LoginViewModel
 import ru.aip.intern.viewmodels.PermissionManagerViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
@@ -52,7 +55,7 @@ fun LoginScreen(
     navigateTo: (Screen) -> Unit
 ) {
 
-    title.value = "Вход в аккаунт"
+    title.value = stringResource(R.string.login)
 
     val viewModel: LoginViewModel = hiltViewModel()
     val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
@@ -71,9 +74,11 @@ fun LoginScreen(
         val password = viewModel.password.observeAsState("")
         val formEnabledState = viewModel.formEnabled.observeAsState(true)
         val isEmailWithError = viewModel.isEmailWithError.observeAsState(false)
-        val emailErrorMessage = viewModel.emailErrorMessage.observeAsState("")
+        val emailErrorMessage =
+            viewModel.emailErrorMessage.observeAsState(UiText.StringResource(R.string.empty))
         val isPasswordWithError = viewModel.isPasswordWithError.observeAsState(false)
-        val passwordErrorMessage = viewModel.passwordErrorMessage.observeAsState("")
+        val passwordErrorMessage =
+            viewModel.passwordErrorMessage.observeAsState(UiText.StringResource(R.string.empty))
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
         val refreshing = viewModel.isRefreshing.observeAsState(false)
@@ -125,12 +130,12 @@ fun LoginScreen(
                     isError = isEmailWithError.value,
                     supportingText = {
                         if (isEmailWithError.value) {
-                            Text(text = emailErrorMessage.value)
+                            Text(text = emailErrorMessage.value.asString())
                         }
                     },
                     label = {
                         Text(
-                            text = "Электропочта"
+                            text = stringResource(R.string.email)
                         )
                     }
                 )
@@ -156,13 +161,13 @@ fun LoginScreen(
                     isError = isPasswordWithError.value,
                     supportingText = {
                         if (isPasswordWithError.value) {
-                            Text(text = passwordErrorMessage.value)
+                            Text(text = passwordErrorMessage.value.asString())
                         }
                     },
                     enabled = formEnabledState.value,
                     label = {
                         Text(
-                            text = "Пароль"
+                            text = stringResource(R.string.password)
                         )
                     },
                     trailingIcon = {
@@ -184,7 +189,7 @@ fun LoginScreen(
                     },
                     enabled = formEnabledState.value
                 ) {
-                    Text(text = "Войти")
+                    Text(text = stringResource(R.string.log_in))
                 }
 
 

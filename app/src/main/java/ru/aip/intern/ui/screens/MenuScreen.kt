@@ -18,7 +18,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
@@ -29,8 +31,7 @@ import ru.aip.intern.viewmodels.StartScreenViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
-    // TODO real API call to get notifications count
-    title.value = "Меню"
+    title.value = stringResource(R.string.menu)
 
     val viewModel: MenuViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()
@@ -58,7 +59,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
                 screen.icon != null && screen.position == ScreenPosition.Menu
             }.forEach { screen ->
                 ListItem(
-                    headlineContent = { Text(text = screen.title) },
+                    headlineContent = { Text(text = screen.title.asString()) },
                     leadingContent = {
                         if (screen.icon != null) {
                             Icon(screen.icon, null)
@@ -85,7 +86,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
             }
 
             ListItem(
-                headlineContent = { Text(text = "Выйти из аккаунта") },
+                headlineContent = { Text(text = stringResource(R.string.log_out)) },
                 leadingContent = {
                     Icon(Icons.AutoMirrored.Outlined.Logout, null)
                 },

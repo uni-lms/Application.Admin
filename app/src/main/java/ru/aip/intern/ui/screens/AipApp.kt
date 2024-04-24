@@ -28,7 +28,6 @@ import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
 import ru.aip.intern.viewmodels.StartScreenViewModel
 import java.util.UUID
-import kotlin.random.Random
 
 @Composable
 fun AipApp(
@@ -37,9 +36,6 @@ fun AipApp(
 ) {
 
     var showSplashScreen by remember { mutableStateOf(true) }
-
-    // TODO real API call to get notifications count
-    val hasUnreadNotifications by remember { mutableStateOf(Random.nextInt(0, 3) > 0) }
 
     val title = remember { mutableStateOf("AIP") }
 
@@ -70,9 +66,8 @@ fun AipApp(
     ConfirmExit()
 
     if (showSplashScreen) {
-        SplashScreen(onLoadingComplete = { screenName ->
+        SplashScreen(onLoadingComplete = { _ ->
             showSplashScreen = false
-
         })
     } else {
         Scaffold(
@@ -85,7 +80,7 @@ fun AipApp(
             },
             bottomBar = {
                 if (currentScreen.showBottomBar) {
-                    BottomBar(navController = navController, hasUnreadNotifications)
+                    BottomBar(navController = navController)
                 }
             },
             snackbarHost = {

@@ -23,7 +23,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.util.format
@@ -49,9 +53,11 @@ fun AssignmentScreen(
         onRefresh = { viewModel.refresh() }
     )
 
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         if (assignmentData.value.title.isEmpty()) {
-            title.value = "Задание"
+            title.value = context.getString(R.string.assignment)
         }
     }
 
@@ -73,7 +79,7 @@ fun AssignmentScreen(
                         contentDescription = null
                     )
                 },
-                headlineContent = { Text(text = "Дедлайн") },
+                headlineContent = { Text(text = stringResource(R.string.deadline)) },
                 trailingContent = {
                     Text(
                         text = assignmentData.value.deadline.format()
@@ -88,7 +94,7 @@ fun AssignmentScreen(
                             contentDescription = null
                         )
                     },
-                    headlineContent = { Text(text = "Задание файлом") },
+                    headlineContent = { Text(text = stringResource(R.string.assingment_as_file)) },
                     trailingContent = {
                         Icon(
                             imageVector = Icons.Outlined.ChevronRight,
@@ -102,7 +108,7 @@ fun AssignmentScreen(
             }
 
             if (solutionsData.value.solutions.isNotEmpty()) {
-                Text(text = "Решения")
+                Text(text = stringResource(R.string.solutions))
             }
 
             solutionsData.value.solutions.forEachIndexed { ind, it ->
@@ -111,7 +117,12 @@ fun AssignmentScreen(
                         navigate(Screen.Solution, it.id)
                     },
                     headlineContent = {
-                        Text(text = "Решение №${ind + 1}")
+                        Text(
+                            text = stringResource(
+                                R.string.solution_attempt,
+                                ind + 1
+                            )
+                        )
                     },
                     supportingContent = {
                         Text(
@@ -128,7 +139,13 @@ fun AssignmentScreen(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                                 ) {
-                                    Text(text = "${it.amountOfComments} комментариев")
+                                    Text(
+                                        text = pluralStringResource(
+                                            R.plurals.amount_of_comments,
+                                            it.amountOfComments,
+                                            it.amountOfComments
+                                        )
+                                    )
                                 }
                             }
 

@@ -21,8 +21,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.domain.events.data.CustomEventType
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.util.formatDate
@@ -49,10 +52,11 @@ fun EventScreen(
     val data = viewModel.data.observeAsState(viewModel.defaultData)
 
     val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         if (data.value.title.isEmpty()) {
-            title.value = "Событие"
+            title.value = context.getString(R.string.event)
         }
     }
 
@@ -70,7 +74,7 @@ fun EventScreen(
                         Icon(Icons.Outlined.Call, null)
                     }
                 },
-                headlineContent = { Text(text = "Тип события") },
+                headlineContent = { Text(text = stringResource(R.string.event_type)) },
                 trailingContent = { Text(data.value.type.title) }
             )
 
@@ -96,7 +100,7 @@ fun EventScreen(
                     Icon(Icons.Outlined.AccessTime, null)
                 },
                 headlineContent = {
-                    Text(text = "Время")
+                    Text(text = stringResource(R.string.time))
                 },
                 trailingContent = {
                     Text(text = "${data.value.startTimestamp.formatTime()} — ${data.value.endTimestamp.formatTime()}")
@@ -109,7 +113,7 @@ fun EventScreen(
                         Icon(Icons.Outlined.Link, null)
                     },
                     headlineContent = {
-                        Text(text = "Ссылка")
+                        Text(text = stringResource(R.string.link))
                     },
                     trailingContent = {
                         Icon(Icons.Outlined.ChevronRight, null)

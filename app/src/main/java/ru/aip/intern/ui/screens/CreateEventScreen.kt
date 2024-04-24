@@ -42,8 +42,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.domain.calendar.data.EventType
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -65,7 +67,7 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
-    title.value = "Запланировать событие"
+    title.value = stringResource(R.string.create_event)
 
     val viewModel: CreateEventViewModel = hiltViewModel()
     val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
@@ -95,7 +97,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             TextField(
-                label = "Название события",
+                label = stringResource(R.string.event_title),
                 icon = Icons.Outlined.Edit,
                 value = eventTitle
             ) {
@@ -103,7 +105,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             }
 
             TextField(
-                label = "Ссылка на событие",
+                label = stringResource(R.string.event_link),
                 icon = Icons.Outlined.Link,
                 value = eventLink
             ) {
@@ -112,7 +114,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             SingleValueDisplay(
                 icon = Icons.Outlined.CalendarMonth,
-                title = "Дата события",
+                title = stringResource(R.string.event_date),
                 value = datePickerState.selectedDateMillis.epochDateToNullableString()
             ) {
                 showDatePicker = true
@@ -120,7 +122,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             DoubleValueDisplay(
                 icon = Icons.Outlined.AccessTime,
-                title = "Время события",
+                title = stringResource(R.string.event_time),
                 leftValue = Pair(startTimePickerState.hour, startTimePickerState.minute)
                     .formatTimeFromPair(
                         context
@@ -144,7 +146,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.School,
-                title = "Стажировки",
+                title = stringResource(R.string.internships),
                 items = eventCreatingInfo.internships.toComboBoxItemList({ it.id }, { it.name })
             ) {
                 selectedInternships.clear()
@@ -153,7 +155,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.PeopleOutline,
-                title = "Преподаватели",
+                title = stringResource(R.string.tutors),
                 items = eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
             ) {
                 selectedUsers.clear()
@@ -162,8 +164,9 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             SingleSelectComboBox(
                 icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
-                title = "Тип события",
-                items = EventType.entries.filter { it.name != "Deadline" }.mapIndexed { ind, item ->
+                title = stringResource(R.string.event_type),
+                items = EventType.entries.filter { it.name != EventType.Deadline.name }
+                    .mapIndexed { ind, item ->
                     ComboBoxItem(ind + 1, item.label)
                 }
             ) {
@@ -189,7 +192,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
                         TimeZone.getDefault().toZoneId()
                     ) { screen, id -> navigate(screen, id) }
                 }) {
-                    Text(text = "Создать")
+                    Text(text = stringResource(R.string.create))
                 }
             }
 
@@ -198,12 +201,12 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
                     onDismissRequest = { showDatePicker = false },
                     confirmButton = {
                         TextButton(onClick = { showDatePicker = false }) {
-                            Text("Выбрать")
+                            Text(stringResource(R.string.select))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showDatePicker = false }) {
-                            Text("Отменить")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 ) {
@@ -213,16 +216,15 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             if (showStartTimePicker) {
                 TimePickerDialog(
-                    title = "Выберите время",
                     onDismissRequest = { showStartTimePicker = false },
                     confirmButton = {
                         TextButton(onClick = { showStartTimePicker = false }) {
-                            Text("Выбрать")
+                            Text(stringResource(R.string.select))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showStartTimePicker = false }) {
-                            Text("Отменить")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 ) {
@@ -237,16 +239,15 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
             if (showEndTimePicker) {
                 TimePickerDialog(
-                    title = "Выберите время",
                     onDismissRequest = { showEndTimePicker = false },
                     confirmButton = {
                         TextButton(onClick = { showEndTimePicker = false }) {
-                            Text("Выбрать")
+                            Text(stringResource(R.string.select))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showEndTimePicker = false }) {
-                            Text("Отменить")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 ) {

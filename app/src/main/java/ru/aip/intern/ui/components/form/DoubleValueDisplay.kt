@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.aip.intern.R
 
 @Composable
 fun DoubleValueDisplay(
@@ -54,7 +56,7 @@ fun DoubleValueDisplay(
                     .clickable { onLeftClick() }
                     .weight(8f)
             ) {
-                Text(text = if (leftValue.isNullOrBlank()) "Выберите…" else leftValue)
+                Text(text = if (leftValue.isNullOrBlank()) stringResource(R.string.choose) else leftValue)
             }
 
             divider()
@@ -70,7 +72,7 @@ fun DoubleValueDisplay(
                     .clickable { onRightClick() }
                     .weight(8f)
             ) {
-                Text(text = if (rightValue.isNullOrBlank()) "Выберите…" else rightValue)
+                Text(text = if (rightValue.isNullOrBlank()) stringResource(R.string.choose) else rightValue)
             }
         }
     }

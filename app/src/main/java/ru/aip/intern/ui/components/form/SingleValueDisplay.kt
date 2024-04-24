@@ -15,7 +15,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.aip.intern.R
 
 @Composable
 fun SingleValueDisplay(
@@ -46,11 +48,11 @@ fun SingleValueDisplay(
                     .clickable { onButtonClick() }
                     .weight(8f)
             ) {
-                Text(text = if (value.isNullOrBlank()) "Выберите…" else value)
+                Text(text = if (value.isNullOrBlank()) stringResource(R.string.choose) else value)
             }
 
             TextButton(onClick = onButtonClick, Modifier.weight(2f)) {
-                Text(text = "Выбрать")
+                Text(text = stringResource(R.string.choose))
             }
 
         }

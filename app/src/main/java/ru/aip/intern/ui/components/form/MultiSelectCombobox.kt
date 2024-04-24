@@ -31,7 +31,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.aip.intern.R
 
 @Composable
 fun <TId> MultiSelectComboBox(
@@ -43,13 +45,14 @@ fun <TId> MultiSelectComboBox(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<ComboBoxItem<TId>>() }
+    val chooseLabel = stringResource(R.string.choose)
     var textBoxText by remember {
-        mutableStateOf("Выбрать…")
+        mutableStateOf(chooseLabel)
     }
 
     fun updateText() {
         textBoxText = if (selectedItems.isEmpty()) {
-            "Выберите…"
+            chooseLabel
         } else {
             selectedItems.joinToString(", ") { it.name }
         }
@@ -110,7 +113,7 @@ fun <TId> MultiSelectComboBox(
                             }
                         }
                     } else {
-                        Text(text = "Выберите…")
+                        Text(text = chooseLabel)
                     }
 
 

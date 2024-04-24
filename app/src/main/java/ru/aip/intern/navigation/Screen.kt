@@ -6,75 +6,77 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.ui.graphics.vector.ImageVector
+import ru.aip.intern.R
+import ru.aip.intern.util.UiText
 
 enum class Screen(
-    val title: String,
+    val title: UiText,
     val canGoBack: Boolean = false,
     val showBottomBar: Boolean = true,
     val icon: ImageVector? = null,
     val position: ScreenPosition? = null
 ) {
     Login(
-        title = "Вход",
+        title = UiText.StringResource(R.string.login),
         canGoBack = false,
         showBottomBar = false,
     ),
     Internships(
-        title = "Стажировки",
+        title = UiText.StringResource(R.string.internships),
         canGoBack = false,
         icon = Icons.AutoMirrored.Outlined.LibraryBooks,
         position = ScreenPosition.BottomBar,
     ),
     Internship(
-        title = "Стажировка",
+        title = UiText.StringResource(R.string.internship),
         canGoBack = true,
         icon = null,
         position = null,
     ),
     Calendar(
-        title = "Календарь",
+        title = UiText.StringResource(R.string.calendar),
         canGoBack = false,
         icon = Icons.Outlined.CalendarMonth,
         position = ScreenPosition.BottomBar
     ),
     Menu(
-        title = "Меню",
+        title = UiText.StringResource(R.string.menu),
         canGoBack = false,
         icon = Icons.Outlined.Menu,
         position = ScreenPosition.BottomBar
     ),
     Notifications(
-        title = "Уведомления",
+        title = UiText.StringResource(R.string.notifications),
         canGoBack = true,
         icon = Icons.Outlined.Notifications,
         position = ScreenPosition.Menu
     ),
     File(
-        title = "Файл",
+        title = UiText.StringResource(R.string.file),
         canGoBack = true,
         icon = null,
         position = null
     ),
     Assignment(
-        title = "Задание",
+        title = UiText.StringResource(R.string.assignment),
         canGoBack = true,
         icon = null,
         position = null
     ),
     Solution(
-        title = "Решение",
+        title = UiText.StringResource(R.string.solution),
         canGoBack = true,
         icon = null,
         position = null
     ),
     Event(
-        title = "Событие",
+        title = UiText.StringResource(R.string.event),
         canGoBack = true,
         icon = null,
         position = null
     ),
     CreateEvent(
-        title = "Создать событие",
+        title = UiText.StringResource(R.string.create_event),
         canGoBack = true,
         icon = null,
         position = null

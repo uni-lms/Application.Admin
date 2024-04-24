@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
@@ -54,6 +55,7 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.domain.calendar.data.DeadlineEvent
 import ru.aip.intern.domain.calendar.data.MeetingEvent
 import ru.aip.intern.navigation.Screen
@@ -165,7 +167,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                                 imageVector = Icons.Outlined.ChevronLeft,
                                 contentDescription = null
                             )
-                            Text(text = "В прошлое")
+                            Text(text = stringResource(R.string.go_to_the_past))
                         }
                     }
                     Button(
@@ -179,7 +181,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "В будущее")
+                            Text(text = stringResource(R.string.go_to_the_future))
                             Icon(
                                 imageVector = Icons.Outlined.ChevronRight,
                                 contentDescription = null
@@ -200,7 +202,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                             imageVector = Icons.Outlined.EditCalendar,
                             contentDescription = null
                         )
-                        Text(text = "Запланировать событие")
+                        Text(text = stringResource(R.string.create_event))
                     }
                 }
             }
@@ -221,7 +223,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
             onDismissRequest = onModalDismiss,
             confirmButton = {
                 TextButton(onClick = onModalDismiss) {
-                    Text(text = "Закрыть")
+                    Text(text = stringResource(R.string.close))
                 }
             },
             title = {
@@ -241,7 +243,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                     if (dayEvents.value.events.isEmpty() && dayRefreshing.value.not()) {
                         Icon(Icons.Outlined.Inbox, null, modifier = Modifier.size(30.dp))
                         Text(
-                            text = "Нет событий",
+                            text = stringResource(R.string.no_events),
                             style = MaterialTheme.typography.titleMedium
                         )
                     } else {

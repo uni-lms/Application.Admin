@@ -21,7 +21,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.viewmodels.FileViewModel
 import java.util.Locale
@@ -58,7 +60,7 @@ fun FileScreen(
                         contentDescription = null
                     )
                 },
-                headlineContent = { Text(text = "Размер файла") },
+                headlineContent = { Text(text = stringResource(R.string.file_size)) },
                 trailingContent = { Text(text = fileData.value.fileSize) }
             )
             ListItem(
@@ -68,7 +70,7 @@ fun FileScreen(
                         contentDescription = null
                     )
                 },
-                headlineContent = { Text(text = "Тип файла") },
+                headlineContent = { Text(text = stringResource(R.string.file_type)) },
                 trailingContent = {
                     Text(
                         text = "Документ ${
@@ -86,7 +88,7 @@ fun FileScreen(
                         viewModel.downloadFile()
                     }
                 ) {
-                    Text(text = "Скачать файл")
+                    Text(text = stringResource(R.string.file_download))
                 }
             }
 

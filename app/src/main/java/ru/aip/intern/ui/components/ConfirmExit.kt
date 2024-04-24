@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import ru.aip.intern.R
 
 @Composable
 fun ConfirmExit() {
@@ -18,7 +19,10 @@ fun ConfirmExit() {
     BackHandler {
         val currentBackPressTime = System.currentTimeMillis()
         if (currentBackPressTime - lastBackPressTime > 2000) { // 2 seconds
-            Toast.makeText(context, "Нажмите ещё раз чтобы выйти", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.tap_back_again_to_exit), Toast.LENGTH_SHORT
+            ).show()
             lastBackPressTime = currentBackPressTime
         } else {
             (context as? Activity)?.finish()

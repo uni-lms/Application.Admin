@@ -13,7 +13,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.notifications.NotificationCard
@@ -24,7 +26,7 @@ import java.util.UUID
 @Composable
 fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
 
-    title.value = "Уведомления"
+    title.value = stringResource(R.string.notifications)
 
     val viewModel = hiltViewModel<NotificationsViewModel>()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
@@ -45,7 +47,7 @@ fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) ->
             if (data.value.notifications.isNotEmpty()) {
                 Column {
                     if (unreadNotifications.isNotEmpty()) {
-                        Text(text = "Непрочитанные")
+                        Text(text = stringResource(R.string.unread))
 
                         unreadNotifications.forEach {
                             NotificationCard(notification = it, navigate)
