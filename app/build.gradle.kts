@@ -104,10 +104,10 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     val ktorVersion = "2.3.9"
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.03.00"))
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -117,7 +117,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.dagger:hilt-android:2.51.1")
@@ -127,7 +127,7 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata")
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
 
     implementation("com.kizitonwose.calendar:compose:2.5.0")
 
