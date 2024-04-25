@@ -14,7 +14,7 @@ enum class Screen(
     val canGoBack: Boolean = false,
     val showBottomBar: Boolean = true,
     val icon: ImageVector? = null,
-    val position: ScreenPosition? = null
+    val position: ScreenPosition = ScreenPosition.None
 ) {
     Login(
         title = UiText.StringResource(R.string.login),
@@ -31,7 +31,7 @@ enum class Screen(
         title = UiText.StringResource(R.string.internship),
         canGoBack = true,
         icon = null,
-        position = null,
+        position = ScreenPosition.None,
     ),
     Calendar(
         title = UiText.StringResource(R.string.calendar),
@@ -55,30 +55,30 @@ enum class Screen(
         title = UiText.StringResource(R.string.file),
         canGoBack = true,
         icon = null,
-        position = null
+        position = ScreenPosition.None
     ),
     Assignment(
         title = UiText.StringResource(R.string.assignment),
         canGoBack = true,
         icon = null,
-        position = null
+        position = ScreenPosition.None
     ),
     Solution(
         title = UiText.StringResource(R.string.solution),
         canGoBack = true,
         icon = null,
-        position = null
+        position = ScreenPosition.None
     ),
     Event(
         title = UiText.StringResource(R.string.event),
         canGoBack = true,
         icon = null,
-        position = null
+        position = ScreenPosition.None
     ),
     CreateEvent(
         title = UiText.StringResource(R.string.create_event),
         canGoBack = true,
         icon = null,
-        position = null
+        position = ScreenPosition.None
     )
 }
