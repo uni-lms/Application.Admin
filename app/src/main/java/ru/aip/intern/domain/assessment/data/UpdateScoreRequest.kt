@@ -5,11 +5,10 @@ import ru.aip.intern.serialization.UuidSerializer
 import java.util.UUID
 
 @Serializable
-data class Assessment(
+data class UpdateScoreRequest(
     @Serializable(UuidSerializer::class)
-    val id: UUID,
-    val title: String,
-    val description: String?,
-    val weight: Double,
-    val score: Int?
+    val internId: UUID,
+    @Serializable(UuidSerializer::class)
+    val criterionId: UUID,
+    val score: Int
 )

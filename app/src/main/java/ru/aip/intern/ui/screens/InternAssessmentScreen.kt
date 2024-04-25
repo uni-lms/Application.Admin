@@ -3,11 +3,16 @@ package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
@@ -15,26 +20,35 @@ import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.domain.assessment.data.Assessment
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.util.UiText
 import ru.aip.intern.viewmodels.InternAssessmentViewModel
 import java.util.UUID
 
@@ -79,6 +93,9 @@ fun InternAssessmentScreen(
                         isExpanded = isExpandedMap[index] ?: false,
                         onHeaderClick = {
                             isExpandedMap[index] = !(isExpandedMap[index] ?: false)
+                        },
+                        onSaveButtonClick = { criterionId, newScore ->
+                            viewModel.updateScore(internId, criterionId, newScore)
                         }
                     )
 
@@ -97,7 +114,8 @@ fun InternAssessmentScreen(
 fun LazyListScope.section(
     data: Assessment,
     isExpanded: Boolean,
-    onHeaderClick: () -> Unit
+    onHeaderClick: () -> Unit,
+    onSaveButtonClick: (UUID, Int) -> Unit
 ) {
     item {
 
@@ -124,8 +142,58 @@ fun LazyListScope.section(
 
     if (isExpanded) {
         item {
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "hidden text")
+
+            var score by rememberSaveable { mutableStateOf((data.score ?: 0).toString()) }
+            var isScoreWithError by rememberSaveable { mutableStateOf(false) }
+            val defaultValue = UiText.DynamicText("").asString()
+            var scoreErrorMessage by rememberSaveable { mutableStateOf(defaultValue) }
+            val context = LocalContext.current
+            val keyboardController = LocalSoftwareKeyboardController.current
+
+            fun validateScore(score: Int): Boolean {
+                return score in 0..10
+            }
+
+            Column {
+
+                OutlinedTextField(
+                    value = score,
+                    onValueChange = { score = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    isError = isScoreWithError,
+                    supportingText = {
+                        if (isScoreWithError) {
+                            Text(text = scoreErrorMessage)
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(R.string.score)
+                        )
+                    }
+                )
+
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Button(onClick = {
+                        if (validateScore(score.toInt())) {
+                            isScoreWithError = false
+                            scoreErrorMessage = defaultValue
+                            keyboardController?.hide()
+                            onSaveButtonClick(data.id, score.toInt())
+                        } else {
+                            isScoreWithError = true
+                            scoreErrorMessage =
+                                UiText.StringResource(R.string.score_out_of_range).asString(context)
+                        }
+                    }) {
+                        Text(text = stringResource(R.string.save))
+                    }
+                }
             }
         }
     }

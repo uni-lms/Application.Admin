@@ -10,11 +10,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.assessment.data.InternAssessment
 import ru.aip.intern.domain.assessment.service.AssessmentService
+import ru.aip.intern.snackbar.SnackbarMessageHandler
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = InternAssessmentViewModel.Factory::class)
 class InternAssessmentViewModel @AssistedInject constructor(
     private val assessmentService: AssessmentService,
+    private val snackbarMessageHandler: SnackbarMessageHandler,
     @Assisted id: UUID
 ) : ViewModel() {
 
@@ -41,6 +43,24 @@ class InternAssessmentViewModel @AssistedInject constructor(
 
             if (response.isSuccess) {
                 internData.value = response.value!!
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            isRefreshing.value = false
+        }
+    }
+
+    fun updateScore(internId: UUID, criterionId: UUID, newScore: Int) {
+        viewModelScope.launch {
+            isRefreshing.value = true
+
+            val response = assessmentService.updateScore(internId, criterionId, newScore)
+
+            if (response.isSuccess) {
+                snackbarMessageHandler.postMessage("Успешно обновлено")
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
             isRefreshing.value = false

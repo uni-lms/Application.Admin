@@ -64,4 +64,7 @@
     <string name="allow">Разрешить</string>
     <string name="decline">Запретить</string>
     <string name="interns_assessment">Оценивание стажёров</string>
+    <string name="save">Сохранить</string>
+    <string name="score">Оценка</string>
+    <string name="score_out_of_range">Оценка должна находиться в диапазоне 0..10</string>
 </resources>
