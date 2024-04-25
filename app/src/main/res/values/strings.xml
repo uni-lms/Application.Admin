@@ -63,4 +63,5 @@
     <string name="sending_notifications_description_if_permanently_declined">Приложению нужно разрешение для отправки уведомлений о предстоящих событиях. Перейдите в настройки, чтобы дать это разрешение вручную</string>
     <string name="allow">Разрешить</string>
     <string name="decline">Запретить</string>
+    <string name="interns_assessment">Оценивание стажёров</string>
 </resources>
