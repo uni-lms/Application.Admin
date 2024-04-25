@@ -40,9 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
+import ru.aip.intern.permissions.NotificationsPermissionsTextProvider
+import ru.aip.intern.permissions.PermissionDialog
 import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.ui.dialogs.RequestingNotificationPermissionDialog
 import ru.aip.intern.util.UiText
 import ru.aip.intern.viewmodels.LoginViewModel
 import ru.aip.intern.viewmodels.PermissionManagerViewModel
@@ -203,8 +204,9 @@ fun LoginScreen(
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (notificationPermissionDialogStatus.value) {
-                    RequestingNotificationPermissionDialog(
-                        onDismissRequest = { },
+                    PermissionDialog(
+                        NotificationsPermissionsTextProvider(),
+                        onDismiss = { },
                         onConfirmation = {
                             notificationPermissionDialogStatus.value = false
                             permissionsViewModel.requestPermission(

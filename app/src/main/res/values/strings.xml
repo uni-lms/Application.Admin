@@ -58,4 +58,9 @@
     <string name="file">Файл</string>
     <string name="invalid_email_format">Некорректный формат электропочты</string>
     <string name="password_must_not_be_empty">Пароль не может быть пустым</string>
+    <string name="sending_notifications">Отправка уведомлений</string>
+    <string name="sending_notifications_description">Приложение может отправлять уведомления о предстоящих событиях. Нажмите разрешить, чтобы предоставить ему доступ к отправке уведомлений</string>
+    <string name="sending_notifications_description_if_permanently_declined">Приложению нужно разрешение для отправки уведомлений о предстоящих событиях. Перейдите в настройки, чтобы дать это разрешение вручную</string>
+    <string name="allow">Разрешить</string>
+    <string name="decline">Запретить</string>
 </resources>
