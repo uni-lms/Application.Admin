@@ -32,7 +32,7 @@ import java.util.UUID
 fun InternshipScreen(
     title: MutableState<String>,
     internshipId: UUID,
-    goToScreen: (Screen, UUID?) -> Unit
+    goToScreen: (Screen, UUID) -> Unit
 ) {
 
     val viewModel = hiltViewModel<InternshipViewModel, InternshipViewModel.Factory>(
@@ -81,7 +81,7 @@ fun InternshipScreen(
             }
 
             if (userRole != UserRole.Intern) {
-                Button(onClick = { goToScreen(Screen.InternsAssessment, null) }) {
+                Button(onClick = { goToScreen(Screen.InternsAssessment, internshipId) }) {
                     Text(text = stringResource(R.string.interns_assessment))
                 }
             }

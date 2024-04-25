@@ -181,6 +181,18 @@ fun AipApp(
                         goToScreen(navController, screen, id)
                     }
                 }
+
+                composable("${Screen.InternsAssessment.name}/{id}") {
+                    val internshipId = backStackEntry?.arguments?.getString("id")
+                    if (internshipId != null) {
+                        InternsAssessmentScreen(
+                            title,
+                            UUID.fromString(internshipId)
+                        ) { screen, id ->
+                            goToScreen(navController, screen, id)
+                        }
+                    }
+                }
             }
         }
     }
