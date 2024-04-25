@@ -55,7 +55,7 @@ fun InternsAssessmentScreen(
                             Text(text = it.internName)
                         },
                         modifier = Modifier.clickable {
-                            navigate(Screen.InternAssessment, null)
+                            navigate(Screen.InternAssessment, it.id)
                         }
                     )
                 }
