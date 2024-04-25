@@ -10,6 +10,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.internships.data.Content
+import ru.aip.intern.domain.internships.data.UserRole
 import ru.aip.intern.domain.internships.service.InternshipsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import java.util.UUID
@@ -33,6 +34,9 @@ class InternshipViewModel @AssistedInject constructor(
     private val _internshipData = MutableLiveData(Content(title = "", sections = emptyList()))
     val internshipData: LiveData<Content> = _internshipData
 
+    var userRole = MutableLiveData(UserRole.Intern)
+        private set
+
     init {
         refresh(id)
     }
@@ -47,6 +51,14 @@ class InternshipViewModel @AssistedInject constructor(
                 _internshipData.value = response.value!!
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            val userRoleResponse = internshipsService.getRole(id)
+
+            if (userRoleResponse.isSuccess) {
+                userRole.value = userRoleResponse.value!!.name
+            } else {
+                snackbarMessageHandler.postMessage(userRoleResponse.errorMessage!!)
             }
 
             _isRefreshing.value = false
