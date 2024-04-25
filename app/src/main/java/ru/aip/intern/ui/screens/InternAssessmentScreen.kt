@@ -141,7 +141,7 @@ fun LazyListScope.section(
     if (isExpanded) {
         item {
 
-            var score by rememberSaveable { mutableStateOf((data.score ?: 0).toString()) }
+            var score by rememberSaveable { mutableStateOf(if (data.score == null) "" else data.score.toString()) }
             var isScoreWithError by rememberSaveable { mutableStateOf(false) }
             val defaultValue = UiText.DynamicText("").asString()
             var scoreErrorMessage by rememberSaveable { mutableStateOf(defaultValue) }
