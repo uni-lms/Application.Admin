@@ -200,9 +200,7 @@ fun AipApp(
                         InternAssessmentScreen(
                             title,
                             UUID.fromString(internId)
-                        ) { screen, id ->
-                            goToScreen(navController, screen, id)
-                        }
+                        )
                     }
                 }
             }

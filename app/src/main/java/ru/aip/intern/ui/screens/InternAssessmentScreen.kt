@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.domain.assessment.data.Assessment
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.util.UiText
 import ru.aip.intern.viewmodels.InternAssessmentViewModel
 import java.util.UUID
@@ -56,8 +55,7 @@ import java.util.UUID
 @Composable
 fun InternAssessmentScreen(
     title: MutableState<String>,
-    internId: UUID,
-    navigate: (Screen, UUID?) -> Unit
+    internId: UUID
 ) {
     title.value = stringResource(R.string.interns_assessment)
 
