@@ -31,6 +31,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ~/work/Applications/Applications
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -55,7 +56,7 @@ jobs:
 
       # Build and sign APK ("-x test" argument is used to skip tests)
       - name: Build APK
-        run: ./gradlew :app:assembleRelease -x test
+        run: ./gradlew :app:assembleRelease -x test --no-daemon
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
