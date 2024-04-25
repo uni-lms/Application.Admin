@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Altenar Internship</string>
-    <string name="empty"></string>
+    <string name="app_name" translatable="false">Altenar Internship</string>
+    <string name="empty" translatable="false"></string>
     <string name="choose">Выберите…</string>
     <string name="choose_time">Выберите время</string>
     <string name="tap_back_again_to_exit">Нажмите ещё раз чтобы выйти</string>
