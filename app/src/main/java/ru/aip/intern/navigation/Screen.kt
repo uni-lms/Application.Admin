@@ -80,5 +80,17 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = ScreenPosition.None
+    ),
+    InternsAssessment(
+        title = UiText.StringResource(R.string.interns_assessment),
+        canGoBack = true,
+        icon = null,
+        position = ScreenPosition.None
+    ),
+    InternAssessment(
+        title = UiText.StringResource(R.string.interns_assessment),
+        canGoBack = true,
+        icon = null,
+        position = ScreenPosition.None
     )
 }
