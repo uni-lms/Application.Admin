@@ -22,7 +22,10 @@ class InternshipsViewModel @Inject constructor(
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
     private val _internshipData = MutableLiveData(emptyList<Internship>())
-    val internshipData: LiveData<List<Internship>> = _internshipData
+    val enrolledInternshipData: LiveData<List<Internship>> = _internshipData
+
+    var ownedInternshipData = MutableLiveData(emptyList<Internship>())
+        private set
 
     init {
         refresh()
@@ -32,12 +35,20 @@ class InternshipsViewModel @Inject constructor(
 
         viewModelScope.launch {
             _isRefreshing.value = true
-            val response = internshipsService.getEnrolled()
+            val enrolledResponse = internshipsService.getEnrolled()
 
-            if (response.isSuccess) {
-                _internshipData.value = response.value!!
+            if (enrolledResponse.isSuccess) {
+                _internshipData.value = enrolledResponse.value!!
             } else {
-                snackbarMessageHandler.postMessage(response.errorMessage!!)
+                snackbarMessageHandler.postMessage(enrolledResponse.errorMessage!!)
+            }
+
+            val ownedResponse = internshipsService.getOwned()
+
+            if (ownedResponse.isSuccess) {
+                _internshipData.value = ownedResponse.value!!
+            } else {
+                snackbarMessageHandler.postMessage(ownedResponse.errorMessage!!)
             }
 
             _isRefreshing.value = false

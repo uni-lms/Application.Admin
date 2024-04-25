@@ -28,7 +28,8 @@ fun InternshipsScreen(
 
     val viewModel: InternshipsViewModel = hiltViewModel()
     val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val internshipData = viewModel.internshipData.observeAsState(emptyList())
+    val enrolledInternshipData = viewModel.enrolledInternshipData.observeAsState(emptyList())
+    val ownedInternshipData = viewModel.ownedInternshipData.observeAsState(emptyList())
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
@@ -39,7 +40,12 @@ fun InternshipsScreen(
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            internshipData.value.forEach {
+            enrolledInternshipData.value.forEach {
+                InternshipCard(internship = it) { id ->
+                    goToScreen(Screen.Internship, id)
+                }
+            }
+            ownedInternshipData.value.forEach {
                 InternshipCard(internship = it) { id ->
                     goToScreen(Screen.Internship, id)
                 }
