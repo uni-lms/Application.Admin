@@ -9,6 +9,7 @@ import io.ktor.http.HttpMethod
 import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.internships.data.Content
 import ru.aip.intern.domain.internships.data.Internship
+import ru.aip.intern.domain.internships.data.Role
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.networking.Response
 import ru.aip.intern.networking.safeRequest
@@ -48,6 +49,19 @@ class InternshipsService @Inject constructor(private val authManager: AuthManage
         return httpClient.safeRequest {
             method = HttpMethod.Get
             url("/content/${id}")
+            accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
+
+    suspend fun getRole(id: UUID): Response<Role> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Get
+            url("/internships/${id}/role")
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, authHeaderValue)
