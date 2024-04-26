@@ -8,7 +8,10 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import ru.aip.intern.domain.content.quiz.QuizInfo
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import java.time.Duration
+import java.time.LocalDateTime
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = QuizViewModel.Factory::class)
@@ -25,7 +28,16 @@ class QuizViewModel @AssistedInject constructor(
     var isRefreshing = MutableStateFlow(false)
         private set
 
-    var data = MutableStateFlow(false)
+    var data = MutableStateFlow(
+        QuizInfo(
+            UUID.randomUUID(),
+            title = "",
+            null,
+            allowedAttempts = 1,
+            availableUntil = LocalDateTime.now(),
+            timeLimit = Duration.ZERO
+        )
+    )
         private set
 
     init {
