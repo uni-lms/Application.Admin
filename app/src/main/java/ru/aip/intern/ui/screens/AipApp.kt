@@ -203,6 +203,18 @@ fun AipApp(
                         )
                     }
                 }
+
+                composable("${Screen.Quiz.name}/{id}") {
+                    val quizId = backStackEntry?.arguments?.getString("id")
+                    if (quizId != null) {
+                        QuizScreen(
+                            title,
+                            UUID.fromString(quizId)
+                        ) { screen, id ->
+                            goToScreen(navController, screen, id)
+                        }
+                    }
+                }
             }
         }
     }

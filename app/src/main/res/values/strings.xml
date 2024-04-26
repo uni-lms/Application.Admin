@@ -67,4 +67,5 @@
     <string name="save">Сохранить</string>
     <string name="score">Оценка</string>
     <string name="score_out_of_range">Оценка должна находиться в диапазоне 0..10</string>
+    <string name="quiz">Тест</string>
 </resources>

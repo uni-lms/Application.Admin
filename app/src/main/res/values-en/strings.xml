@@ -63,4 +63,5 @@
     <string name="save">Save</string>
     <string name="score">Score</string>
     <string name="score_out_of_range">Score must be in range of 0..10</string>
+    <string name="quiz">Quiz</string>
 </resources>

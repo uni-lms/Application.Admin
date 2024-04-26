@@ -5,6 +5,7 @@ import ru.aip.intern.domain.internships.data.AssignmentContentItem
 import ru.aip.intern.domain.internships.data.BaseContentItem
 import ru.aip.intern.domain.internships.data.FileContentItem
 import ru.aip.intern.domain.internships.data.LinkContentItem
+import ru.aip.intern.domain.internships.data.QuizContentItem
 import ru.aip.intern.domain.internships.data.TextContentItem
 import ru.aip.intern.navigation.Screen
 import java.util.UUID
@@ -30,4 +31,11 @@ fun ContentCard(content: BaseContentItem, navigate: (Screen, UUID) -> Unit) {
             navigate(Screen.Assignment, id)
         }
     }
+
+    if (content is QuizContentItem) {
+        QuizContentCard(content = content) { id ->
+            navigate(Screen.Quiz, id)
+        }
+    }
+
 }
