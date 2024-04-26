@@ -13,8 +13,8 @@ import java.util.UUID
 
 @HiltViewModel(assistedFactory = QuizViewModel.Factory::class)
 class QuizViewModel @AssistedInject constructor(
-    snackbarMessageHandler: SnackbarMessageHandler,
-    @Assisted id: UUID
+    private val snackbarMessageHandler: SnackbarMessageHandler,
+    @Assisted private val id: UUID
 ) : ViewModel() {
 
     @AssistedFactory
