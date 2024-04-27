@@ -64,4 +64,6 @@
     <string name="score">Score</string>
     <string name="score_out_of_range">Score must be in range of 0..10</string>
     <string name="quiz">Quiz</string>
+    <string name="token_has_expired">Token has expired</string>
+    <string name="meeting">Meeting</string>
 </resources>

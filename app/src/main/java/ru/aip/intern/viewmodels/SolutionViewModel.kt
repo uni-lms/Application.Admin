@@ -1,18 +1,18 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.content.assignment.data.SolutionInfo
 import ru.aip.intern.domain.content.assignment.service.AssignmentService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import java.time.LocalDateTime
+import ru.aip.intern.ui.state.SolutionState
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = SolutionViewModel.Factory::class)
@@ -27,22 +27,8 @@ class SolutionViewModel @AssistedInject constructor(
         fun create(id: UUID): SolutionViewModel
     }
 
-    val defaultSolution = SolutionInfo(
-        author = "",
-        createdAt = LocalDateTime.now(),
-        link = null,
-        files = emptyList(),
-        comments = emptyList()
-    )
-
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    private val _solutionData = MutableLiveData(defaultSolution)
-    val solutionData: LiveData<SolutionInfo> = _solutionData
-
-    private val _commentText = MutableLiveData("")
-    val commentText: LiveData<String> = _commentText
+    private val _state = MutableStateFlow(SolutionState())
+    val state = _state.asStateFlow()
 
     init {
         refresh()
@@ -51,29 +37,49 @@ class SolutionViewModel @AssistedInject constructor(
     fun refresh() {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val response = assignmentService.getSolution(id)
 
             if (response.isSuccess) {
-                _solutionData.value = response.value!!
+                _state.update {
+                    it.copy(
+                        solutionInfo = response.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 
     fun updateCommentText(newText: String) {
-        _commentText.value = newText
+        _state.update {
+            it.copy(
+                commentText = newText
+            )
+        }
     }
 
     fun createComment(replyToCommentId: UUID?) {
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
 
             val response =
-                assignmentService.createComment(id, _commentText.value!!, replyToCommentId)
+                assignmentService.createComment(id, _state.value.commentText, replyToCommentId)
 
             if (response.isSuccess) {
                 refresh()
@@ -82,7 +88,11 @@ class SolutionViewModel @AssistedInject constructor(
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 

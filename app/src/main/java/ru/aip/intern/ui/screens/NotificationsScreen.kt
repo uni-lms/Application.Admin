@@ -10,7 +10,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,14 +30,14 @@ fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) ->
     title.value = stringResource(R.string.notifications)
 
     val viewModel = hiltViewModel<NotificationsViewModel>()
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val data = viewModel.data.observeAsState(viewModel.defaultContent)
 
-    val unreadNotifications = data.value.notifications.filter { !it.isRead }
-    val readNotifications = data.value.notifications.filter { it.isRead }
+    val state by viewModel.state.collectAsState()
+
+    val unreadNotifications = state.notificationsData.notifications.filter { !it.isRead }
+    val readNotifications = state.notificationsData.notifications.filter { it.isRead }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
@@ -44,7 +45,7 @@ fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) ->
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
 
-            if (data.value.notifications.isNotEmpty()) {
+            if (state.notificationsData.notifications.isNotEmpty()) {
                 Column {
                     if (unreadNotifications.isNotEmpty()) {
                         Text(text = stringResource(R.string.unread))
@@ -67,7 +68,7 @@ fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) ->
             }
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

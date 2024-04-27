@@ -15,13 +15,13 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.ui.components.BaseScreen
@@ -35,12 +35,11 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
 
     val viewModel: MenuViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val whoami = viewModel.whoamiData.observeAsState(WhoamiResponse(email = "", fullName = ""))
-    val unreadNotificationsCount = viewModel.unreadNotificationsCount.observeAsState(0)
+
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
@@ -48,8 +47,8 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
         BaseScreen {
 
             ListItem(
-                headlineContent = { Text(text = whoami.value.fullName) },
-                supportingContent = { Text(text = whoami.value.email) },
+                headlineContent = { Text(text = state.whoAmIData.fullName) },
+                supportingContent = { Text(text = state.whoAmIData.email) },
                 leadingContent = {
                     Icon(Icons.Outlined.Person, null)
                 }
@@ -66,9 +65,9 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
                         }
                     },
                     trailingContent = {
-                        if (screen == Screen.Notifications && unreadNotificationsCount.value > 0) {
+                        if (screen == Screen.Notifications && state.notificationsCount > 0) {
                             Badge {
-                                Text(text = unreadNotificationsCount.value.toString())
+                                Text(text = state.notificationsCount.toString())
                             }
                         }
                     },
@@ -99,7 +98,7 @@ fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

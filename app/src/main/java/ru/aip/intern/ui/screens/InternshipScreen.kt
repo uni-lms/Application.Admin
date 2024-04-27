@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -19,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.domain.internships.data.Content
 import ru.aip.intern.domain.internships.data.UserRole
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
@@ -38,35 +38,34 @@ fun InternshipScreen(
     val viewModel = hiltViewModel<InternshipViewModel, InternshipViewModel.Factory>(
         creationCallback = { factory -> factory.create(internshipId) }
     )
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val internshipData =
-        viewModel.internshipData.observeAsState(Content(title = "", sections = emptyList()))
+
+    val state by viewModel.state.collectAsState()
 
     val userRole by viewModel.userRole.observeAsState(UserRole.Intern)
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(internshipId) }
     )
     val context = LocalContext.current
 
 
     LaunchedEffect(Unit) {
-        if (internshipData.value.title.isEmpty()) {
+        if (state.contentData.title.isEmpty()) {
             title.value = context.getString(R.string.internship)
         }
     }
 
-    LaunchedEffect(internshipData.value.title) {
-        if (internshipData.value.title.isNotEmpty()) {
-            title.value = internshipData.value.title
+    LaunchedEffect(state.contentData.title) {
+        if (state.contentData.title.isNotEmpty()) {
+            title.value = state.contentData.title
         }
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
 
-            internshipData.value.sections.forEach { section ->
+            state.contentData.sections.forEach { section ->
                 if (section.items.isNotEmpty()) {
                     Text(
                         text = section.name,
@@ -88,7 +87,7 @@ fun InternshipScreen(
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

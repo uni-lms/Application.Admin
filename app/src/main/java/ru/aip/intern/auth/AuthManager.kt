@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class AuthManager @Inject constructor(private val dataStoreRepository: DataStoreRepository) {
 
-    private suspend fun getCurrentToken(): String {
+    suspend fun getCurrentToken(): String {
         return dataStoreRepository.apiKey.first() ?: ""
     }
 

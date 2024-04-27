@@ -7,11 +7,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -35,15 +34,14 @@ fun AipApp(
     snackbarMessageHandler: SnackbarMessageHandler
 ) {
 
-    var showSplashScreen by remember { mutableStateOf(true) }
-
     val title = remember { mutableStateOf("AIP") }
 
     val snackbarHostState = remember { SnackbarHostState() }
 
     val viewModel: StartScreenViewModel = hiltViewModel()
 
-    val startScreen by viewModel.startScreen.observeAsState(Screen.Login)
+    val state by viewModel.state.collectAsState()
+
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val route = backStackEntry?.destination?.route
@@ -54,7 +52,7 @@ fun AipApp(
         route
     }
 
-    val currentScreen = Screen.valueOf(screenName ?: startScreen.name)
+    val currentScreen = Screen.valueOf(screenName ?: state.startScreen.name)
 
 
     LaunchedEffect(snackbarMessageHandler) {
@@ -65,10 +63,8 @@ fun AipApp(
 
     ConfirmExit()
 
-    if (showSplashScreen) {
-        SplashScreen(onLoadingComplete = { _ ->
-            showSplashScreen = false
-        })
+    if (state.showSplashScreen) {
+        SplashScreen()
     } else {
         Scaffold(
             topBar = {
@@ -89,7 +85,7 @@ fun AipApp(
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = startScreen.name,
+                startDestination = state.startScreen.name,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)

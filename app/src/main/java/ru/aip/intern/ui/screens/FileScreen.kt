@@ -18,7 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,16 +40,15 @@ fun FileScreen(
     val viewModel = hiltViewModel<FileViewModel, FileViewModel.Factory>(
         creationCallback = { factory -> factory.create(fileId) }
     )
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val fileData = viewModel.fileData.observeAsState(viewModel.defaultContent)
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
-    LaunchedEffect(fileData.value) {
-        title.value = fileData.value.title
+    LaunchedEffect(state.fileData) {
+        title.value = state.fileData.title
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -61,7 +61,7 @@ fun FileScreen(
                     )
                 },
                 headlineContent = { Text(text = stringResource(R.string.file_size)) },
-                trailingContent = { Text(text = fileData.value.fileSize) }
+                trailingContent = { Text(text = state.fileData.fileSize) }
             )
             ListItem(
                 leadingContent = {
@@ -74,7 +74,7 @@ fun FileScreen(
                 trailingContent = {
                     Text(
                         text = "Документ ${
-                            fileData.value.extension.uppercase(
+                            state.fileData.extension.uppercase(
                                 Locale.ROOT
                             ).replace(".", "")
                         }"
@@ -94,7 +94,7 @@ fun FileScreen(
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

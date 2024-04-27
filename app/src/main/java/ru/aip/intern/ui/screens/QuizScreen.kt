@@ -34,24 +34,24 @@ fun QuizScreen(
         hiltViewModel<QuizViewModel, QuizViewModel.Factory>(
             creationCallback = { factory -> factory.create(quizId) }
         )
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-    val quizData by viewModel.data.collectAsState()
+
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(quizId) }
     )
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        if (quizData.title.isEmpty()) {
+        if (state.quizInfo.title.isEmpty()) {
             title.value = context.getString(R.string.quiz)
         }
     }
 
-    LaunchedEffect(quizData.title) {
-        if (quizData.title.isNotEmpty()) {
-            title.value = quizData.title
+    LaunchedEffect(state.quizInfo.title) {
+        if (state.quizInfo.title.isNotEmpty()) {
+            title.value = state.quizInfo.title
         }
     }
 
@@ -61,7 +61,7 @@ fun QuizScreen(
         }
 
         PullRefreshIndicator(
-            isRefreshing,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

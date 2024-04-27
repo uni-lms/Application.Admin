@@ -20,7 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,33 +45,31 @@ fun AssignmentScreen(
     val viewModel = hiltViewModel<AssignmentViewModel, AssignmentViewModel.Factory>(
         creationCallback = { factory -> factory.create(assignmentId) }
     )
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val assignmentData = viewModel.assignmentData.observeAsState(viewModel.defaultContent)
-    val solutionsData = viewModel.solutionsData.observeAsState(viewModel.defaultSolutions)
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        if (assignmentData.value.title.isEmpty()) {
+        if (state.assignment.title.isEmpty()) {
             title.value = context.getString(R.string.assignment)
         }
     }
 
-    LaunchedEffect(assignmentData.value.title) {
-        if (assignmentData.value.title.isNotEmpty()) {
-            title.value = assignmentData.value.title
+    LaunchedEffect(state.assignment.title) {
+        if (state.assignment.title.isNotEmpty()) {
+            title.value = state.assignment.title
         }
     }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            if (assignmentData.value.description != null) {
-                Text(text = assignmentData.value.description!!)
+            if (state.assignment.description != null) {
+                Text(text = state.assignment.description!!)
             }
             ListItem(
                 leadingContent = {
@@ -82,11 +81,11 @@ fun AssignmentScreen(
                 headlineContent = { Text(text = stringResource(R.string.deadline)) },
                 trailingContent = {
                     Text(
-                        text = assignmentData.value.deadline.format()
+                        text = state.assignment.deadline.format()
                     )
                 }
             )
-            if (assignmentData.value.fileId != null) {
+            if (state.assignment.fileId != null) {
                 ListItem(
                     leadingContent = {
                         Icon(
@@ -102,16 +101,16 @@ fun AssignmentScreen(
                         )
                     },
                     modifier = Modifier.clickable {
-                        navigate(Screen.File, assignmentData.value.fileId!!)
+                        navigate(Screen.File, state.assignment.fileId!!)
                     }
                 )
             }
 
-            if (solutionsData.value.solutions.isNotEmpty()) {
+            if (state.solutions.solutions.isNotEmpty()) {
                 Text(text = stringResource(R.string.solutions))
             }
 
-            solutionsData.value.solutions.forEachIndexed { ind, it ->
+            state.solutions.solutions.forEachIndexed { ind, it ->
                 ListItem(
                     modifier = Modifier.clickable {
                         navigate(Screen.Solution, it.id)
@@ -162,7 +161,7 @@ fun AssignmentScreen(
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

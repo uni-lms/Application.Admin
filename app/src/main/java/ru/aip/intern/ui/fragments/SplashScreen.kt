@@ -12,27 +12,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.navigation.Screen
-import ru.aip.intern.viewmodels.StartScreenViewModel
 
 @Composable
-fun SplashScreen(onLoadingComplete: (Screen) -> Unit) {
-
-    val viewModel: StartScreenViewModel = hiltViewModel()
-    val startScreen by viewModel.startScreen.observeAsState()
-
-    LaunchedEffect(startScreen) {
-        startScreen?.let(onLoadingComplete)
-    }
+fun SplashScreen() {
 
     Box(
         modifier = Modifier

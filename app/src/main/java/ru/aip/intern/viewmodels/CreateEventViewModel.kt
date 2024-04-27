@@ -3,21 +3,19 @@ package ru.aip.intern.viewmodels
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePickerState
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.calendar.data.EventType
 import ru.aip.intern.domain.events.data.CreateEventRequest
-import ru.aip.intern.domain.events.data.EventCreatingInfo
-import ru.aip.intern.domain.events.data.User
 import ru.aip.intern.domain.events.service.EventsService
-import ru.aip.intern.domain.internships.data.Internship
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.state.CreateEventState
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -30,42 +28,89 @@ class CreateEventViewModel @Inject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler
 ) : ViewModel() {
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    val defaultEventCreatingInfo = EventCreatingInfo(
-        listOf(
-            Internship(UUID.randomUUID(), "fe"),
-            Internship(UUID.randomUUID(), "fvdvfc"),
-            Internship(UUID.randomUUID(), "fvewfd"),
-        ), listOf(
-            User(UUID.randomUUID(), "dvrvd"),
-            User(UUID.randomUUID(), "fdvd"),
-            User(UUID.randomUUID(), "vdsvcd"),
-        )
-    )
-
-    private val _eventCreatingInfo = MutableLiveData(defaultEventCreatingInfo)
-    val eventCreatingInfo: LiveData<EventCreatingInfo> = _eventCreatingInfo
+    private val _state = MutableStateFlow(CreateEventState())
+    val state = _state.asStateFlow()
 
     init {
         refresh()
     }
 
+    fun updateFormStateTitle(title: String) {
+        _state.update {
+            it.copy(
+                formState = it.formState.copy(
+                    title = title
+                )
+            )
+        }
+    }
+
+    fun updateFormStateLink(link: String) {
+        _state.update {
+            it.copy(
+                formState = it.formState.copy(
+                    link = link
+                )
+            )
+        }
+    }
+
+    fun updateFormStateSelectedInternships(internships: List<UUID>) {
+        _state.update {
+            it.copy(
+                formState = it.formState.copy(
+                    selectedInternships = internships
+                )
+            )
+        }
+    }
+
+    fun updateFormStateSelectedUsers(users: List<UUID>) {
+        _state.update {
+            it.copy(
+                formState = it.formState.copy(
+                    selectedUsers = users
+                )
+            )
+        }
+    }
+
+    fun updateFormStateEventType(eventType: Int) {
+        _state.update {
+            it.copy(
+                formState = it.formState.copy(
+                    selectedEventType = eventType
+                )
+            )
+        }
+    }
+
     fun refresh() {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
 
             val response = eventsService.getDataForEventCreating()
 
             if (response.isSuccess) {
-                _eventCreatingInfo.value = response.value!!
+                _state.update {
+                    it.copy(
+                        eventCreatingInfo = response.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
 
     }
@@ -89,32 +134,30 @@ class CreateEventViewModel @Inject constructor(
 
     @OptIn(ExperimentalMaterial3Api::class)
     fun createEvent(
-        eventTitle: String,
-        eventLink: String?,
         datePickerState: DatePickerState,
         startTimePickerState: TimePickerState,
         endTimePickerState: TimePickerState,
-        selectedInternships: SnapshotStateList<UUID>,
-        selectedUsers: SnapshotStateList<UUID>,
-        selectedEventType: Int?,
         userZoneId: ZoneId,
         navigate: (Screen, UUID) -> Unit
     ) {
 
 
         val request = CreateEventRequest(
-            eventTitle,
+            _state.value.formState.title,
             statesToLocalDateTime(datePickerState, startTimePickerState, userZoneId),
             statesToLocalDateTime(datePickerState, endTimePickerState, userZoneId),
-            eventLink,
-            selectedInternships.toList(),
-            selectedUsers.toList(),
-            EventType.entries[selectedEventType ?: 0].name
+            _state.value.formState.link,
+            _state.value.formState.selectedInternships,
+            _state.value.formState.selectedUsers,
+            EventType.entries[_state.value.formState.selectedEventType ?: 0].name
         )
 
         viewModelScope.launch {
-            _isRefreshing.value = true
-
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val response = eventsService.createEvent(request)
 
             if (response.isSuccess) {
@@ -123,7 +166,11 @@ class CreateEventViewModel @Inject constructor(
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
 
     }

@@ -30,8 +30,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,7 +49,6 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
@@ -65,7 +64,6 @@ import ru.aip.intern.ui.components.calendar.DaysOfWeek
 import ru.aip.intern.ui.components.calendar.events.DeadlineCard
 import ru.aip.intern.ui.components.calendar.events.MeetingCard
 import ru.aip.intern.viewmodels.CalendarViewModel
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -77,7 +75,6 @@ import java.util.UUID
 fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Unit) {
 
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
-    val daysOfWeek = daysOfWeek()
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(6) }
     val endMonth = remember { currentMonth.plusMonths(6) }
@@ -88,7 +85,6 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
         endMonth = endMonth,
         outDateStyle = OutDateStyle.EndOfGrid
     )
-    val today = remember { LocalDate.now() }
     var isDayEventsModalOpened by remember { mutableStateOf(false) }
     var selectedDay by remember { mutableStateOf<CalendarDay?>(null) }
 
@@ -98,14 +94,10 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
         creationCallback = { factory -> factory.create(visibleMonth.yearMonth) }
     )
 
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val dayRefreshing = viewModel.isDayRefreshing.observeAsState(false)
-    val data = viewModel.data.observeAsState(viewModel.defaultContent)
-
-    val dayEvents = viewModel.dayEvents.observeAsState(viewModel.defaultEvents)
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = {
             title.value = buildTitle(visibleMonth.yearMonth)
             viewModel.refresh()
@@ -131,8 +123,8 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                 dayContent = {
                     Day(
                         day = it,
-                        today = today,
-                        dayEventsOverview = data.value.days.firstOrNull { day -> day.dayOfMonth == it.date.dayOfMonth }) {
+                        today = state.today,
+                        dayEventsOverview = state.events.days.firstOrNull { day -> day.dayOfMonth == it.date.dayOfMonth }) {
                         selectedDay = it
                         isDayEventsModalOpened = true
                         viewModel.getDayEvents(it.date.dayOfMonth)
@@ -140,7 +132,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                 },
                 state = calendarState,
                 monthHeader = {
-                    DaysOfWeek(daysOfWeek = daysOfWeek)
+                    DaysOfWeek(daysOfWeek = state.daysOfWeek)
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             )
@@ -208,7 +200,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
             }
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
@@ -237,10 +229,10 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    if (dayRefreshing.value) {
+                    if (state.isDayRefreshing) {
                         CircularProgressIndicator()
                     }
-                    if (dayEvents.value.events.isEmpty() && dayRefreshing.value.not()) {
+                    if (state.dayEvents.events.isEmpty() && state.isDayRefreshing.not()) {
                         Icon(Icons.Outlined.Inbox, null, modifier = Modifier.size(30.dp))
                         Text(
                             text = stringResource(R.string.no_events),
@@ -248,7 +240,7 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
                         )
                     } else {
                         LazyColumn(modifier = Modifier.padding(3.dp)) {
-                            items(items = dayEvents.value.events, itemContent = {
+                            items(items = state.dayEvents.events, itemContent = {
                                 if (it is DeadlineEvent) {
                                     DeadlineCard(it) { screen, id ->
                                         isDayEventsModalOpened = false

@@ -11,14 +11,13 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.domain.assessment.data.InternsComparison
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.viewmodels.InternsAssessmentViewModel
@@ -38,18 +37,18 @@ fun InternsAssessmentScreen(
         hiltViewModel<InternsAssessmentViewModel, InternsAssessmentViewModel.Factory>(
             creationCallback = { factory -> factory.create(internshipId) }
         )
-    val isRefreshing by viewModel.isRefreshing.observeAsState(false)
-    val internsData by viewModel.internsData.observeAsState(InternsComparison(emptyList()))
+
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(internshipId) }
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             Column {
-                internsData.internsAssessment.forEach {
+                state.assessmentsData.internsAssessment.forEach {
                     ListItem(
                         headlineContent = {
                             Text(text = it.internName)
@@ -62,7 +61,7 @@ fun InternsAssessmentScreen(
             }
         }
         PullRefreshIndicator(
-            isRefreshing,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

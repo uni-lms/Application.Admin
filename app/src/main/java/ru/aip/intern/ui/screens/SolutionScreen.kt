@@ -30,8 +30,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,16 +60,14 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
         creationCallback = { factory -> factory.create(id) }
     )
 
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val solutionInfo = viewModel.solutionData.observeAsState(viewModel.defaultSolution)
-    val commentText = viewModel.commentText.observeAsState("")
+    val state by viewModel.state.collectAsState()
 
     val uriHandler = LocalUriHandler.current
     var showBottomSheet by remember { mutableStateOf(false) }
     var replyCommentId by remember { mutableStateOf<UUID?>(null) }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
@@ -85,7 +83,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 },
                 trailingContent = {
                     Text(
-                        text = solutionInfo.value.createdAt.format()
+                        text = state.solutionInfo.createdAt.format()
                     )
                 }
             )
@@ -97,10 +95,10 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                     Text(text = stringResource(R.string.author))
                 },
                 trailingContent = {
-                    Text(text = solutionInfo.value.author)
+                    Text(text = state.solutionInfo.author)
                 }
             )
-            if (solutionInfo.value.link != null) {
+            if (state.solutionInfo.link != null) {
                 ListItem(
                     leadingContent = {
                         Icon(imageVector = Icons.Outlined.Link, contentDescription = null)
@@ -112,16 +110,16 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
                     },
                     modifier = Modifier.clickable {
-                        uriHandler.openUri(solutionInfo.value.link!!)
+                        uriHandler.openUri(state.solutionInfo.link!!)
                     }
                 )
             }
 
-            if (solutionInfo.value.files.isNotEmpty()) {
+            if (state.solutionInfo.files.isNotEmpty()) {
                 Text(text = stringResource(R.string.solution_as_files))
             }
 
-            solutionInfo.value.files.forEach {
+            state.solutionInfo.files.forEach {
                 FileContentCard(content = it) { fileId ->
                     navigate(Screen.File, fileId)
                 }
@@ -129,7 +127,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
 
             Text(text = stringResource(R.string.comments))
 
-            CommentTree(comments = solutionInfo.value.comments) { commentId ->
+            CommentTree(comments = state.solutionInfo.comments) { commentId ->
                 showBottomSheet = true
                 replyCommentId = commentId
             }
@@ -169,7 +167,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             TextField(
-                                value = commentText.value,
+                                value = state.commentText,
                                 onValueChange = { viewModel.updateCommentText(it) },
                                 Modifier.fillMaxWidth(0.9f)
                             )
@@ -186,7 +184,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

@@ -4,8 +4,6 @@ import android.app.DownloadManager
 import android.os.Environment
 import android.util.Log
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -13,12 +11,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.http.HttpHeaders
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.auth.AuthManager
-import ru.aip.intern.domain.content.file.data.FileInfo
 import ru.aip.intern.domain.content.file.service.FileService
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.state.FileState
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = FileViewModel.Factory::class)
@@ -35,20 +36,8 @@ class FileViewModel @AssistedInject constructor(
         fun create(id: UUID): FileViewModel
     }
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    val defaultContent = FileInfo(
-        title = "",
-        fileName = "",
-        fileSize = "",
-        contentType = "",
-        extension = "",
-        id = id
-    )
-
-    private val _fileData = MutableLiveData(defaultContent)
-    val fileData: LiveData<FileInfo> = _fileData
+    private val _state = MutableStateFlow(FileState())
+    val state = _state.asStateFlow()
 
     init {
         refresh()
@@ -57,16 +46,28 @@ class FileViewModel @AssistedInject constructor(
     fun refresh() {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val response = fileService.getFileInfo(id)
 
             if (response.isSuccess) {
-                _fileData.value = response.value!!
+                _state.update {
+                    it.copy(
+                        fileData = response.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 
@@ -79,13 +80,13 @@ class FileViewModel @AssistedInject constructor(
     fun downloadFile() {
         viewModelScope.launch {
             val request = DownloadManager.Request(buildDownloadUrl().toUri())
-                .setMimeType(fileData.value?.contentType)
+                .setMimeType(_state.value.fileData.contentType)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setTitle(fileData.value?.fileName)
+                .setTitle(_state.value.fileData.fileName)
                 .addRequestHeader(HttpHeaders.Authorization, authManager.getAuthHeaderValue())
                 .setDestinationInExternalPublicDir(
                     Environment.DIRECTORY_DOWNLOADS,
-                    "AipDownloads/${fileData.value?.fileName}"
+                    "AipDownloads/${_state.value.fileData.fileName}"
                 )
 
             downloadManager.enqueue(request)

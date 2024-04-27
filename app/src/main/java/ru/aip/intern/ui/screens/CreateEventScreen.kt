@@ -32,11 +32,9 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -70,17 +68,11 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
     title.value = stringResource(R.string.create_event)
 
     val viewModel: CreateEventViewModel = hiltViewModel()
-    val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
-    var eventTitle by rememberSaveable { mutableStateOf("") }
-    var eventLink by rememberSaveable { mutableStateOf("") }
-    val selectedInternships = remember { mutableStateListOf<UUID>() }
-    val selectedUsers = remember { mutableStateListOf<UUID>() }
-    val selectedEventType = rememberSaveable { mutableStateOf<Int?>(null) }
 
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
@@ -99,17 +91,17 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             TextField(
                 label = stringResource(R.string.event_title),
                 icon = Icons.Outlined.Edit,
-                value = eventTitle
+                value = state.formState.title
             ) {
-                eventTitle = it
+                viewModel.updateFormStateTitle(it)
             }
 
             TextField(
                 label = stringResource(R.string.event_link),
                 icon = Icons.Outlined.Link,
-                value = eventLink
+                value = state.formState.link
             ) {
-                eventLink = it
+                viewModel.updateFormStateLink(it)
             }
 
             SingleValueDisplay(
@@ -147,19 +139,19 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             MultiSelectComboBox(
                 icon = Icons.Outlined.School,
                 title = stringResource(R.string.internships),
-                items = eventCreatingInfo.internships.toComboBoxItemList({ it.id }, { it.name })
+                items = state.eventCreatingInfo.internships.toComboBoxItemList(
+                    { it.id },
+                    { it.name })
             ) {
-                selectedInternships.clear()
-                selectedInternships.addAll(it)
+                viewModel.updateFormStateSelectedInternships(it)
             }
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.PeopleOutline,
                 title = stringResource(R.string.tutors),
-                items = eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
+                items = state.eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
             ) {
-                selectedUsers.clear()
-                selectedUsers.addAll(it)
+                viewModel.updateFormStateSelectedUsers(it)
             }
 
             SingleSelectComboBox(
@@ -170,7 +162,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
                     ComboBoxItem(ind + 1, item.label)
                 }
             ) {
-                selectedEventType.value = it
+                viewModel.updateFormStateEventType(it)
             }
 
             Row(
@@ -181,14 +173,9 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             ) {
                 Button(onClick = {
                     viewModel.createEvent(
-                        eventTitle,
-                        eventLink,
                         datePickerState,
                         startTimePickerState,
                         endTimePickerState,
-                        selectedInternships,
-                        selectedUsers,
-                        selectedEventType.value,
                         TimeZone.getDefault().toZoneId()
                     ) { screen, id -> navigate(screen, id) }
                 }) {
@@ -262,7 +249,7 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

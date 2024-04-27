@@ -29,8 +29,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -63,16 +63,15 @@ fun InternAssessmentScreen(
         hiltViewModel<InternAssessmentViewModel, InternAssessmentViewModel.Factory>(
             creationCallback = { factory -> factory.create(internId) }
         )
-    val isRefreshing by viewModel.isRefreshing.observeAsState(false)
-    val internData by viewModel.internData.observeAsState(viewModel.defaultContent)
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(internId) }
     )
 
     val isExpandedMap = remember {
-        List(internData.assessments.size) { index: Int -> index to false }
+        List(state.assessmentData.assessments.size) { index: Int -> index to false }
             .toMutableStateMap()
     }
 
@@ -85,7 +84,7 @@ fun InternAssessmentScreen(
                 .padding(28.dp)
         ) {
             LazyColumn {
-                internData.assessments.onEachIndexed { index, assessment ->
+                state.assessmentData.assessments.onEachIndexed { index, assessment ->
                     section(
                         data = assessment,
                         isExpanded = isExpandedMap[index] ?: false,
@@ -101,7 +100,7 @@ fun InternAssessmentScreen(
             }
         }
         PullRefreshIndicator(
-            isRefreshing,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

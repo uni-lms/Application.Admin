@@ -7,11 +7,11 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.content.quiz.QuizInfo
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import java.time.Duration
-import java.time.LocalDateTime
+import ru.aip.intern.ui.state.QuizState
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = QuizViewModel.Factory::class)
@@ -25,20 +25,8 @@ class QuizViewModel @AssistedInject constructor(
         fun create(id: UUID): QuizViewModel
     }
 
-    var isRefreshing = MutableStateFlow(false)
-        private set
-
-    var data = MutableStateFlow(
-        QuizInfo(
-            UUID.randomUUID(),
-            title = "",
-            null,
-            allowedAttempts = 1,
-            availableUntil = LocalDateTime.now(),
-            timeLimit = Duration.ZERO
-        )
-    )
-        private set
+    private val _state = MutableStateFlow(QuizState())
+    val state = _state.asStateFlow()
 
     init {
         refresh(id)
@@ -46,7 +34,19 @@ class QuizViewModel @AssistedInject constructor(
 
     fun refresh(id: UUID) {
         viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
 
+            // …
+
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 

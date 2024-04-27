@@ -7,7 +7,8 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,12 +28,10 @@ fun InternshipsScreen(
 ) {
 
     val viewModel: InternshipsViewModel = hiltViewModel()
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val enrolledInternshipData = viewModel.enrolledInternshipData.observeAsState(emptyList())
-    val ownedInternshipData = viewModel.ownedInternshipData.observeAsState(emptyList())
+    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
+        refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
 
@@ -40,19 +39,14 @@ fun InternshipsScreen(
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            enrolledInternshipData.value.forEach {
-                InternshipCard(internship = it) { id ->
-                    goToScreen(Screen.Internship, id)
-                }
-            }
-            ownedInternshipData.value.forEach {
+            state.internships.forEach {
                 InternshipCard(internship = it) { id ->
                     goToScreen(Screen.Internship, id)
                 }
             }
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
