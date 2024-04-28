@@ -8,20 +8,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.R
-import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import ru.aip.intern.storage.DataStoreRepository
 import ru.aip.intern.ui.state.StartScreenState
 import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
 class StartScreenViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository,
     private val authService: AuthService,
-    private val authManager: AuthManager,
     private val snackbarMessageHandler: SnackbarMessageHandler,
 ) :
     ViewModel() {

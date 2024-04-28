@@ -23,8 +23,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSnackbarMessageHandler(): SnackbarMessageHandler {
-        return SnackbarMessageHandler()
+    fun provideSnackbarMessageHandler(@ApplicationContext context: Context): SnackbarMessageHandler {
+        return SnackbarMessageHandler(context)
     }
 
     @Provides
