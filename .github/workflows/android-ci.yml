@@ -41,11 +41,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Init git user
+        run: |
+          git config --global user.email "dadyarri+release@gmail.com"
+          git config --global user.name Release
+
       - name: Bump version
         run: |
-          git config user.name dadyarri
           npm install
           npx release-it --ci --github.preRelease --no-git.requireCleanWorkingDir
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       # Here we need to decode keystore.jks from base64 string and place it
       # in the folder specified in the release signing configuration
