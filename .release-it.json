@@ -37,7 +37,8 @@
             "section": "Исправлено"
           }
         ]
-      }
+      },
+      "infile": "CHANGELOG.md"
     }
   }
 }

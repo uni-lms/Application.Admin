@@ -3,6 +3,7 @@ name: Android CI
 on:
   pull_request:
     types: [ "opened", "synchronize" ]
+  workflow_dispatch: { }
 jobs:
   build:
     permissions:
@@ -20,6 +21,10 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
           cache: gradle
+      - name: Set up Node
+        uses: actions/setup-node@4
+        with:
+          node-version: '20'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -35,6 +40,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      - name: Bump version
+        run: |
+          npm install
+          npm run release-it --ci --github.preRelease
 
       # Here we need to decode keystore.jks from base64 string and place it
       # in the folder specified in the release signing configuration
@@ -89,54 +99,13 @@ jobs:
           retention-days: 20
           overwrite: true
 
-      - name: Generate Release Notes
-        id: generate_release_notes
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const response = await github.rest.pulls.listCommits({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-            });
-
-            const linkHeader = response.headers.link;
-            let lastPageURL = '';
-
-            if (linkHeader) {
-              const links = linkHeader.split(',').map(a => a.split(';'));
-              const lastLink = links.find(link => link[1].includes('rel="last"'));
-              if (lastLink) {
-                lastPageURL = lastLink[0].trim().slice(1, -1); // Remove the angle brackets
-              }
-            }
-
-            if (lastPageURL) {
-              const url = new URL(lastPageURL);
-              const params = new URLSearchParams(url.search);
-              const page = params.get('page');
-
-
-              const { data: commits } = await github.rest.pulls.listCommits({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-                page
-              });
-              let releaseNotes = commits.map(commit => `- ${commit.commit.message}`).join("\n");
-              console.log(`Release notes:\n${releaseNotes}`);
-              core.setOutput('release_notes', `## Release notes:\n${releaseNotes}`);
-            } else {
-              core.setOutput('release_notes', '');
-            }
-
       - name: Create Pre-release
         uses: softprops/action-gh-release@master
         with:
           draft: false
           prerelease: true
           target_commitish: ${{env.GITHUB_REF}}
-          body: ${{steps.generate_release_notes.outputs.release_notes}}
+          body_path: CHANGELOG.md
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
           files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
