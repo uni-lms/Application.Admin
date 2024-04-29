@@ -6,10 +6,7 @@
     "publish": false
   },
   "github": {
-    "release": true,
-    "assets": [
-      "app/build/outputs/apk/release/AltenarInternship.apk"
-    ]
+    "release": true
   },
   "plugins": {
     "@release-it/bumper": {
