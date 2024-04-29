@@ -22,7 +22,7 @@ jobs:
           distribution: 'zulu'
           cache: gradle
       - name: Set up Node
-        uses: actions/setup-node@4
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Grant execute permission for gradlew
