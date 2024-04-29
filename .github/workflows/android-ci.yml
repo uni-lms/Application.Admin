@@ -44,7 +44,7 @@ jobs:
       - name: Init git user
         run: |
           git config --global user.email "dadyarri+release@gmail.com"
-          git config --global user.name Release
+          git config --global user.name "Daniil"
 
       - name: Install npm dependencies
         run: npm install
