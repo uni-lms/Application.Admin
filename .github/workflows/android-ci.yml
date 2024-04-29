@@ -46,10 +46,12 @@ jobs:
           git config --global user.email "dadyarri+release@gmail.com"
           git config --global user.name Release
 
+      - name: Install npm dependencies
+        run: npm install
+
       - name: Bump version
-        run: |
-          npm install
-          npx release-it --ci -VV --no-git.requireCleanWorkingDir --no-github.release $version
+        run:
+          npx release-it --ci -VV --no-git.requireCleanWorkingDir --no-github.release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -109,3 +111,5 @@ jobs:
       - name: Create Pre-release
         run: |
           npx release-it --ci -VV --no-increment --no-git --github.preRelease
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
