@@ -49,7 +49,7 @@ jobs:
       - name: Bump version
         run: |
           npm install
-          npx release-it --ci --github.preRelease --no-git.requireCleanWorkingDir
+          npx release-it --ci -VV --no-git.requireCleanWorkingDir --no-github.release $version
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -107,14 +107,5 @@ jobs:
           overwrite: true
 
       - name: Create Pre-release
-        uses: softprops/action-gh-release@master
-        with:
-          draft: false
-          prerelease: true
-          target_commitish: ${{env.GITHUB_REF}}
-          body_path: CHANGELOG.md
-          name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
-          tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
-          files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx release-it --ci -VV --no-increment --no-git --github.preRelease
