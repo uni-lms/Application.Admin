@@ -1,6 +1,5 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.io.ByteArrayOutputStream
-import java.nio.charset.Charset
 
 fun Project.gitCommitCount(): Int {
     val stdout = ByteArrayOutputStream()
@@ -20,6 +19,9 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val majorVersion = 2
+val minorVersion = 0
+val patchVersion = 0
 
 android {
     namespace = "ru.aip.intern"
@@ -30,7 +32,7 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = gitCommitCount()
-        versionName = file("version.txt").readText(Charset.forName("UTF-8"))
+        versionName = "$majorVersion.$minorVersion.$patchVersion"
 
         vectorDrawables {
             useSupportLibrary = true
