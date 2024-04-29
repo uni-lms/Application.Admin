@@ -43,7 +43,6 @@ jobs:
 
       - name: Bump version
         run: |
-          git config user.name dadyarri
           npm install
           npx release-it --ci --github.preRelease --no-git.requireCleanWorkingDir
 
