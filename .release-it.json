@@ -18,6 +18,26 @@
         "file": "app/version.txt",
         "type": "text/plain"
       }
+    },
+    "@release-it/conventional-changelog": {
+      "header": "# Список изменений",
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {
+            "type": "feat",
+            "section": "Добавлено"
+          },
+          {
+            "type": "add",
+            "section": "Добавлено"
+          },
+          {
+            "type": "fix",
+            "section": "Исправлено"
+          }
+        ]
+      }
     }
   }
 }
