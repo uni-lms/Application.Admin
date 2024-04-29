@@ -44,7 +44,7 @@ jobs:
       - name: Bump version
         run: |
           npm install
-          npm run release-it --ci --github.preRelease
+          npx release-it --ci --github.preRelease
 
       # Here we need to decode keystore.jks from base64 string and place it
       # in the folder specified in the release signing configuration
