@@ -6,13 +6,10 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
@@ -25,7 +22,6 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun QuizScreen(
-    title: MutableState<String>,
     quizId: UUID,
     navigate: (Screen, UUID) -> Unit
 ) {
@@ -41,19 +37,6 @@ fun QuizScreen(
         refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(quizId) }
     )
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (state.quizInfo.title.isEmpty()) {
-            title.value = context.getString(R.string.quiz)
-        }
-    }
-
-    LaunchedEffect(state.quizInfo.title) {
-        if (state.quizInfo.title.isNotEmpty()) {
-            title.value = state.quizInfo.title
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {

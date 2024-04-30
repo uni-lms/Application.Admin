@@ -7,11 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.domain.notifications.service.NotificationsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.MenuState
+import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,14 +22,17 @@ class MenuViewModel @Inject constructor(
     val storage: DataStoreRepository,
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val authService: AuthService,
-    private val notificationsService: NotificationsService
+    private val notificationsService: NotificationsService,
+    private val titleManager: TitleManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MenuState())
     val state = _state.asStateFlow()
 
     init {
-
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.menu))
+        }
         refresh()
     }
 

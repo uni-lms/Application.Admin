@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
+import ru.aip.intern.ui.managers.TitleManager
 import javax.inject.Singleton
 
 @Module
@@ -19,6 +20,12 @@ object AppModule {
     @Provides
     fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository {
         return DataStoreRepository(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTitleManager(): TitleManager {
+        return TitleManager()
     }
 
     @Provides

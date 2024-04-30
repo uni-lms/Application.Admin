@@ -16,8 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,7 +31,6 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FileScreen(
-    title: MutableState<String>,
     fileId: UUID
 ) {
 
@@ -46,10 +43,6 @@ fun FileScreen(
         refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
-
-    LaunchedEffect(state.fileData) {
-        title.value = state.fileData.title
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {

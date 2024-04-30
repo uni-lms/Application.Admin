@@ -14,6 +14,7 @@ import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.LoginState
 import ru.aip.intern.util.UiText
 import javax.inject.Inject
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val storage: DataStoreRepository,
     private val snackbarMessageHandler: SnackbarMessageHandler,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val titleManager: TitleManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -32,6 +34,9 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+
+            titleManager.update(UiText.StringResource(R.string.login))
+
             storage.askedForNotificationPermission.collect { asked ->
                 _state.update {
                     it.copy(

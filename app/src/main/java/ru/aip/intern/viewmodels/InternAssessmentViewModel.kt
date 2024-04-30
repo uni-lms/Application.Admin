@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ru.aip.intern.R
 import ru.aip.intern.domain.assessment.service.AssessmentService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.InternAssessmentState
 import ru.aip.intern.util.UiText
 import java.util.UUID
@@ -21,6 +22,7 @@ import java.util.UUID
 class InternAssessmentViewModel @AssistedInject constructor(
     private val assessmentService: AssessmentService,
     private val snackbarMessageHandler: SnackbarMessageHandler,
+    private val titleManager: TitleManager,
     @Assisted id: UUID
 ) : ViewModel() {
 
@@ -33,6 +35,9 @@ class InternAssessmentViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.interns_assessment))
+        }
         refresh(id)
     }
 
@@ -52,6 +57,11 @@ class InternAssessmentViewModel @AssistedInject constructor(
                         assessmentData = response.value!!
                     )
                 }
+
+                if (response.value!!.internName.isNotBlank()) {
+                    titleManager.update(UiText.DynamicText(response.value.internName))
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }

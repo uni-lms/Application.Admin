@@ -21,7 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,12 +49,8 @@ import ru.aip.intern.viewmodels.StartScreenViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LoginScreen(
-    title: MutableState<String>,
     navigateTo: (Screen) -> Unit
 ) {
-
-    title.value = stringResource(R.string.login)
-
     val viewModel: LoginViewModel = hiltViewModel()
     val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()

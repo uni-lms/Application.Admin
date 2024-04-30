@@ -9,7 +9,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,10 +24,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
-
-    title.value = stringResource(R.string.notifications)
-
+fun NotificationsScreen(navigate: (Screen, UUID) -> Unit) {
     val viewModel = hiltViewModel<NotificationsViewModel>()
 
     val state by viewModel.state.collectAsState()

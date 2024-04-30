@@ -29,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,13 +65,11 @@ import ru.aip.intern.ui.components.calendar.events.MeetingCard
 import ru.aip.intern.viewmodels.CalendarViewModel
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Locale
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Unit) {
+fun CalendarScreen(navigate: (Screen, UUID?) -> Unit) {
 
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val currentMonth = remember { YearMonth.now() }
@@ -99,18 +96,13 @@ fun CalendarScreen(title: MutableState<String>, navigate: (Screen, UUID?) -> Uni
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
         onRefresh = {
-            title.value = buildTitle(visibleMonth.yearMonth)
             viewModel.refresh()
         }
     )
 
     val scope = rememberCoroutineScope()
 
-    title.value = buildTitle(visibleMonth.yearMonth)
-
-
     LaunchedEffect(visibleMonth) {
-        title.value = buildTitle(visibleMonth.yearMonth)
         isDayEventsModalOpened = false
         selectedDay = null
         viewModel.yearMonth = visibleMonth.yearMonth
@@ -292,13 +284,3 @@ private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
             visibleItemsInfo.map { it.month }
         }
     }
-
-private fun buildTitle(yearMonth: YearMonth): String {
-    return "${
-        yearMonth.month.getDisplayName(
-            TextStyle.FULL_STANDALONE,
-            Locale.getDefault()
-        )
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-    } ${yearMonth.year}"
-}

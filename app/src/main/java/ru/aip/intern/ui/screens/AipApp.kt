@@ -11,13 +11,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.components.ConfirmExit
@@ -25,6 +30,7 @@ import ru.aip.intern.ui.fragments.BottomBar
 import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
+import ru.aip.intern.viewmodels.AipAppViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
 import java.util.UUID
 
@@ -34,13 +40,25 @@ fun AipApp(
     snackbarMessageHandler: SnackbarMessageHandler
 ) {
 
-    val title = remember { mutableStateOf("AIP") }
-
+    var title by remember {
+        mutableStateOf("")
+    }
     val snackbarHostState = remember { SnackbarHostState() }
 
     val viewModel: StartScreenViewModel = hiltViewModel()
+    val appViewModel: AipAppViewModel = hiltViewModel()
 
     val state by viewModel.state.collectAsState()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(appViewModel.title) {
+        scope.launch {
+            appViewModel.title.collectLatest {
+                title = it.asString(context)
+            }
+        }
+    }
 
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -91,7 +109,7 @@ fun AipApp(
                     .padding(innerPadding)
             ) {
                 composable(Screen.Login.name) {
-                    LoginScreen(title) { screen ->
+                    LoginScreen { screen ->
                         goToScreen(
                             navController,
                             screen
@@ -99,7 +117,7 @@ fun AipApp(
                     }
                 }
                 composable(Screen.Internships.name) {
-                    InternshipsScreen(title) { screen, id ->
+                    InternshipsScreen { screen, id ->
                         goToScreen(
                             navController,
                             screen,
@@ -111,7 +129,6 @@ fun AipApp(
                     val internshipId = backStackEntry?.arguments?.getString("id")
                     if (internshipId != null) {
                         InternshipScreen(
-                            title,
                             UUID.fromString(internshipId),
                         ) { screen, id ->
                             goToScreen(
@@ -123,15 +140,15 @@ fun AipApp(
                     }
                 }
                 composable(Screen.Menu.name) {
-                    MenuScreen(title) { screen -> goToScreen(navController, screen) }
+                    MenuScreen { screen -> goToScreen(navController, screen) }
                 }
 
                 composable(Screen.Calendar.name) {
-                    CalendarScreen(title) { screen, id -> goToScreen(navController, screen, id) }
+                    CalendarScreen { screen, id -> goToScreen(navController, screen, id) }
                 }
 
                 composable(Screen.Notifications.name) {
-                    NotificationsScreen(title) { screen, id ->
+                    NotificationsScreen { screen, id ->
                         goToScreen(
                             navController,
                             screen,
@@ -143,14 +160,14 @@ fun AipApp(
                 composable("${Screen.File.name}/{id}") {
                     val fileId = backStackEntry?.arguments?.getString("id")
                     if (fileId != null) {
-                        FileScreen(title, UUID.fromString(fileId))
+                        FileScreen(UUID.fromString(fileId))
                     }
                 }
 
                 composable("${Screen.Assignment.name}/{id}") {
                     val assignmentId = backStackEntry?.arguments?.getString("id")
                     if (assignmentId != null) {
-                        AssignmentScreen(title, UUID.fromString(assignmentId)) { screen, id ->
+                        AssignmentScreen(UUID.fromString(assignmentId)) { screen, id ->
                             goToScreen(navController, screen, id)
                         }
                     }
@@ -159,7 +176,7 @@ fun AipApp(
                 composable("${Screen.Solution.name}/{id}") {
                     val solutionId = backStackEntry?.arguments?.getString("id")
                     if (solutionId != null) {
-                        SolutionScreen(title, UUID.fromString(solutionId)) { screen, id ->
+                        SolutionScreen(UUID.fromString(solutionId)) { screen, id ->
                             goToScreen(navController, screen, id)
                         }
                     }
@@ -168,12 +185,12 @@ fun AipApp(
                 composable("${Screen.Event.name}/{id}") {
                     val eventId = backStackEntry?.arguments?.getString("id")
                     if (eventId != null) {
-                        EventScreen(title, UUID.fromString(eventId))
+                        EventScreen(UUID.fromString(eventId))
                     }
                 }
 
                 composable(Screen.CreateEvent.name) {
-                    CreateEventScreen(title) { screen, id ->
+                    CreateEventScreen { screen, id ->
                         goToScreen(navController, screen, id)
                     }
                 }
@@ -182,7 +199,6 @@ fun AipApp(
                     val internshipId = backStackEntry?.arguments?.getString("id")
                     if (internshipId != null) {
                         InternsAssessmentScreen(
-                            title,
                             UUID.fromString(internshipId)
                         ) { screen, id ->
                             goToScreen(navController, screen, id)
@@ -194,7 +210,6 @@ fun AipApp(
                     val internId = backStackEntry?.arguments?.getString("id")
                     if (internId != null) {
                         InternAssessmentScreen(
-                            title,
                             UUID.fromString(internId)
                         )
                     }
@@ -204,7 +219,6 @@ fun AipApp(
                     val quizId = backStackEntry?.arguments?.getString("id")
                     if (quizId != null) {
                         QuizScreen(
-                            title,
                             UUID.fromString(quizId)
                         ) { screen, id ->
                             goToScreen(navController, screen, id)

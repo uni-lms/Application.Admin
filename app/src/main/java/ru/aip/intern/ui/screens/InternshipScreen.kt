@@ -9,13 +9,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
@@ -29,7 +26,6 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InternshipScreen(
-    title: MutableState<String>,
     internshipId: UUID,
     goToScreen: (Screen, UUID) -> Unit
 ) {
@@ -44,20 +40,6 @@ fun InternshipScreen(
         refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh(internshipId) }
     )
-    val context = LocalContext.current
-
-
-    LaunchedEffect(Unit) {
-        if (state.contentData.title.isEmpty()) {
-            title.value = context.getString(R.string.internship)
-        }
-    }
-
-    LaunchedEffect(state.contentData.title) {
-        if (state.contentData.title.isNotEmpty()) {
-            title.value = state.contentData.title
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {

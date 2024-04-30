@@ -10,15 +10,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.domain.internships.service.InternshipsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.InternshipState
+import ru.aip.intern.util.UiText
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = InternshipViewModel.Factory::class)
 class InternshipViewModel @AssistedInject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val internshipsService: InternshipsService,
+    private val titleManager: TitleManager,
     @Assisted private val id: UUID
 ) :
     ViewModel() {
@@ -32,6 +36,9 @@ class InternshipViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.internship))
+        }
         refresh(id)
     }
 
@@ -51,6 +58,11 @@ class InternshipViewModel @AssistedInject constructor(
                         contentData = response.value!!
                     )
                 }
+
+                if (response.value!!.title.isNotBlank()) {
+                    titleManager.update(UiText.DynamicText(response.value.title))
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }

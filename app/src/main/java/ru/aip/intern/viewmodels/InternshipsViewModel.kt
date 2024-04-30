@@ -7,15 +7,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.domain.internships.service.InternshipsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.InternshipsState
+import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
 class InternshipsViewModel @Inject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val internshipsService: InternshipsService,
+    private val titleManager: TitleManager
 ) :
     ViewModel() {
 
@@ -23,6 +27,9 @@ class InternshipsViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.internships))
+        }
         refresh()
     }
 

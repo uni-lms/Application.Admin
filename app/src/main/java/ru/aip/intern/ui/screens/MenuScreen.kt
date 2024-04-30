@@ -14,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,8 +29,7 @@ import ru.aip.intern.viewmodels.StartScreenViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MenuScreen(title: MutableState<String>, navigateTo: (Screen) -> Unit) {
-    title.value = stringResource(R.string.menu)
+fun MenuScreen(navigateTo: (Screen) -> Unit) {
 
     val viewModel: MenuViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()

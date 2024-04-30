@@ -16,13 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,7 +34,6 @@ import java.util.UUID
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EventScreen(
-    title: MutableState<String>,
     id: UUID,
 ) {
 
@@ -53,19 +49,6 @@ fun EventScreen(
     )
 
     val uriHandler = LocalUriHandler.current
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (state.eventData.title.isEmpty()) {
-            title.value = context.getString(R.string.event)
-        }
-    }
-
-    LaunchedEffect(state.eventData.title) {
-        if (state.eventData.title.isNotEmpty()) {
-            title.value = state.eventData.title
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {

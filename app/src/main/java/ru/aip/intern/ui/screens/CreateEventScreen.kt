@@ -31,7 +31,6 @@ import androidx.compose.material3.TimePickerLayoutType
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,8 +63,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
-    title.value = stringResource(R.string.create_event)
+fun CreateEventScreen(navigate: (Screen, UUID) -> Unit) {
 
     val viewModel: CreateEventViewModel = hiltViewModel()
 

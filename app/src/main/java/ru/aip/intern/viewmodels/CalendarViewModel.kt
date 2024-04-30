@@ -12,13 +12,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.domain.calendar.service.CalendarService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.CalendarState
+import ru.aip.intern.util.UiText
 import java.time.YearMonth
+import java.time.format.TextStyle
+import java.util.Locale
 
 @HiltViewModel(assistedFactory = CalendarViewModel.Factory::class)
 class CalendarViewModel @AssistedInject constructor(
     private val calendarService: CalendarService,
     private val snackbarMessageHandler: SnackbarMessageHandler,
+    private val titleManager: TitleManager,
     @Assisted var yearMonth: YearMonth
 ) : ViewModel() {
 
@@ -54,6 +59,8 @@ class CalendarViewModel @AssistedInject constructor(
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
+            titleManager.update(UiText.DynamicText(buildTitle(yearMonth)))
+
             _state.update {
                 it.copy(
                     isRefreshing = false
@@ -87,6 +94,16 @@ class CalendarViewModel @AssistedInject constructor(
                 )
             }
         }
+    }
+
+    private fun buildTitle(yearMonth: YearMonth): String {
+        return "${
+            yearMonth.month.getDisplayName(
+                TextStyle.FULL_STANDALONE,
+                Locale.getDefault()
+            )
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        } ${yearMonth.year}"
     }
 
 }

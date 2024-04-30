@@ -29,7 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,9 +51,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUID) -> Unit) {
-
-    title.value = stringResource(R.string.solution)
+fun SolutionScreen(id: UUID, navigate: (Screen, UUID) -> Unit) {
 
     val viewModel = hiltViewModel<SolutionViewModel, SolutionViewModel.Factory>(
         creationCallback = { factory -> factory.create(id) }

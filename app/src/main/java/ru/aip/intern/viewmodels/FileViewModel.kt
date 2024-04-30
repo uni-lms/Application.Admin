@@ -15,11 +15,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.aip.intern.R
 import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.content.file.service.FileService
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.FileState
+import ru.aip.intern.util.UiText
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = FileViewModel.Factory::class)
@@ -28,6 +31,7 @@ class FileViewModel @AssistedInject constructor(
     private val fileService: FileService,
     private val downloadManager: DownloadManager,
     private val authManager: AuthManager,
+    private val titleManager: TitleManager,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -40,6 +44,9 @@ class FileViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.file))
+        }
         refresh()
     }
 
@@ -59,6 +66,11 @@ class FileViewModel @AssistedInject constructor(
                         fileData = response.value!!
                     )
                 }
+
+                if (response.value!!.title.isNotBlank()) {
+                    titleManager.update(UiText.DynamicText(response.value.title))
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
