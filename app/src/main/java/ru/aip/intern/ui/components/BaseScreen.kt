@@ -19,7 +19,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.networking.ConnectivityObserver
@@ -31,10 +30,15 @@ fun BaseScreen(children: @Composable () -> Unit) {
     val viewModel: TopBarViewModel = hiltViewModel()
     val networkState =
         viewModel.networkState.collectAsState(ConnectivityObserver.Status.Available)
-    val animationSpec =
-        tween<IntSize>(durationMillis = 500, easing = FastOutSlowInEasing, delayMillis = 500)
     Column(
         Modifier
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = FastOutSlowInEasing,
+                    delayMillis = 500
+                )
+            )
     ) {
         AnimatedVisibility(
             visible = networkState.value != ConnectivityObserver.Status.Available,
@@ -54,9 +58,6 @@ fun BaseScreen(children: @Composable () -> Unit) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
-                .animateContentSize(
-                    animationSpec = animationSpec
-                )
         ) {
             Column(
                 modifier = Modifier
