@@ -22,11 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +43,6 @@ import ru.aip.intern.permissions.NotificationsPermissionsTextProvider
 import ru.aip.intern.permissions.PermissionDialog
 import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.util.UiText
 import ru.aip.intern.viewmodels.LoginViewModel
 import ru.aip.intern.viewmodels.PermissionManagerViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
@@ -62,6 +60,25 @@ fun LoginScreen(
     val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()
 
+    val state by viewModel.state.collectAsState()
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isRefreshing,
+        onRefresh = { }
+    )
+
+    val context = LocalContext.current
+
+    var notificationPermissionStatus by remember {
+        mutableStateOf(PermissionStatus.NOT_REQUESTED)
+    }
+    var notificationPermissionDialogStatus by remember {
+        mutableStateOf(false)
+    }
+    var isPasswordVisible by remember {
+        mutableStateOf(false)
+    }
+
     fun submit() {
         if (viewModel.validate()) {
             viewModel.login { navigateTo(Screen.Internships) }
@@ -71,45 +88,17 @@ fun LoginScreen(
 
     BaseScreen {
 
-        val email = viewModel.email.observeAsState("")
-        val password = viewModel.password.observeAsState("")
-        val formEnabledState = viewModel.formEnabled.observeAsState(true)
-        val isEmailWithError = viewModel.isEmailWithError.observeAsState(false)
-        val emailErrorMessage =
-            viewModel.emailErrorMessage.observeAsState(UiText.StringResource(R.string.empty))
-        val isPasswordWithError = viewModel.isPasswordWithError.observeAsState(false)
-        val passwordErrorMessage =
-            viewModel.passwordErrorMessage.observeAsState(UiText.StringResource(R.string.empty))
-        var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-        val refreshing = viewModel.isRefreshing.observeAsState(false)
-        val pullRefreshState = rememberPullRefreshState(
-            refreshing = refreshing.value,
-            onRefresh = { }
-        )
-
-        val context = LocalContext.current
-
-        val notificationPermissionStatus = remember {
-            mutableStateOf(PermissionStatus.NOT_REQUESTED)
-        }
-        val notificationPermissionDialogStatus = remember {
-            mutableStateOf(false)
-        }
-        val askedForNotificationPermission =
-            viewModel.askedForNotificationPermission.observeAsState(false)
-
 
         LaunchedEffect(key1 = true) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                notificationPermissionStatus.value = permissionsViewModel.checkPermission(
+                notificationPermissionStatus = permissionsViewModel.checkPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
                 )
 
-                notificationPermissionDialogStatus.value =
-                    notificationPermissionStatus.value == PermissionStatus.DENIED && !askedForNotificationPermission.value
+                notificationPermissionDialogStatus =
+                    notificationPermissionStatus == PermissionStatus.DENIED && !state.askedForNotificationPermission
 
                 viewModel.setAskedForNotificationPermission(true)
             }
@@ -119,7 +108,7 @@ fun LoginScreen(
         Box {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(
-                    value = email.value,
+                    value = state.email,
                     onValueChange = { viewModel.setEmail(it) },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -127,11 +116,11 @@ fun LoginScreen(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
                     ),
-                    enabled = formEnabledState.value,
-                    isError = isEmailWithError.value,
+                    enabled = state.isFormEnabled,
+                    isError = state.emailError.asString().isNotBlank(),
                     supportingText = {
-                        if (isEmailWithError.value) {
-                            Text(text = emailErrorMessage.value.asString())
+                        if (state.emailError.asString().isNotBlank()) {
+                            Text(text = state.emailError.asString())
                         }
                     },
                     label = {
@@ -142,7 +131,7 @@ fun LoginScreen(
                 )
 
                 OutlinedTextField(
-                    value = password.value,
+                    value = state.password,
                     onValueChange = { viewModel.setPassword(it) },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -150,7 +139,7 @@ fun LoginScreen(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done
                     ),
-                    visualTransformation = if (passwordVisible)
+                    visualTransformation = if (isPasswordVisible)
                         VisualTransformation.None
                     else
                         PasswordVisualTransformation(),
@@ -159,24 +148,24 @@ fun LoginScreen(
                             submit()
                         }
                     ),
-                    isError = isPasswordWithError.value,
+                    isError = state.passwordError.asString().isNotBlank(),
                     supportingText = {
-                        if (isPasswordWithError.value) {
-                            Text(text = passwordErrorMessage.value.asString())
+                        if (state.passwordError.asString().isNotBlank()) {
+                            Text(text = state.passwordError.asString())
                         }
                     },
-                    enabled = formEnabledState.value,
+                    enabled = state.isFormEnabled,
                     label = {
                         Text(
                             text = stringResource(R.string.password)
                         )
                     },
                     trailingIcon = {
-                        val image = if (passwordVisible)
+                        val image = if (isPasswordVisible)
                             Icons.Outlined.Visibility
                         else Icons.Outlined.VisibilityOff
 
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                             Icon(imageVector = image, null)
                         }
 
@@ -188,7 +177,7 @@ fun LoginScreen(
                     onClick = {
                         submit()
                     },
-                    enabled = formEnabledState.value
+                    enabled = state.isFormEnabled
                 ) {
                     Text(text = stringResource(R.string.log_in))
                 }
@@ -197,25 +186,25 @@ fun LoginScreen(
             }
 
             PullRefreshIndicator(
-                refreshing.value,
+                state.isRefreshing,
                 pullRefreshState,
                 Modifier.align(Alignment.TopCenter)
             )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (notificationPermissionDialogStatus.value) {
+                if (notificationPermissionDialogStatus) {
                     PermissionDialog(
                         NotificationsPermissionsTextProvider(),
                         onDismiss = { },
                         onConfirmation = {
-                            notificationPermissionDialogStatus.value = false
+                            notificationPermissionDialogStatus = false
                             permissionsViewModel.requestPermission(
                                 context,
                                 Manifest.permission.POST_NOTIFICATIONS
                             )
                         },
                         onCancel = {
-                            notificationPermissionDialogStatus.value = false
+                            notificationPermissionDialogStatus = false
                         }
                     )
                 }

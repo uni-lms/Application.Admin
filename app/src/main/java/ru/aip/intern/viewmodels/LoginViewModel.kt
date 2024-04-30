@@ -1,18 +1,20 @@
 package ru.aip.intern.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.R
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
+import ru.aip.intern.ui.state.LoginState
 import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
@@ -23,107 +25,111 @@ class LoginViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
 
-    private val _email = MutableLiveData("")
-    val email: LiveData<String> = _email
-
-    private val _password = MutableLiveData("")
-    val password: LiveData<String> = _password
-
-    private val _formEnabled = MutableLiveData(true)
-    val formEnabled: LiveData<Boolean> = _formEnabled
-
-    private val _isEmailWithError = MutableLiveData(false)
-    val isEmailWithError: LiveData<Boolean> = _isEmailWithError
-
-    var emailErrorMessage = MutableLiveData(UiText.StringResource(R.string.empty))
-        private set
-
-    private val _isPasswordWithError = MutableLiveData(false)
-    val isPasswordWithError: LiveData<Boolean> = _isPasswordWithError
-
-    var passwordErrorMessage = MutableLiveData(UiText.StringResource(R.string.empty))
-        private set
-
-    private val _askedForNotificationPermission = MutableLiveData(false)
-    val askedForNotificationPermission: LiveData<Boolean> = _askedForNotificationPermission
+    private val _emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
 
     init {
         viewModelScope.launch {
-            storage.askedForNotificationPermission.collect {
-                _askedForNotificationPermission.value = it
+            storage.askedForNotificationPermission.collect { asked ->
+                _state.update {
+                    it.copy(
+                        askedForNotificationPermission = asked
+                    )
+                }
             }
         }
     }
 
-    object FieldsValidationState {
+    private object FieldsValidationState {
         var email: Boolean = true
         var password: Boolean = true
     }
 
     fun setEmail(email: String) {
-        _email.value = email
+        _state.update {
+            it.copy(
+                email = email
+            )
+        }
     }
 
     fun setPassword(password: String) {
-        _password.value = password
+        _state.update {
+            it.copy(
+                password = password
+            )
+        }
     }
 
     fun setAskedForNotificationPermission(value: Boolean) {
-        _askedForNotificationPermission.value = value
+        _state.update {
+            it.copy(
+                askedForNotificationPermission = value
+            )
+        }
         viewModelScope.launch {
             storage.saveAskedForNotificationPermissionStatus(value)
         }
     }
 
-    private fun validateEmail(email: String): Boolean {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-        return email.matches(emailRegex.toRegex())
+    private fun validateEmail(email: String) {
+        if (email.matches(_emailRegex.toRegex())) {
+            _state.update {
+                it.copy(
+                    emailError = UiText.StringResource(R.string.empty)
+                )
+            }
+            FieldsValidationState.email = true
+        } else {
+            _state.update {
+                it.copy(
+                    emailError = UiText.StringResource(R.string.invalid_email_format)
+                )
+            }
+            FieldsValidationState.email = false
+        }
     }
 
-    private fun validatePassword(password: String): Boolean {
-        return password.isNotBlank()
+    private fun validatePassword(password: String) {
+        if (password.isNotBlank()) {
+            _state.update {
+                it.copy(
+                    passwordError = UiText.StringResource(R.string.empty)
+                )
+            }
+            FieldsValidationState.password = true
+        } else {
+            _state.update {
+                it.copy(
+                    passwordError = UiText.StringResource(R.string.password_must_not_be_empty)
+                )
+            }
+            FieldsValidationState.password = false
+        }
     }
 
     fun validate(): Boolean {
 
-        if (!validateEmail(_email.value ?: "")) {
-            _isEmailWithError.value = true
-            emailErrorMessage.value = UiText.StringResource(R.string.invalid_email_format)
-            FieldsValidationState.email = false
-        } else {
-            FieldsValidationState.email = true
-        }
+        validateEmail(_state.value.email)
 
-        if (!validatePassword(_password.value ?: "")) {
-            _isPasswordWithError.value = true
-            passwordErrorMessage.value = UiText.StringResource(R.string.password_must_not_be_empty)
-            FieldsValidationState.password = false
-        } else {
-            FieldsValidationState.password = true
-        }
+        validatePassword(_state.value.password)
 
-        if (FieldsValidationState.email) {
-            _isEmailWithError.value = false
-            emailErrorMessage.value = UiText.StringResource(R.string.empty)
-        }
-
-        if (FieldsValidationState.password) {
-            _isPasswordWithError.value = false
-            passwordErrorMessage.value = UiText.StringResource(R.string.empty)
-        }
         return FieldsValidationState.email && FieldsValidationState.password
     }
 
     fun login(redirect: () -> Unit) {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
-            _formEnabled.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = true,
+                    isFormEnabled = false
+                )
+            }
 
-            val request = LoginRequest(email.value!!, password.value!!)
+            val request = LoginRequest(_state.value.email, _state.value.password)
             var fcmToken = ""
 
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
@@ -148,8 +154,12 @@ class LoginViewModel @Inject constructor(
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
-            _formEnabled.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = false,
+                    isFormEnabled = true
+                )
+            }
 
         }
 
