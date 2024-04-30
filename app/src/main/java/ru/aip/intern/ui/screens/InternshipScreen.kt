@@ -13,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,8 +39,6 @@ fun InternshipScreen(
     )
 
     val state by viewModel.state.collectAsState()
-
-    val userRole by viewModel.userRole.observeAsState(UserRole.Intern)
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
@@ -79,7 +76,7 @@ fun InternshipScreen(
                 }
             }
 
-            if (userRole != UserRole.Intern) {
+            if (state.userRole != UserRole.Intern) {
                 Button(onClick = { goToScreen(Screen.InternsAssessment, internshipId) }) {
                     Text(text = stringResource(R.string.interns_assessment))
                 }
