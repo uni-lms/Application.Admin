@@ -7,6 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.aip.intern.networking.ConnectivityObserver
+import ru.aip.intern.networking.NetworkConnectivityObserver
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import ru.aip.intern.ui.managers.TitleManager
@@ -32,6 +34,12 @@ object AppModule {
     @Singleton
     fun provideSnackbarMessageHandler(@ApplicationContext context: Context): SnackbarMessageHandler {
         return SnackbarMessageHandler(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityObserver(@ApplicationContext context: Context): ConnectivityObserver {
+        return NetworkConnectivityObserver(context)
     }
 
     @Provides
