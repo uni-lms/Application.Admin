@@ -136,6 +136,7 @@ dependencies {
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.client.logging) // Плагин для логгирования
 
+    implementation(libs.slf4j.api)
     implementation(libs.tony19.logback.android)  // Драйвер логгирования
 
     debugImplementation(libs.androidx.compose.ui.tooling)
