@@ -2,6 +2,7 @@ package ru.aip.intern.ui.state
 
 import ru.aip.intern.domain.content.assignment.data.AssignmentInfo
 import ru.aip.intern.domain.content.assignment.data.SolutionsList
+import ru.aip.intern.domain.internships.data.UserRole
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -14,5 +15,6 @@ data class AssignmentState(
         description = "",
         fileId = UUID.randomUUID()
     ),
-    val solutions: SolutionsList = SolutionsList(emptyList())
+    val solutions: SolutionsList = SolutionsList(emptyList()),
+    val userRole: UserRole = UserRole.Intern
 )

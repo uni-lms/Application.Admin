@@ -98,12 +98,18 @@ fun AssignmentScreen(
                         navigate(Screen.Solution, it.id)
                     },
                     headlineContent = {
-                        Text(
-                            text = stringResource(
-                                R.string.solution_attempt,
-                                ind + 1
+                        if (it.authorName == null) {
+                            Text(
+                                text = stringResource(
+                                    R.string.solution_attempt,
+                                    ind + 1
+                                )
                             )
-                        )
+                        } else {
+                            Text(
+                                text = it.authorName
+                            )
+                        }
                     },
                     supportingContent = {
                         Text(
