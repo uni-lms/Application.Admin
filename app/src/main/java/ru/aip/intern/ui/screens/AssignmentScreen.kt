@@ -18,12 +18,10 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,18 +47,6 @@ fun AssignmentScreen(
         refreshing = state.isRefreshing,
         onRefresh = { viewModel.refresh() }
     )
-
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (state.assignment.title.isEmpty()) {
-        }
-    }
-
-    LaunchedEffect(state.assignment.title) {
-        if (state.assignment.title.isNotEmpty()) {
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
