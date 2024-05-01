@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get git log info
-        run: git log --oneline --no-pager -n 10
+        run: git log --oneline -n 10
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
