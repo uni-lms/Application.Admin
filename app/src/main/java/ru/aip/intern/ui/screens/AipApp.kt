@@ -2,6 +2,7 @@ package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -31,14 +32,22 @@ import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
 import ru.aip.intern.viewmodels.AipAppViewModel
+import ru.aip.intern.viewmodels.AssignmentViewModel
+import ru.aip.intern.viewmodels.CreateEventViewModel
+import ru.aip.intern.viewmodels.EventViewModel
 import ru.aip.intern.viewmodels.FileViewModel
+import ru.aip.intern.viewmodels.InternAssessmentViewModel
+import ru.aip.intern.viewmodels.InternsAssessmentViewModel
 import ru.aip.intern.viewmodels.InternshipViewModel
 import ru.aip.intern.viewmodels.InternshipsViewModel
 import ru.aip.intern.viewmodels.MenuViewModel
 import ru.aip.intern.viewmodels.NotificationsViewModel
+import ru.aip.intern.viewmodels.QuizViewModel
+import ru.aip.intern.viewmodels.SolutionViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
 import java.util.UUID
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AipApp(
     navController: NavHostController = rememberNavController(),
@@ -227,50 +236,137 @@ fun AipApp(
                 composable("${Screen.Assignment.name}/{id}") {
                     val assignmentId = backStackEntry?.arguments?.getString("id")
                     if (assignmentId != null) {
-                        AssignmentScreen(UUID.fromString(assignmentId)) { screen, id ->
-                            goToScreen(navController, screen, id)
-                        }
+                        val uuid = UUID.fromString(assignmentId)
+                        val assignmentViewModel =
+                            hiltViewModel<AssignmentViewModel, AssignmentViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid) }
+                            )
+                        val assignmentState by assignmentViewModel.state.collectAsState()
+                        AssignmentScreen(
+                            state = assignmentState,
+                            onRefresh = assignmentViewModel::refresh,
+                            onFileClick = {
+                                goToScreen(
+                                    navController,
+                                    Screen.File,
+                                    assignmentState.assignment.fileId
+                                )
+                            },
+                            onSolutionClick = { id ->
+                                goToScreen(
+                                    navController,
+                                    Screen.File,
+                                    id
+                                )
+                            }
+                        )
                     }
                 }
 
                 composable("${Screen.Solution.name}/{id}") {
                     val solutionId = backStackEntry?.arguments?.getString("id")
                     if (solutionId != null) {
-                        SolutionScreen(UUID.fromString(solutionId)) { screen, id ->
-                            goToScreen(navController, screen, id)
-                        }
+                        val uuid = UUID.fromString(solutionId)
+                        val solutionViewModel =
+                            hiltViewModel<SolutionViewModel, SolutionViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid) }
+                            )
+
+                        val solutionState by solutionViewModel.state.collectAsState()
+                        SolutionScreen(
+                            state = solutionState,
+                            onRefresh = solutionViewModel::refresh,
+                            onFileClick = { id ->
+                                goToScreen(navController, Screen.File, id)
+                            },
+                            onCommentTextUpdate = solutionViewModel::updateCommentText,
+                            onCommentCreate = solutionViewModel::createComment
+
+                        )
                     }
                 }
 
                 composable("${Screen.Event.name}/{id}") {
                     val eventId = backStackEntry?.arguments?.getString("id")
                     if (eventId != null) {
-                        EventScreen(UUID.fromString(eventId))
+                        val uuid = UUID.fromString(eventId)
+                        val eventViewModel = hiltViewModel<EventViewModel, EventViewModel.Factory>(
+                            creationCallback = { factory -> factory.create(uuid) }
+                        )
+
+                        val eventState by eventViewModel.state.collectAsState()
+                        EventScreen(
+                            state = eventState,
+                            onRefresh = eventViewModel::refresh
+                        )
                     }
                 }
 
                 composable(Screen.CreateEvent.name) {
-                    CreateEventScreen { screen, id ->
-                        goToScreen(navController, screen, id)
-                    }
+                    val createEventViewModel: CreateEventViewModel = hiltViewModel()
+
+                    val createEventState by createEventViewModel.state.collectAsState()
+                    CreateEventScreen(
+                        state = createEventState,
+                        onRefresh = createEventViewModel::refresh,
+                        onTitleUpdate = createEventViewModel::updateFormStateTitle,
+                        onLinkUpdate = createEventViewModel::updateFormStateLink,
+                        onInternshipsUpdate = createEventViewModel::updateFormStateSelectedInternships,
+                        onUsersUpdate = createEventViewModel::updateFormStateSelectedUsers,
+                        onEventTypeUpdate = createEventViewModel::updateFormStateEventType,
+                        onEventCreate = { datePickerState,
+                                          startTimePickerState,
+                                          endTimePickerState,
+                                          userZoneId ->
+                            createEventViewModel.createEvent(
+                                datePickerState,
+                                startTimePickerState,
+                                endTimePickerState,
+                                userZoneId
+                            ) { screen, id ->
+                                goToScreen(navController, screen, id)
+                            }
+                        }
+                    )
                 }
 
                 composable("${Screen.InternsAssessment.name}/{id}") {
                     val internshipId = backStackEntry?.arguments?.getString("id")
                     if (internshipId != null) {
+                        val uuid = UUID.fromString(internshipId)
+                        val internsAssessmentViewModel: InternsAssessmentViewModel =
+                            hiltViewModel<InternsAssessmentViewModel, InternsAssessmentViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid) }
+                            )
+
+                        val internsAssessmentState by internsAssessmentViewModel.state.collectAsState()
                         InternsAssessmentScreen(
-                            UUID.fromString(internshipId)
-                        ) { screen, id ->
-                            goToScreen(navController, screen, id)
-                        }
+                            state = internsAssessmentState,
+                            onRefresh = { internsAssessmentViewModel.refresh(uuid) },
+                            onInternClick = { id ->
+                                goToScreen(navController, Screen.InternAssessment, id)
+                            }
+                        )
                     }
                 }
 
                 composable("${Screen.InternAssessment.name}/{id}") {
                     val internId = backStackEntry?.arguments?.getString("id")
                     if (internId != null) {
+                        val uuid = UUID.fromString(internId)
+                        val internAssessmentViewModel: InternAssessmentViewModel =
+                            hiltViewModel<InternAssessmentViewModel, InternAssessmentViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid) }
+                            )
+                        val internAssessmentState by internAssessmentViewModel.state.collectAsState()
                         InternAssessmentScreen(
-                            UUID.fromString(internId)
+                            state = internAssessmentState,
+                            onRefresh = {
+                                internAssessmentViewModel.refresh(uuid)
+                            },
+                            onSaveButtonClick = { criterionId, newScore ->
+                                internAssessmentViewModel.updateScore(uuid, criterionId, newScore)
+                            }
                         )
                     }
                 }
@@ -278,11 +374,17 @@ fun AipApp(
                 composable("${Screen.Quiz.name}/{id}") {
                     val quizId = backStackEntry?.arguments?.getString("id")
                     if (quizId != null) {
+                        val uuid = UUID.fromString(quizId)
+                        val quizViewModel: QuizViewModel =
+                            hiltViewModel<QuizViewModel, QuizViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid) }
+                            )
+
+                        val quizState by quizViewModel.state.collectAsState()
                         QuizScreen(
-                            UUID.fromString(quizId)
-                        ) { screen, id ->
-                            goToScreen(navController, screen, id)
-                        }
+                            state = quizState,
+                            onRefresh = { quizViewModel.refresh(uuid) }
+                        )
                     }
                 }
             }

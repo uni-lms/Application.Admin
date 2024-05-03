@@ -29,7 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,25 +38,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.comments.CommentTree
 import ru.aip.intern.ui.components.content.FileContentCard
+import ru.aip.intern.ui.state.SolutionState
 import ru.aip.intern.util.format
-import ru.aip.intern.viewmodels.SolutionViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SolutionScreen(id: UUID, navigate: (Screen, UUID) -> Unit) {
+fun SolutionScreen(
+    state: SolutionState,
+    onRefresh: () -> Unit,
+    onFileClick: (UUID) -> Unit,
+    onCommentTextUpdate: (String) -> Unit,
+    onCommentCreate: (UUID?) -> Unit
+) {
 
-    val viewModel = hiltViewModel<SolutionViewModel, SolutionViewModel.Factory>(
-        creationCallback = { factory -> factory.create(id) }
-    )
-
-    val state by viewModel.state.collectAsState()
 
     val uriHandler = LocalUriHandler.current
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -65,7 +63,7 @@ fun SolutionScreen(id: UUID, navigate: (Screen, UUID) -> Unit) {
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -117,9 +115,7 @@ fun SolutionScreen(id: UUID, navigate: (Screen, UUID) -> Unit) {
             }
 
             state.solutionInfo.files.forEach {
-                FileContentCard(content = it) { fileId ->
-                    navigate(Screen.File, fileId)
-                }
+                FileContentCard(content = it, navigate = onFileClick)
             }
 
             Text(text = stringResource(R.string.comments))
@@ -165,10 +161,10 @@ fun SolutionScreen(id: UUID, navigate: (Screen, UUID) -> Unit) {
                         ) {
                             TextField(
                                 value = state.commentText,
-                                onValueChange = { viewModel.updateCommentText(it) },
+                                onValueChange = onCommentTextUpdate,
                                 Modifier.fillMaxWidth(0.9f)
                             )
-                            IconButton(onClick = { viewModel.createComment(replyCommentId) }) {
+                            IconButton(onClick = { onCommentCreate(replyCommentId) }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Outlined.Send,
                                     contentDescription = null

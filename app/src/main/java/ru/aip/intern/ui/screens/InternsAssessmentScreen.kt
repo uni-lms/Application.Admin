@@ -10,34 +10,26 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.viewmodels.InternsAssessmentViewModel
+import ru.aip.intern.ui.state.InternsAssessmentState
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InternsAssessmentScreen(
-    internshipId: UUID,
-    navigate: (Screen, UUID?) -> Unit
+    state: InternsAssessmentState,
+    onRefresh: () -> Unit,
+    onInternClick: (UUID) -> Unit
 ) {
 
 
-    val viewModel: InternsAssessmentViewModel =
-        hiltViewModel<InternsAssessmentViewModel, InternsAssessmentViewModel.Factory>(
-            creationCallback = { factory -> factory.create(internshipId) }
-        )
 
-    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh(internshipId) }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -49,7 +41,7 @@ fun InternsAssessmentScreen(
                             Text(text = it.internName)
                         },
                         modifier = Modifier.clickable {
-                            navigate(Screen.InternAssessment, it.id)
+                            onInternClick(it.id)
                         }
                     )
                 }

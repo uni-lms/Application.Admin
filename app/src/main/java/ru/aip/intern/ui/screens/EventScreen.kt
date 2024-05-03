@@ -16,36 +16,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.domain.events.data.CustomEventType
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.state.EventState
 import ru.aip.intern.util.formatDate
 import ru.aip.intern.util.formatTime
-import ru.aip.intern.viewmodels.EventViewModel
-import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EventScreen(
-    id: UUID,
+    state: EventState,
+    onRefresh: () -> Unit
 ) {
-
-    val viewModel = hiltViewModel<EventViewModel, EventViewModel.Factory>(
-        creationCallback = { factory -> factory.create(id) }
-    )
-
-    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     val uriHandler = LocalUriHandler.current
@@ -105,7 +96,7 @@ fun EventScreen(
                         Icon(Icons.Outlined.ChevronRight, null)
                     },
                     modifier = Modifier.clickable {
-                        uriHandler.openUri(state.eventData.link!!)
+                        uriHandler.openUri(state.eventData.link)
                     }
                 )
             }

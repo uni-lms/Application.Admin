@@ -18,40 +18,35 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.state.AssignmentState
 import ru.aip.intern.util.format
-import ru.aip.intern.viewmodels.AssignmentViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AssignmentScreen(
-    assignmentId: UUID,
-    navigate: (Screen, UUID) -> Unit
+    state: AssignmentState,
+    onRefresh: () -> Unit,
+    onFileClick: () -> Unit,
+    onSolutionClick: (UUID) -> Unit
 ) {
-    val viewModel = hiltViewModel<AssignmentViewModel, AssignmentViewModel.Factory>(
-        creationCallback = { factory -> factory.create(assignmentId) }
-    )
-    val state by viewModel.state.collectAsState()
+
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             if (state.assignment.description != null) {
-                Text(text = state.assignment.description!!)
+                Text(text = state.assignment.description)
             }
             ListItem(
                 leadingContent = {
@@ -83,7 +78,7 @@ fun AssignmentScreen(
                         )
                     },
                     modifier = Modifier.clickable {
-                        navigate(Screen.File, state.assignment.fileId!!)
+                        onFileClick()
                     }
                 )
             }
@@ -95,7 +90,7 @@ fun AssignmentScreen(
             state.solutions.solutions.forEachIndexed { ind, it ->
                 ListItem(
                     modifier = Modifier.clickable {
-                        navigate(Screen.Solution, it.id)
+                        onSolutionClick(it.id)
                     },
                     headlineContent = {
                         if (it.authorName == null) {
