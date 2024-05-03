@@ -9,32 +9,29 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.notifications.NotificationCard
-import ru.aip.intern.viewmodels.NotificationsViewModel
+import ru.aip.intern.ui.state.NotificationsState
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NotificationsScreen(navigate: (Screen, UUID) -> Unit) {
-    val viewModel = hiltViewModel<NotificationsViewModel>()
-
-    val state by viewModel.state.collectAsState()
-
+fun NotificationsScreen(
+    state: NotificationsState,
+    onRefresh: () -> Unit,
+    onNotificationClick: (Screen, UUID) -> Unit
+) {
     val unreadNotifications = state.notificationsData.notifications.filter { !it.isRead }
     val readNotifications = state.notificationsData.notifications.filter { it.isRead }
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
 
@@ -47,7 +44,7 @@ fun NotificationsScreen(navigate: (Screen, UUID) -> Unit) {
                         Text(text = stringResource(R.string.unread))
 
                         unreadNotifications.forEach {
-                            NotificationCard(notification = it, navigate)
+                            NotificationCard(notification = it, onNotificationClick)
                         }
                     }
 
@@ -57,7 +54,7 @@ fun NotificationsScreen(navigate: (Screen, UUID) -> Unit) {
 
                     if (readNotifications.isNotEmpty()) {
                         readNotifications.forEach {
-                            NotificationCard(notification = it, navigate)
+                            NotificationCard(notification = it, onNotificationClick)
                         }
                     }
                 }

@@ -14,31 +14,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.viewmodels.MenuViewModel
-import ru.aip.intern.viewmodels.StartScreenViewModel
+import ru.aip.intern.ui.state.MenuState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MenuScreen(navigateTo: (Screen) -> Unit) {
-
-    val viewModel: MenuViewModel = hiltViewModel()
-    val startScreenViewModel: StartScreenViewModel = hiltViewModel()
-
-    val state by viewModel.state.collectAsState()
+fun MenuScreen(
+    state: MenuState,
+    onRefresh: () -> Unit,
+    onNavigateFromMenu: (Screen) -> Unit,
+    onLogout: () -> Unit
+) {
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -70,14 +66,7 @@ fun MenuScreen(navigateTo: (Screen) -> Unit) {
                         }
                     },
                     modifier = Modifier.clickable {
-                        val screenToGo = when (screen) {
-                            Screen.Notifications -> Screen.Notifications
-                            else -> null
-                        }
-
-                        if (screenToGo != null) {
-                            navigateTo(screenToGo)
-                        }
+                        onNavigateFromMenu(screen)
                     }
                 )
             }
@@ -88,9 +77,7 @@ fun MenuScreen(navigateTo: (Screen) -> Unit) {
                     Icon(Icons.AutoMirrored.Outlined.Logout, null)
                 },
                 modifier = Modifier.clickable {
-                    viewModel.logOut()
-                    navigateTo(Screen.Login)
-                    startScreenViewModel.updateStartScreen(Screen.Login)
+                    onLogout()
                 }
             )
 

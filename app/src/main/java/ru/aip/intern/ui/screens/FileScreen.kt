@@ -16,32 +16,30 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import ru.aip.intern.R
+import ru.aip.intern.domain.content.file.data.FileInfo
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.viewmodels.FileViewModel
+import ru.aip.intern.ui.state.FileState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import java.util.Locale
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FileScreen(
-    fileId: UUID
+    state: FileState,
+    onRefresh: () -> Unit,
+    onDownloadFile: () -> Unit
 ) {
 
-    val viewModel = hiltViewModel<FileViewModel, FileViewModel.Factory>(
-        creationCallback = { factory -> factory.create(fileId) }
-    )
-    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -66,20 +64,18 @@ fun FileScreen(
                 headlineContent = { Text(text = stringResource(R.string.file_type)) },
                 trailingContent = {
                     Text(
-                        text = "Документ ${
-                            state.fileData.extension.uppercase(
+                        text = stringResource(
+                            R.string.document_type, state.fileData.extension.uppercase(
                                 Locale.ROOT
                             ).replace(".", "")
-                        }"
+                        )
                     )
                 }
             )
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Button(
-                    onClick = {
-                        viewModel.downloadFile()
-                    }
+                    onClick = onDownloadFile
                 ) {
                     Text(text = stringResource(R.string.file_download))
                 }
@@ -93,4 +89,22 @@ fun FileScreen(
         )
     }
 
+}
+
+@Preview
+@Composable
+private fun FileScreenPreview() {
+    AltenarInternshipTheme {
+        FileScreen(state = FileState(
+            isRefreshing = false,
+            fileData = FileInfo(
+                id = UUID.randomUUID(),
+                title = "Test file",
+                fileName = "file.pdf",
+                fileSize = "2 Mb",
+                extension = "pdf",
+                contentType = "application/pdf"
+            )
+        ), onRefresh = { }, onDownloadFile = { })
+    }
 }

@@ -31,7 +31,11 @@ import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
 import ru.aip.intern.viewmodels.AipAppViewModel
+import ru.aip.intern.viewmodels.FileViewModel
+import ru.aip.intern.viewmodels.InternshipViewModel
 import ru.aip.intern.viewmodels.InternshipsViewModel
+import ru.aip.intern.viewmodels.MenuViewModel
+import ru.aip.intern.viewmodels.NotificationsViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
 import java.util.UUID
 
@@ -121,27 +125,71 @@ fun AipApp(
                     val internshipsViewModel: InternshipsViewModel = hiltViewModel()
                     val internshipsState by internshipsViewModel.state.collectAsState()
                     InternshipsScreen(
-                        internshipsState,
-                        { internshipsViewModel.refresh() },
-                        { id -> goToScreen(navController, Screen.Internship, id) }
+                        state = internshipsState,
+                        onRefresh = internshipsViewModel::refresh,
+                        goToInternship = { id -> goToScreen(navController, Screen.Internship, id) }
                     )
                 }
                 composable("${Screen.Internship.name}/{id}") {
                     val internshipId = backStackEntry?.arguments?.getString("id")
                     if (internshipId != null) {
-                        InternshipScreen(
-                            UUID.fromString(internshipId),
-                        ) { screen, id ->
-                            goToScreen(
-                                navController,
-                                screen,
-                                id
+                        val uuid = UUID.fromString(
+                            internshipId
+                        )
+                        val internshipViewModel =
+                            hiltViewModel<InternshipViewModel, InternshipViewModel.Factory>(
+                                creationCallback = { factory ->
+                                    factory.create(
+                                        uuid
+                                    )
+                                }
                             )
-                        }
+
+                        val internshipState by internshipViewModel.state.collectAsState()
+
+                        InternshipScreen(
+                            state = internshipState,
+                            onRefresh = { internshipViewModel.refresh(uuid) },
+                            onContentItemClick = { screen, id ->
+                                goToScreen(
+                                    navController,
+                                    screen,
+                                    id
+                                )
+                            },
+                            onAssessmentClick = {
+                                goToScreen(
+                                    navController,
+                                    Screen.InternsAssessment,
+                                    uuid
+                                )
+                            }
+                        )
                     }
                 }
                 composable(Screen.Menu.name) {
-                    MenuScreen { screen -> goToScreen(navController, screen) }
+                    val menuViewModel: MenuViewModel = hiltViewModel()
+                    val menuState by menuViewModel.state.collectAsState()
+
+                    MenuScreen(
+                        state = menuState,
+                        onRefresh = menuViewModel::refresh,
+                        onNavigateFromMenu = { screen ->
+                            val screenToGo = when (screen) {
+                                Screen.Notifications -> Screen.Notifications
+                                else -> null
+                            }
+
+                            if (screenToGo != null) {
+                                goToScreen(navController, screenToGo)
+                            }
+                        },
+                        onLogout = {
+                            menuViewModel.logOut()
+                            goToScreen(navController, Screen.Login)
+                            viewModel.updateStartScreen(Screen.Login)
+                        }
+                    )
                 }
 
                 composable(Screen.Calendar.name) {
@@ -149,19 +197,30 @@ fun AipApp(
                 }
 
                 composable(Screen.Notifications.name) {
-                    NotificationsScreen { screen, id ->
-                        goToScreen(
-                            navController,
-                            screen,
-                            id
-                        )
-                    }
+                    val notificationsViewModel = hiltViewModel<NotificationsViewModel>()
+                    val notificationsState by notificationsViewModel.state.collectAsState()
+                    NotificationsScreen(
+                        state = notificationsState,
+                        onRefresh = notificationsViewModel::refresh,
+                        onNotificationClick = { screen, id ->
+                            goToScreen(navController, screen, id)
+                        }
+                    )
                 }
 
                 composable("${Screen.File.name}/{id}") {
                     val fileId = backStackEntry?.arguments?.getString("id")
                     if (fileId != null) {
-                        FileScreen(UUID.fromString(fileId))
+                        val uuid = UUID.fromString(fileId)
+                        val fileViewModel = hiltViewModel<FileViewModel, FileViewModel.Factory>(
+                            creationCallback = { factory -> factory.create(uuid) }
+                        )
+                        val fileState by fileViewModel.state.collectAsState()
+                        FileScreen(
+                            state = fileState,
+                            onRefresh = fileViewModel::refresh,
+                            onDownloadFile = fileViewModel::downloadFile
+                        )
                     }
                 }
 
