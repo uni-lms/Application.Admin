@@ -256,7 +256,7 @@ fun AipApp(
                             onSolutionClick = { id ->
                                 goToScreen(
                                     navController,
-                                    Screen.File,
+                                    Screen.Solution,
                                     id
                                 )
                             }
