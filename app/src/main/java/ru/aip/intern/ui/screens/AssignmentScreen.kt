@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import ru.aip.intern.R
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.state.AssignmentState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.format
 import java.util.UUID
 
@@ -147,6 +149,19 @@ fun AssignmentScreen(
             state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AssignmentScreenPreview() {
+    AltenarInternshipTheme {
+        AssignmentScreen(
+            state = AssignmentState(),
+            onRefresh = { },
+            onFileClick = { },
+            onSolutionClick = { }
         )
     }
 }

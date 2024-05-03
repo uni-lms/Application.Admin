@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.aip.intern.R
 import ru.aip.intern.domain.calendar.data.EventType
@@ -54,6 +55,7 @@ import ru.aip.intern.ui.components.form.TextField
 import ru.aip.intern.ui.components.form.TimePickerDialog
 import ru.aip.intern.ui.components.form.toComboBoxItemList
 import ru.aip.intern.ui.state.CreateEventState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.epochDateToNullableString
 import ru.aip.intern.util.formatTimeFromPair
 import ru.aip.intern.util.is24HourFormat
@@ -259,4 +261,24 @@ fun CreateEventScreen(
         )
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun CreateEventScreenPreview() {
+    AltenarInternshipTheme {
+        CreateEventScreen(
+            state = CreateEventState(),
+            onRefresh = { },
+            onTitleUpdate = { },
+            onLinkUpdate = { },
+            onInternshipsUpdate = { },
+            onUsersUpdate = { },
+            onEventTypeUpdate = { },
+            onEventCreate = { _, _, _, _ ->
+
+            }
+        )
+    }
 }

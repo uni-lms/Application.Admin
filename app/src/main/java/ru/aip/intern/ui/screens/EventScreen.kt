@@ -20,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import ru.aip.intern.R
 import ru.aip.intern.domain.events.data.CustomEventType
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.state.EventState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.formatDate
 import ru.aip.intern.util.formatTime
 
@@ -108,4 +110,14 @@ fun EventScreen(
         )
     }
 
+}
+
+@Preview
+@Composable
+private fun EventScreenPreview() {
+    AltenarInternshipTheme {
+        EventScreen(state = EventState()) {
+
+        }
+    }
 }
