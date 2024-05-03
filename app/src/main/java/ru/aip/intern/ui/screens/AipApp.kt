@@ -123,10 +123,11 @@ fun AipApp(
                     .padding(innerPadding)
             ) {
                 composable(Screen.Login.name) {
-                    LoginScreen { screen ->
+                    LoginScreen { screen, saveEntry ->
                         goToScreen(
                             navController,
-                            screen
+                            screen,
+                            saveEntry = saveEntry
                         )
                     }
                 }

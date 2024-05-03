@@ -49,7 +49,7 @@ import ru.aip.intern.viewmodels.StartScreenViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LoginScreen(
-    navigateTo: (Screen) -> Unit
+    navigateTo: (Screen, Boolean) -> Unit
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
     val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
@@ -76,7 +76,7 @@ fun LoginScreen(
 
     fun submit() {
         if (viewModel.validate()) {
-            viewModel.login { navigateTo(Screen.Internships) }
+            viewModel.login { navigateTo(Screen.Internships, false) }
             startScreenViewModel.updateStartScreen(Screen.Internships)
         }
     }
