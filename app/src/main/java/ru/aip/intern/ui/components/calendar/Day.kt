@@ -14,10 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import ru.aip.intern.domain.calendar.data.DayEventsOverview
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import java.time.LocalDate
 
 @Composable
@@ -77,4 +82,25 @@ fun Day(
         }
     }
 
+}
+
+private class DayPositionParameterProvider : PreviewParameterProvider<DayPosition> {
+    override val values: Sequence<DayPosition>
+        get() = sequenceOf(DayPosition.MonthDate, DayPosition.InDate, DayPosition.OutDate)
+}
+
+@Preview
+@PreviewLightDark
+@Composable
+private fun DayPreview(
+    @PreviewParameter(DayPositionParameterProvider::class) dayPosition: DayPosition
+) {
+    AltenarInternshipTheme {
+        Day(
+            day = CalendarDay(LocalDate.now(), dayPosition),
+            today = LocalDate.now(),
+            dayEventsOverview = null,
+            onDayClick = { }
+        )
+    }
 }

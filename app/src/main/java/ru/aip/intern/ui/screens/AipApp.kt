@@ -31,6 +31,7 @@ import ru.aip.intern.ui.fragments.SplashScreen
 import ru.aip.intern.ui.fragments.TopBar
 import ru.aip.intern.util.goToScreen
 import ru.aip.intern.viewmodels.AipAppViewModel
+import ru.aip.intern.viewmodels.InternshipsViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
 import java.util.UUID
 
@@ -117,13 +118,13 @@ fun AipApp(
                     }
                 }
                 composable(Screen.Internships.name) {
-                    InternshipsScreen { screen, id ->
-                        goToScreen(
-                            navController,
-                            screen,
-                            id
-                        )
-                    }
+                    val internshipsViewModel: InternshipsViewModel = hiltViewModel()
+                    val internshipsState by internshipsViewModel.state.collectAsState()
+                    InternshipsScreen(
+                        internshipsState,
+                        { internshipsViewModel.refresh() },
+                        { id -> goToScreen(navController, Screen.Internship, id) }
+                    )
                 }
                 composable("${Screen.Internship.name}/{id}") {
                     val internshipId = backStackEntry?.arguments?.getString("id")

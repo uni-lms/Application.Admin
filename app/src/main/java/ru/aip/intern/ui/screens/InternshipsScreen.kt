@@ -6,36 +6,36 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import ru.aip.intern.navigation.Screen
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.InternshipCard
-import ru.aip.intern.viewmodels.InternshipsViewModel
+import ru.aip.intern.ui.state.InternshipsState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InternshipsScreen(
-    goToScreen: (Screen, UUID) -> Unit
+    state: InternshipsState,
+    onRefresh: () -> Unit,
+    goToInternship: (UUID) -> Unit
 ) {
-
-    val viewModel: InternshipsViewModel = hiltViewModel()
-    val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             state.internships.forEach {
                 InternshipCard(internship = it) { id ->
-                    goToScreen(Screen.Internship, id)
+                    goToInternship(id)
                 }
             }
         }
@@ -43,6 +43,21 @@ fun InternshipsScreen(
             state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Preview
+@PreviewScreenSizes
+@PreviewFontScale
+@PreviewLightDark
+@Composable
+fun InternshipsScreenPreview() {
+    AltenarInternshipTheme {
+        InternshipsScreen(
+            state = InternshipsState(),
+            onRefresh = { },
+            goToInternship = { _ -> }
         )
     }
 }
