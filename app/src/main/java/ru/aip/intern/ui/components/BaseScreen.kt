@@ -18,7 +18,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.networking.ConnectivityObserver
@@ -27,9 +29,6 @@ import ru.aip.intern.viewmodels.TopBarViewModel
 @Composable
 fun BaseScreen(children: @Composable () -> Unit) {
 
-    val viewModel: TopBarViewModel = hiltViewModel()
-    val networkState =
-        viewModel.networkState.collectAsState(ConnectivityObserver.Status.Available)
     Column(
         Modifier
             .animateContentSize(
@@ -40,18 +39,24 @@ fun BaseScreen(children: @Composable () -> Unit) {
                 )
             )
     ) {
-        AnimatedVisibility(
-            visible = networkState.value != ConnectivityObserver.Status.Available,
-            enter = fadeIn() + slideInVertically(
-                initialOffsetY = { fullHeight -> -fullHeight },
-                animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
-            ),
-            exit = fadeOut() + slideOutVertically(
-                targetOffsetY = { fullHeight -> -fullHeight },
-                animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
-            )
-        ) {
-            NoInternetAvailable()
+        if (!LocalInspectionMode.current) {
+            val viewModel: TopBarViewModel = hiltViewModel()
+            val networkState by
+            viewModel.networkState.collectAsState(ConnectivityObserver.Status.Available)
+
+            AnimatedVisibility(
+                visible = networkState != ConnectivityObserver.Status.Available,
+                enter = fadeIn() + slideInVertically(
+                    initialOffsetY = { fullHeight -> -fullHeight },
+                    animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+                ),
+                exit = fadeOut() + slideOutVertically(
+                    targetOffsetY = { fullHeight -> -fullHeight },
+                    animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+                )
+            ) {
+                NoInternetAvailable()
+            }
         }
         Surface(
             modifier = Modifier
