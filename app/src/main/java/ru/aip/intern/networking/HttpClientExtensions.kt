@@ -69,7 +69,8 @@ suspend inline fun <reified T> HttpClient.safeRequest(block: HttpRequestBuilder.
 
 suspend inline fun HttpClient.safeDownload(
     url: String,
-    crossinline progressListener: (Float) -> Unit
+    crossinline progressListener: (Float) -> Unit,
+    block: HttpRequestBuilder.() -> Unit = {}
 ): Response<ByteArray> {
     return try {
 
@@ -83,6 +84,7 @@ suspend inline fun HttpClient.safeDownload(
 
                 progressListener(progress)
             }
+            block()
         }
 
         when (response.status) {

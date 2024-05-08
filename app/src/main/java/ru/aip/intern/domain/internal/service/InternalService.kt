@@ -1,5 +1,6 @@
 package ru.aip.intern.domain.internal.service
 
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.accept
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
@@ -21,8 +22,12 @@ class InternalService @Inject constructor() {
         }
     }
 
-    suspend fun downloadFile(url: String, progressListener: (Float) -> Unit): Response<ByteArray> {
+    suspend fun downloadFile(
+        url: String,
+        progressListener: (Float) -> Unit,
+        configureRequest: HttpRequestBuilder.() -> Unit = {}
+    ): Response<ByteArray> {
         val httpClient = HttpClientFactory.httpClient
-        return httpClient.safeDownload(url, progressListener)
+        return httpClient.safeDownload(url, progressListener, configureRequest)
     }
 }
