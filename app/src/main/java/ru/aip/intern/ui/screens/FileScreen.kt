@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AttachFile
@@ -13,6 +14,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import ru.aip.intern.R
 import ru.aip.intern.domain.content.file.data.FileInfo
 import ru.aip.intern.ui.components.BaseScreen
@@ -75,9 +78,17 @@ fun FileScreen(
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Button(
-                    onClick = onDownloadFile
+                    onClick = onDownloadFile,
+                    enabled = !state.isDownloading
                 ) {
-                    Text(text = stringResource(R.string.file_download))
+                    if (state.isDownloading) {
+                        LinearProgressIndicator(
+                            progress = { state.downloadProgress },
+                            modifier = Modifier.width(100.dp),
+                        )
+                    } else {
+                        Text(text = stringResource(R.string.file_download))
+                    }
                 }
             }
 

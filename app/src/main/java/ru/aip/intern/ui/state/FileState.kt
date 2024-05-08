@@ -5,6 +5,8 @@ import java.util.UUID
 
 data class FileState(
     val isRefreshing: Boolean = false,
+    val isDownloading: Boolean = false,
+    val downloadProgress: Float = 0F,
     val fileData: FileInfo = FileInfo(
         title = "",
         fileName = "",

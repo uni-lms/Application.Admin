@@ -1,6 +1,5 @@
 package ru.aip.intern.di
 
-import android.app.DownloadManager
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -40,12 +39,6 @@ object AppModule {
     @Singleton
     fun provideConnectivityObserver(@ApplicationContext context: Context): ConnectivityObserver {
         return NetworkConnectivityObserver(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideDownloadManager(@ApplicationContext context: Context): DownloadManager {
-        return context.getSystemService(DownloadManager::class.java)
     }
 
 }
