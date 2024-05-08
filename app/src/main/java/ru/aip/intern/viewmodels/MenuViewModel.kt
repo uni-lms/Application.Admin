@@ -15,7 +15,6 @@ import ru.aip.intern.domain.internal.data.ReleaseInfo
 import ru.aip.intern.domain.internal.service.InternalService
 import ru.aip.intern.domain.notifications.service.NotificationsService
 import ru.aip.intern.downloading.LocalFile
-import ru.aip.intern.downloading.installApplication
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import ru.aip.intern.ui.managers.TitleManager
@@ -99,7 +98,8 @@ class MenuViewModel @Inject constructor(
                 )
             }
 
-            val response = internalService.getLatestRelease(context.getString(R.string.app_version))
+//            val response = internalService.getLatestRelease(context.getString(R.string.app_version))
+            val response = internalService.getLatestRelease("v2.0.0-100")
 
             if (response.isSuccess) {
                 _state.update {
@@ -108,7 +108,7 @@ class MenuViewModel @Inject constructor(
                         releaseInfo = response.value!!
                     )
                 }
-                afterSuccess()
+//                afterSuccess()
             } else {
                 snackbarMessageHandler.postMessage(UiText.StringResource(R.string.already_latest))
             }
@@ -133,12 +133,16 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    fun onDownload(releaseInfo: ReleaseInfo, afterSuccess: () -> Unit) {
+    fun onDownload(releaseInfo: ReleaseInfo) {
         viewModelScope.launch {
 
             _state.update {
                 it.copy(
-                    isDownloading = true
+                    downloadButtonState = it.downloadButtonState.copy(
+                        isDownloading = true,
+                        isDownloaded = false,
+                        downloadProgress = 0F
+                    )
                 )
             }
 
@@ -155,24 +159,36 @@ class MenuViewModel @Inject constructor(
                 progressListener = { progress ->
                     _state.update {
                         it.copy(
-                            downloadProgress = progress
+                            downloadButtonState = it.downloadButtonState.copy(
+                                downloadProgress = progress
+                            )
                         )
                     }
                 })
 
             if (response.isSuccess) {
                 outputFile.writeBytes(response.value!!)
-                LocalFile(
-                    outputFile,
-                    releaseInfo.contentType,
-                    releaseInfo.fileName
-                ).installApplication(context)
-                afterSuccess()
+
+                _state.update {
+                    it.copy(
+                        downloadButtonState = it.downloadButtonState.copy(
+                            file = LocalFile(
+                                file = outputFile,
+                                name = releaseInfo.fileName,
+                                mimeType = releaseInfo.contentType
+                            )
+                        )
+                    )
+                }
             }
 
             _state.update {
                 it.copy(
-                    isDownloading = false
+                    downloadButtonState = it.downloadButtonState.copy(
+                        isDownloading = false,
+                        isDownloaded = true,
+                        downloadProgress = 0F
+                    )
                 )
             }
         }

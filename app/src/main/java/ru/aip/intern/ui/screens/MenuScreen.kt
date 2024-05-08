@@ -1,15 +1,11 @@
 package ru.aip.intern.ui.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
@@ -19,10 +15,8 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Badge
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -32,14 +26,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.aip.intern.R
 import ru.aip.intern.domain.internal.data.ReleaseInfo
+import ru.aip.intern.downloading.installApplication
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.navigation.ScreenPosition
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.DownloadButton
 import ru.aip.intern.ui.state.MenuState
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
@@ -51,7 +48,7 @@ fun MenuScreen(
     onLogout: () -> Unit,
     onCheckForUpdatesClick: (() -> Unit) -> Unit,
     onSheetHide: (() -> Unit) -> Unit,
-    onDownloadButtonClick: (ReleaseInfo, () -> Unit) -> Unit
+    onDownloadButtonClick: (ReleaseInfo) -> Unit
 ) {
 
     val pullRefreshState = rememberPullRefreshState(
@@ -61,6 +58,7 @@ fun MenuScreen(
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
@@ -142,29 +140,18 @@ fun MenuScreen(
 
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    if (!state.isDownloading) {
-                        Button(
-                            onClick = {
-                                onDownloadButtonClick(state.releaseInfo!!) {
-                                    onSheetHide { scope.launch { sheetState.hide() } }
-                                }
-                            }
-                        ) {
-                            Text(stringResource(R.string.download_update))
+                DownloadButton(
+                    state = state.downloadButtonState,
+                    onDownloadStart = {
+                        onDownloadButtonClick(state.releaseInfo!!)
+                    },
+                    onOpenFile = { file ->
+                        scope.launch {
+                            file.installApplication(context)
                         }
-                    } else {
-                        LinearProgressIndicator(
-                            progress = { state.downloadProgress },
-                            modifier = Modifier.width(100.dp),
-                        )
                     }
-                }
+                )
             }
         }
     }
-
 }
