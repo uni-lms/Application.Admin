@@ -18,6 +18,7 @@ import ru.aip.intern.R
 import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.content.file.service.FileService
 import ru.aip.intern.domain.internal.service.InternalService
+import ru.aip.intern.downloading.LocalFile
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.managers.TitleManager
@@ -95,7 +96,11 @@ class FileViewModel @AssistedInject constructor(
 
             _state.update {
                 it.copy(
-                    isDownloading = true
+                    downloadButtonState = it.downloadButtonState.copy(
+                        isDownloading = true,
+                        isDownloaded = false,
+                        downloadProgress = 0F
+                    )
                 )
             }
 
@@ -105,7 +110,9 @@ class FileViewModel @AssistedInject constructor(
                 internalService.downloadFile(buildDownloadUrl(), progressListener = { progress ->
                     _state.update {
                         it.copy(
-                            downloadProgress = progress
+                            downloadButtonState = it.downloadButtonState.copy(
+                                downloadProgress = progress
+                            )
                         )
                     }
                 }, configureRequest = {
@@ -124,11 +131,28 @@ class FileViewModel @AssistedInject constructor(
 
             if (response.isSuccess) {
                 outputFile.writeBytes(response.value!!)
+
+                _state.update {
+                    it.copy(
+                        downloadButtonState = it.downloadButtonState.copy(
+                            file = LocalFile(
+                                file = outputFile,
+                                mimeType = _state.value.fileData.contentType,
+                                name = _state.value.fileData.fileName
+                            )
+                        )
+                    )
+                }
+
             }
 
             _state.update {
                 it.copy(
-                    isDownloading = false
+                    downloadButtonState = it.downloadButtonState.copy(
+                        isDownloading = false,
+                        isDownloaded = true,
+                        downloadProgress = 0F
+                    )
                 )
             }
 
