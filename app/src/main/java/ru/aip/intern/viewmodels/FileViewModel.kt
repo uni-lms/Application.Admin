@@ -73,6 +73,22 @@ class FileViewModel @AssistedInject constructor(
                     titleManager.update(UiText.DynamicText(response.value.title))
                 }
 
+                val outputFile = getOutputFile()
+                if (outputFile.exists()) {
+                    _state.update {
+                        it.copy(
+                            downloadButtonState = it.downloadButtonState.copy(
+                                isDownloaded = true,
+                                file = LocalFile(
+                                    file = outputFile,
+                                    name = _state.value.fileData.fileName,
+                                    mimeType = _state.value.fileData.contentType,
+                                )
+                            )
+                        )
+                    }
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
@@ -121,13 +137,7 @@ class FileViewModel @AssistedInject constructor(
                     }
                 })
 
-            val outputFolder = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "AipDownloads"
-            )
-            outputFolder.mkdir()
-
-            val outputFile = File(outputFolder, _state.value.fileData.fileName)
+            val outputFile = getOutputFile()
 
             if (response.isSuccess) {
                 outputFile.writeBytes(response.value!!)
@@ -157,6 +167,24 @@ class FileViewModel @AssistedInject constructor(
             }
 
         }
+    }
+
+    private fun getOutputFile(): File {
+        val outputFolder = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "AipDownloads"
+        )
+        outputFolder.mkdir()
+
+        val fileName = "${_state.value.fileData.id}.${
+            _state.value.fileData.fileName.substringAfterLast(
+                ".",
+                ""
+            )
+        }"
+
+        val outputFile = File(outputFolder, fileName)
+        return outputFile
     }
 
 
