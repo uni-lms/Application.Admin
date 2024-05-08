@@ -56,7 +56,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue(
+                "string",
+                "app_version",
+                "v${defaultConfig.versionName}-${defaultConfig.versionCode}"
+            )
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["appAuthority"] = "${defaultConfig.applicationId}.fileprovider"
             applicationVariants.all {
                 val variant = this
                 variant.outputs
@@ -77,6 +83,13 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
+            manifestPlaceholders["appAuthority"] =
+                "${defaultConfig.applicationId}${applicationIdSuffix}.fileprovider"
+            resValue(
+                "string",
+                "app_version",
+                "v${defaultConfig.versionName}-${defaultConfig.versionCode}"
+            )
         }
     }
     compileOptions {
@@ -138,6 +151,9 @@ dependencies {
 
     implementation(libs.slf4j.api)
     implementation(libs.tony19.logback.android)  // Драйвер логгирования
+
+    implementation(libs.ackpine.core)
+    implementation(libs.ackpine.ktx)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
