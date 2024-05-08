@@ -1,6 +1,6 @@
 package ru.aip.intern.viewmodels
 
-import android.os.Environment
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.request.headers
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,7 @@ class FileViewModel @AssistedInject constructor(
     private val internalService: InternalService,
     private val authManager: AuthManager,
     private val titleManager: TitleManager,
+    @ApplicationContext private val context: Context,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -171,8 +173,8 @@ class FileViewModel @AssistedInject constructor(
 
     private fun getOutputFile(): File {
         val outputFolder = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            "AipDownloads"
+            context.getExternalFilesDir(null),
+            "Downloads"
         )
         outputFolder.mkdir()
 
