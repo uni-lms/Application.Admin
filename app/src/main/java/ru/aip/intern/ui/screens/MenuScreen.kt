@@ -142,6 +142,8 @@ fun MenuScreen(
 
                 DownloadButton(
                     state = state.downloadButtonState,
+                    downloadTitle = stringResource(R.string.download_update),
+                    openTitle = stringResource(R.string.install_update),
                     onDownloadStart = {
                         onDownloadButtonClick(state.releaseInfo!!)
                     },

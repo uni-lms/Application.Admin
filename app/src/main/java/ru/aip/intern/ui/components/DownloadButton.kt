@@ -15,11 +15,13 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import ru.aip.intern.R
 import ru.aip.intern.downloading.LocalFile
 import ru.aip.intern.ui.screens.DownloadButtonState
 import ru.aip.intern.ui.theme.AltenarInternshipTheme
@@ -27,6 +29,8 @@ import ru.aip.intern.ui.theme.AltenarInternshipTheme
 @Composable
 fun DownloadButton(
     state: DownloadButtonState,
+    downloadTitle: String = stringResource(R.string.download_file),
+    openTitle: String = stringResource(R.string.open_file),
     onDownloadStart: () -> Unit,
     onOpenFile: (file: LocalFile) -> Unit
 ) {
@@ -53,7 +57,7 @@ fun DownloadButton(
                         null,
                         modifier = Modifier.size(20.dp)
                     )
-                    Text(text = "Скачать файл")
+                    Text(text = downloadTitle)
                 }
 
                 if (state.isDownloading && !state.isDownloaded) {
@@ -70,7 +74,7 @@ fun DownloadButton(
                         null,
                         modifier = Modifier.size(20.dp)
                     )
-                    Text(text = "Открыть файл")
+                    Text(text = openTitle)
                 }
 
             }

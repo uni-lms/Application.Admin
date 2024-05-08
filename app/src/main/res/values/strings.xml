@@ -76,4 +76,7 @@
     <string name="check_for_updates">Проверить наличие обновлений</string>
     <string name="download_update">Скачать обновление</string>
     <string name="already_latest">Уже установлена последняя версия</string>
+    <string name="download_file">Скачать файл</string>
+    <string name="open_file">Открыть файл</string>
+    <string name="install_update">Обновить</string>
 </resources>
