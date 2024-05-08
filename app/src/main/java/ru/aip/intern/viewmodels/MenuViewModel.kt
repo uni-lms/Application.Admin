@@ -98,8 +98,7 @@ class MenuViewModel @Inject constructor(
                 )
             }
 
-//            val response = internalService.getLatestRelease(context.getString(R.string.app_version))
-            val response = internalService.getLatestRelease("v2.0.0-100")
+            val response = internalService.getLatestRelease(context.getString(R.string.app_version))
 
             if (response.isSuccess) {
                 _state.update {
@@ -108,7 +107,7 @@ class MenuViewModel @Inject constructor(
                         releaseInfo = response.value!!
                     )
                 }
-//                afterSuccess()
+                afterSuccess()
             } else {
                 snackbarMessageHandler.postMessage(UiText.StringResource(R.string.already_latest))
             }
