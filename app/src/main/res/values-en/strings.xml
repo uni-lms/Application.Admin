@@ -69,4 +69,7 @@
     <string name="update_succedeed">Update succeeded</string>
     <string name="no_internet">No internet available</string>
     <string name="document_type">Document %1$s</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="download_update">Dowload the update</string>
+    <string name="already_latest">Already installed latest version</string>
 </resources>

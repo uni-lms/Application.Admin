@@ -198,7 +198,10 @@ fun AipApp(
                             menuViewModel.logOut()
                             goToScreen(navController, Screen.Login)
                             viewModel.updateStartScreen(Screen.Login)
-                        }
+                        },
+                        onCheckForUpdatesClick = menuViewModel::checkForUpdates,
+                        onSheetHide = menuViewModel::onSheetHide,
+                        onDownloadButtonClick = menuViewModel::onDownload
                     )
                 }
 

@@ -73,4 +73,7 @@
     <string name="update_succedeed">Успешно обновлено</string>
     <string name="no_internet">Нет доступа к интернету</string>
     <string name="document_type">Документ %1$s</string>
+    <string name="check_for_updates">Проверить наличие обновлений</string>
+    <string name="download_update">Скачать обновление</string>
+    <string name="already_latest">Уже установлена последняя версия</string>
 </resources>
