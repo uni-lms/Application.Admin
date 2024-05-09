@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.request.headers
 import io.ktor.http.HttpHeaders
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,6 +22,8 @@ import ru.aip.intern.domain.content.file.service.FileService
 import ru.aip.intern.domain.internal.service.InternalService
 import ru.aip.intern.downloading.LocalFile
 import ru.aip.intern.networking.HttpClientFactory
+import ru.aip.intern.notifications.NotificationChannel
+import ru.aip.intern.notifications.NotificationManager
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.FileState
@@ -35,6 +38,7 @@ class FileViewModel @AssistedInject constructor(
     private val internalService: InternalService,
     private val authManager: AuthManager,
     private val titleManager: TitleManager,
+    private val notificationManager: NotificationManager,
     @ApplicationContext private val context: Context,
     @Assisted private val id: UUID
 ) : ViewModel() {
@@ -123,6 +127,14 @@ class FileViewModel @AssistedInject constructor(
             }
 
             val authHeaderValue = authManager.getAuthHeaderValue()
+            val notification = notificationManager.buildNotification(
+                NotificationChannel.Downloading,
+                0,
+                UiText.StringResource(R.string.downloading_file),
+                UiText.DynamicText(_state.value.fileData.fileName),
+                true
+            )
+            val notificationId = notificationManager.pushNotification(notification)
 
             val response =
                 internalService.downloadFile(buildDownloadUrl(), progressListener = { progress ->
@@ -133,6 +145,16 @@ class FileViewModel @AssistedInject constructor(
                             )
                         )
                     }
+
+                    val updatedNotification = notificationManager.buildNotification(
+                        NotificationChannel.Downloading,
+                        (progress * 100).toInt(),
+                        UiText.StringResource(R.string.downloading_file),
+                        UiText.DynamicText(_state.value.fileData.fileName),
+                        true
+                    )
+                    notificationManager.pushNotification(notificationId, updatedNotification)
+
                 }, configureRequest = {
                     headers {
                         append(HttpHeaders.Authorization, authHeaderValue)
@@ -155,6 +177,16 @@ class FileViewModel @AssistedInject constructor(
                         )
                     )
                 }
+
+                delay(1000)
+                val updatedNotification = notificationManager.buildNotification(
+                    NotificationChannel.Downloading,
+                    null,
+                    UiText.StringResource(R.string.downloaded_file),
+                    UiText.DynamicText(_state.value.fileData.fileName),
+                    false
+                )
+                notificationManager.pushNotification(notificationId, updatedNotification)
 
             }
 

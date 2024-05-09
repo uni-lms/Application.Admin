@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,6 +16,8 @@ import ru.aip.intern.domain.internal.data.ReleaseInfo
 import ru.aip.intern.domain.internal.service.InternalService
 import ru.aip.intern.domain.notifications.service.NotificationsService
 import ru.aip.intern.downloading.LocalFile
+import ru.aip.intern.notifications.NotificationChannel
+import ru.aip.intern.notifications.NotificationManager
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import ru.aip.intern.ui.managers.TitleManager
@@ -32,6 +35,7 @@ class MenuViewModel @Inject constructor(
     private val notificationsService: NotificationsService,
     private val titleManager: TitleManager,
     private val internalService: InternalService,
+    private val notificationManager: NotificationManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MenuState())
@@ -153,6 +157,15 @@ class MenuViewModel @Inject constructor(
 
             val outputFile = File(outputFolder, releaseInfo.fileName)
 
+            val notification = notificationManager.buildNotification(
+                NotificationChannel.Downloading,
+                0,
+                UiText.StringResource(R.string.downloading_file),
+                UiText.DynamicText(_state.value.releaseInfo?.fileName!!),
+                true
+            )
+            val notificationId = notificationManager.pushNotification(notification)
+
             val response = internalService.downloadFile(
                 releaseInfo.downloadUrl,
                 progressListener = { progress ->
@@ -163,6 +176,16 @@ class MenuViewModel @Inject constructor(
                             )
                         )
                     }
+
+                    val updatedNotification = notificationManager.buildNotification(
+                        NotificationChannel.Downloading,
+                        (progress * 100).toInt(),
+                        UiText.StringResource(R.string.downloading_file),
+                        UiText.DynamicText(_state.value.releaseInfo?.fileName!!),
+                        true
+                    )
+                    notificationManager.pushNotification(notificationId, updatedNotification)
+
                 })
 
             if (response.isSuccess) {
@@ -179,6 +202,16 @@ class MenuViewModel @Inject constructor(
                         )
                     )
                 }
+
+                delay(1000)
+                val updatedNotification = notificationManager.buildNotification(
+                    NotificationChannel.Downloading,
+                    null,
+                    UiText.StringResource(R.string.downloaded_file),
+                    UiText.DynamicText(_state.value.releaseInfo?.fileName!!),
+                    false
+                )
+                notificationManager.pushNotification(notificationId, updatedNotification)
             }
 
             _state.update {
