@@ -1,5 +1,7 @@
 package ru.aip.intern.viewmodels
 
+import android.Manifest
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +14,8 @@ import kotlinx.coroutines.launch
 import ru.aip.intern.R
 import ru.aip.intern.domain.auth.data.LoginRequest
 import ru.aip.intern.domain.auth.service.AuthService
+import ru.aip.intern.permissions.PermissionManager
+import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.storage.DataStoreRepository
 import ru.aip.intern.ui.managers.TitleManager
@@ -24,7 +28,8 @@ class LoginViewModel @Inject constructor(
     val storage: DataStoreRepository,
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val authService: AuthService,
-    private val titleManager: TitleManager
+    private val titleManager: TitleManager,
+    private val permissionManager: PermissionManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -76,6 +81,47 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch {
             storage.saveAskedForNotificationPermissionStatus(value)
+        }
+    }
+
+    fun havePermission() {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            val notificationPermissionStatus = permissionManager.checkPermission(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+
+            _state.update {
+                it.copy(
+                    notificationPermissionStatus = notificationPermissionStatus,
+                    isNotificationPermissionDialogShown = notificationPermissionStatus == PermissionStatus.DENIED && !it.askedForNotificationPermission
+                )
+            }
+
+
+            setAskedForNotificationPermission(true)
+        }
+    }
+
+    fun askPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            hideDialog()
+
+            permissionManager.requestPermission(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+    }
+
+    fun hideDialog() {
+        _state.update {
+            it.copy(
+                isNotificationPermissionDialogShown = false
+            )
         }
     }
 

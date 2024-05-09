@@ -1,6 +1,5 @@
 package ru.aip.intern.ui.screens
 
-import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,10 +38,8 @@ import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.permissions.NotificationsPermissionsTextProvider
 import ru.aip.intern.permissions.PermissionDialog
-import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.viewmodels.LoginViewModel
-import ru.aip.intern.viewmodels.PermissionManagerViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -52,7 +48,6 @@ fun LoginScreen(
     navigateTo: (Screen, Boolean) -> Unit
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
-    val permissionsViewModel: PermissionManagerViewModel = hiltViewModel()
     val startScreenViewModel: StartScreenViewModel = hiltViewModel()
 
     val state by viewModel.state.collectAsState()
@@ -62,14 +57,6 @@ fun LoginScreen(
         onRefresh = { }
     )
 
-    val context = LocalContext.current
-
-    var notificationPermissionStatus by remember {
-        mutableStateOf(PermissionStatus.NOT_REQUESTED)
-    }
-    var notificationPermissionDialogStatus by remember {
-        mutableStateOf(false)
-    }
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
@@ -85,18 +72,7 @@ fun LoginScreen(
 
 
         LaunchedEffect(key1 = true) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                notificationPermissionStatus = permissionsViewModel.checkPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-
-                notificationPermissionDialogStatus =
-                    notificationPermissionStatus == PermissionStatus.DENIED && !state.askedForNotificationPermission
-
-                viewModel.setAskedForNotificationPermission(true)
-            }
+            viewModel.havePermission()
         }
 
 
@@ -187,19 +163,15 @@ fun LoginScreen(
             )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (notificationPermissionDialogStatus) {
+                if (state.isNotificationPermissionDialogShown) {
                     PermissionDialog(
                         NotificationsPermissionsTextProvider(),
                         onDismiss = { },
                         onConfirmation = {
-                            notificationPermissionDialogStatus = false
-                            permissionsViewModel.requestPermission(
-                                context,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            )
+                            viewModel.askPermission()
                         },
                         onCancel = {
-                            notificationPermissionDialogStatus = false
+                            viewModel.hideDialog()
                         }
                     )
                 }

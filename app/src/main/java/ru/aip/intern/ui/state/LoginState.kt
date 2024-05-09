@@ -1,6 +1,7 @@
 package ru.aip.intern.ui.state
 
 import ru.aip.intern.R
+import ru.aip.intern.permissions.PermissionStatus
 import ru.aip.intern.util.UiText
 
 data class LoginState(
@@ -11,4 +12,6 @@ data class LoginState(
     val emailError: UiText = UiText.StringResource(R.string.empty),
     val passwordError: UiText = UiText.StringResource(R.string.empty),
     val askedForNotificationPermission: Boolean = false,
+    val notificationPermissionStatus: PermissionStatus = PermissionStatus.NOT_REQUESTED,
+    val isNotificationPermissionDialogShown: Boolean = false
 )
