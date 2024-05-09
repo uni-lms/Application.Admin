@@ -92,7 +92,9 @@ jobs:
           echo $formatted_commits
           
           # Store the formatted commits in the GITHUB_OUTPUT
-          echo "commits='$formatted_commits'" >> $GITHUB_OUTPUT
+          echo "commits<<EOF" >> $GITHUB_OUTPUT
+          echo "$formatted_commits" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Pre-release
         uses: softprops/action-gh-release@master
