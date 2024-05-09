@@ -2,7 +2,6 @@ package ru.aip.intern.ui.state
 
 import ru.aip.intern.domain.auth.data.WhoamiResponse
 import ru.aip.intern.domain.internal.data.ReleaseInfo
-import ru.aip.intern.ui.screens.DownloadButtonState
 
 data class MenuState(
     val isRefreshing: Boolean = false,

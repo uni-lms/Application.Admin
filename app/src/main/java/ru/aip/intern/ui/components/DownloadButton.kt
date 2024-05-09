@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.aip.intern.R
 import ru.aip.intern.downloading.LocalFile
-import ru.aip.intern.ui.screens.DownloadButtonState
+import ru.aip.intern.ui.state.DownloadButtonState
 import ru.aip.intern.ui.theme.AltenarInternshipTheme
 
 @Composable

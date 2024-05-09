@@ -1,4 +1,4 @@
-package ru.aip.intern.ui.screens
+package ru.aip.intern.ui.state
 
 import ru.aip.intern.downloading.LocalFile
 

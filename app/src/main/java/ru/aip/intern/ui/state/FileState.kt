@@ -1,7 +1,6 @@
 package ru.aip.intern.ui.state
 
 import ru.aip.intern.domain.content.file.data.FileInfo
-import ru.aip.intern.ui.screens.DownloadButtonState
 import java.util.UUID
 
 data class FileState(
