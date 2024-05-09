@@ -89,8 +89,10 @@ jobs:
           # Format the commit messages
           formatted_commits=$(echo "$commits" | sed 's/^/\n— /')
           
+          echo $formatted_commits
+          
           # Store the formatted commits in the GITHUB_OUTPUT
-          echo "COMMITS=$formatted_commits" >> $GITHUB_OUTPUT
+          echo "commits='$formatted_commits'" >> $GITHUB_OUTPUT
 
       - name: Create Pre-release
         uses: softprops/action-gh-release@master
