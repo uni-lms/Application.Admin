@@ -138,6 +138,12 @@ fun MenuScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+
+                    state.releaseInfo.body.forEach {
+                        Text(text = it)
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
                 DownloadButton(
