@@ -63,10 +63,6 @@ jobs:
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
 
-      - name: List built files
-        shell: bash
-        run: ls -la /home/runner/work/Applications/Applications/app/build/outputs/apk/release
-
       # Show information about the APK's signing certificates
       - name: Verify Signature
         run: |
@@ -83,44 +79,18 @@ jobs:
 
       - name: Generate Release Notes
         id: generate_release_notes
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const response = await github.rest.pulls.listCommits({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-            });
-
-            const linkHeader = response.headers.link;
-            let lastPageURL = '';
-
-            if (linkHeader) {
-              const links = linkHeader.split(',').map(a => a.split(';'));
-              const lastLink = links.find(link => link[1].includes('rel="last"'));
-              if (lastLink) {
-                lastPageURL = lastLink[0].trim().slice(1, -1); // Remove the angle brackets
-              }
-            }
-
-            if (lastPageURL) {
-              const url = new URL(lastPageURL);
-              const params = new URLSearchParams(url.search);
-              const page = params.get('page');
-
-
-              const { data: commits } = await github.rest.pulls.listCommits({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-                page
-              });
-              let releaseNotes = commits.map(commit => `- ${commit.commit.message}`).join("\n");
-              console.log(`Release notes:\n${releaseNotes}`);
-              core.setOutput('release_notes', `## Release notes:\n${releaseNotes}`);
-            } else {
-              core.setOutput('release_notes', '');
-            }
+        run: |
+          echo "PR base SHA: ${{ github.event.before }}"
+          echo "PR head SHA: ${{ github.event.after }}"
+          
+          # Get the list of commits
+          commits=$(git log --format='%s' ${{ github.event.before }}..${{ github.event.after }})
+          
+          # Format the commit messages
+          formatted_commits=$(echo "$commits" | sed 's/^/\n— /')
+          
+          # Store the formatted commits in the GITHUB_OUTPUT
+          echo "COMMITS=$formatted_commits" >> $GITHUB_OUTPUT
 
       - name: Create Pre-release
         uses: softprops/action-gh-release@master
@@ -128,7 +98,7 @@ jobs:
           draft: false
           prerelease: true
           target_commitish: ${{env.GITHUB_REF}}
-          body: ${{steps.generate_release_notes.outputs.release_notes}}
+          body: ${{steps.generate_release_notes.outputs.commits}}
           name: Версия ${{steps.android_version.outputs.VERSION_NAME}}
           tag_name: v${{steps.android_version.outputs.VERSION_NAME}}
           files: /home/runner/work/Applications/Applications/app/build/outputs/apk/release/AltenarInternship.apk
