@@ -75,4 +75,7 @@
     <string name="download_file">Download file</string>
     <string name="open_file">Open file</string>
     <string name="install_update">Update</string>
+    <string name="channel_downloading">Downloading Files</string>
+    <string name="downloading_file">Downloading file</string>
+    <string name="downloaded_file">File downloaded</string>
 </resources>

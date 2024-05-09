@@ -79,4 +79,7 @@
     <string name="download_file">Скачать файл</string>
     <string name="open_file">Открыть файл</string>
     <string name="install_update">Обновить</string>
+    <string name="channel_downloading">Загрузка файлов</string>
+    <string name="downloading_file">Скачивание файла</string>
+    <string name="downloaded_file">Файл скачан</string>
 </resources>

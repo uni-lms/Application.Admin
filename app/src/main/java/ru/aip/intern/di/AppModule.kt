@@ -1,5 +1,6 @@
 package ru.aip.intern.di
 
+import android.app.NotificationManager
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -39,6 +40,12 @@ object AppModule {
     @Singleton
     fun provideConnectivityObserver(@ApplicationContext context: Context): ConnectivityObserver {
         return NetworkConnectivityObserver(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager {
+        return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
 }
