@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
@@ -129,7 +131,11 @@ fun MenuScreen(
             onDismissRequest = { onSheetHide { scope.launch { sheetState.show() } } },
             sheetState = sheetState
         ) {
-            Column(Modifier.padding(20.dp)) {
+            Column(
+                Modifier
+                    .padding(20.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 if (state.releaseInfo != null) {
                     Text(
                         text = state.releaseInfo.title,
