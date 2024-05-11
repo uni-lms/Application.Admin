@@ -13,6 +13,7 @@ data class QuizState(
         null,
         allowedAttempts = 1,
         availableUntil = LocalDateTime.now(),
-        timeLimit = Duration.ZERO
+        timeLimit = Duration.ZERO,
+        attempts = emptyList()
     )
 )

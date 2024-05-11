@@ -19,4 +19,5 @@ data class QuizInfo(
     @Serializable(DurationSerializer::class)
     val timeLimit: Duration,
     val allowedAttempts: Int,
+    val attempts: List<QuizPassAttempt>
 )
