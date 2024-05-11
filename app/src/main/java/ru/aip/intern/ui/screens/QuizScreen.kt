@@ -158,8 +158,8 @@ private fun QuizScreenPreview() {
                     title = "Тест 1",
                     "Lorem ipsum dolor sit amet",
                     availableUntil = LocalDateTime.now().plusDays(2),
-                    timeLimit = 40.minutes.toJavaDuration(),
-                    allowedAttempts = 1,
+                    timeLimit = "40 minutes",
+                    allowedAttempts = 5,
                     attempts = listOf(
                         QuizPassAttempt(
                             startedAt = LocalDateTime.now(),
@@ -184,18 +184,11 @@ private fun QuizScreenPreview() {
                                 accrued = 10,
                                 max = 10,
                             )
-                        ),
-                        QuizPassAttempt(
-                            startedAt = LocalDateTime.now(),
-                            finishedAt = null,
-                            accruedPoints = AccruedPoints(
-                                accrued = 10,
-                                max = 10,
-                            )
-                        ),
+                        )
                     )
                 )
-            ), onRefresh = {}
+            ), onRefresh = {},
+            toggleDialog = {}
         )
     }
 }
