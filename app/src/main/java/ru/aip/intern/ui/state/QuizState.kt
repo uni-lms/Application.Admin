@@ -1,6 +1,6 @@
 package ru.aip.intern.ui.state
 
-import ru.aip.intern.domain.content.quiz.QuizInfo
+import ru.aip.intern.domain.content.quiz.data.QuizInfo
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.UUID

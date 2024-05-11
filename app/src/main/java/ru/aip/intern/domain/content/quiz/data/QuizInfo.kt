@@ -1,4 +1,4 @@
-package ru.aip.intern.domain.content.quiz
+package ru.aip.intern.domain.content.quiz.data
 
 import kotlinx.serialization.Serializable
 import ru.aip.intern.serialization.DurationSerializer
