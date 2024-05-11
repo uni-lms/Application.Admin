@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.R
+import ru.aip.intern.domain.content.quiz.service.QuizService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.QuizState
@@ -21,6 +22,7 @@ import java.util.UUID
 class QuizViewModel @AssistedInject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val titleManager: TitleManager,
+    private val quizService: QuizService,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -49,7 +51,20 @@ class QuizViewModel @AssistedInject constructor(
                 )
             }
 
-            // …
+            val response = quizService.getQuizInfo(id)
+
+            if (response.isSuccess) {
+                _state.update {
+                    it.copy(
+                        quizInfo = response.value!!
+                    )
+                }
+
+                titleManager.update(UiText.DynamicText(response.value!!.title))
+
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
 
             _state.update {
                 it.copy(
