@@ -27,15 +27,13 @@ class InternshipsViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            titleManager.update(UiText.StringResource(R.string.internships))
-        }
         refresh()
     }
 
     fun refresh() {
 
         viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.internships))
             _state.update {
                 it.copy(
                     isRefreshing = true
