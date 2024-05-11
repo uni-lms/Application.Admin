@@ -105,7 +105,7 @@ fun SolutionScreen(
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
                     },
                     modifier = Modifier.clickable {
-                        uriHandler.openUri(state.solutionInfo.link!!)
+                        uriHandler.openUri(state.solutionInfo.link)
                     }
                 )
             }
