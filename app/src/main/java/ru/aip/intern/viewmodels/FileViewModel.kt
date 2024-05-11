@@ -178,7 +178,7 @@ class FileViewModel @AssistedInject constructor(
                     )
                 }
 
-                delay(1000)
+                delay(1500)
                 val updatedNotification = notificationManager.buildNotification(
                     NotificationChannel.Downloading,
                     null,
