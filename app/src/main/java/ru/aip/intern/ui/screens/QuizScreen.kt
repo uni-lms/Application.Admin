@@ -108,7 +108,7 @@ fun QuizScreen(
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                state.quizInfo.attempts.forEachIndexed { ind, attempt ->
+                state.quizInfo.attempts.sortedBy { it.startedAt }.forEachIndexed { ind, attempt ->
                     ListItem(
                         overlineContent = {
                             if (attempt.isFinished()) {
