@@ -387,7 +387,8 @@ fun AipApp(
                         val quizState by quizViewModel.state.collectAsState()
                         QuizScreen(
                             state = quizState,
-                            onRefresh = { quizViewModel.refresh(uuid) }
+                            onRefresh = { quizViewModel.refresh(uuid) },
+                            toggleDialog = { quizViewModel.toggleDialog() }
                         )
                     }
                 }

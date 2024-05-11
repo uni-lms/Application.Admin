@@ -74,4 +74,12 @@ class QuizViewModel @AssistedInject constructor(
         }
     }
 
+    fun toggleDialog() {
+        _state.update {
+            it.copy(
+                isStartAttemptDialogVisible = !it.isStartAttemptDialogVisible
+            )
+        }
+    }
+
 }

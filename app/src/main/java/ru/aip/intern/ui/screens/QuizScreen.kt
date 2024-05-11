@@ -42,7 +42,8 @@ import kotlin.time.toJavaDuration
 @Composable
 fun QuizScreen(
     state: QuizState,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    toggleDialog: () -> Unit
 ) {
 
     val pullRefreshState = rememberPullRefreshState(
