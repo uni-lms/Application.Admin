@@ -82,4 +82,8 @@
     <string name="channel_downloading">Загрузка файлов</string>
     <string name="downloading_file">Скачивание файла</string>
     <string name="downloaded_file">Файл скачан</string>
+    <string name="available_until">Доступно до</string>
+    <string name="time_limit">Ограничение по времени</string>
+    <string name="allowed_attempts">Разрешённых попыток</string>
+    <string name="quiz_pass_attempts">Попытки выполнения теста</string>
 </resources>

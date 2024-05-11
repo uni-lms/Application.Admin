@@ -78,4 +78,8 @@
     <string name="channel_downloading">Downloading Files</string>
     <string name="downloading_file">Downloading file</string>
     <string name="downloaded_file">File downloaded</string>
+    <string name="available_until">Available until</string>
+    <string name="time_limit">Time limit</string>
+    <string name="allowed_attempts">Allowed attempts</string>
+    <string name="quiz_pass_attempts">Quiz pass attempts</string>
 </resources>
