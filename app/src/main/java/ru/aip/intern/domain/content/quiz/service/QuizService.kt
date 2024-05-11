@@ -11,6 +11,7 @@ import ru.aip.intern.domain.content.quiz.data.QuizInfo
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.networking.Response
 import ru.aip.intern.networking.safeRequest
+import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
@@ -26,6 +27,7 @@ class QuizService @Inject constructor(
             accept(ContentType.Application.Json)
             headers {
                 append(HttpHeaders.Authorization, authHeaderValue)
+                append(HttpHeaders.AcceptLanguage, Locale.getDefault().toLanguageTag())
             }
         }
     }
