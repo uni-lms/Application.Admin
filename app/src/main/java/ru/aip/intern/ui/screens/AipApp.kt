@@ -42,6 +42,7 @@ import ru.aip.intern.viewmodels.InternshipViewModel
 import ru.aip.intern.viewmodels.InternshipsViewModel
 import ru.aip.intern.viewmodels.MenuViewModel
 import ru.aip.intern.viewmodels.NotificationsViewModel
+import ru.aip.intern.viewmodels.QuestionViewModel
 import ru.aip.intern.viewmodels.QuizViewModel
 import ru.aip.intern.viewmodels.SolutionViewModel
 import ru.aip.intern.viewmodels.StartScreenViewModel
@@ -388,9 +389,36 @@ fun AipApp(
                         QuizScreen(
                             state = quizState,
                             onRefresh = { quizViewModel.refresh(uuid) },
-                            toggleDialog = { quizViewModel.toggleDialog() }
+                            toggleDialog = { quizViewModel.toggleDialog() },
+                            onContinueAttempt = {
+                                goToScreen(
+                                    navController,
+                                    Screen.Question,
+                                    it,
+                                    false,
+                                    1
+                                )
+                            }
                         )
                     }
+                }
+                composable("${Screen.Question.name}/{id}/{question}") {
+                    val attemptId = backStackEntry?.arguments?.getString("id")
+                    val question = backStackEntry?.arguments?.getInt("question")
+
+                    if (attemptId != null && question != null) {
+                        val uuid = UUID.fromString(attemptId)
+                        val questionViewModel: QuestionViewModel =
+                            hiltViewModel<QuestionViewModel, QuestionViewModel.Factory>(
+                                creationCallback = { factory -> factory.create(uuid, question) }
+                            )
+                        val questionState by questionViewModel.state.collectAsState()
+
+                        QuestionScreen(state = questionState, onRefresh = {
+                            questionViewModel.refresh(uuid, question)
+                        })
+                    }
+
                 }
             }
         }

@@ -49,7 +49,8 @@ import java.util.UUID
 fun QuizScreen(
     state: QuizState,
     onRefresh: () -> Unit,
-    toggleDialog: () -> Unit
+    toggleDialog: () -> Unit,
+    onContinueAttempt: (UUID) -> Unit
 ) {
 
     val pullRefreshState = rememberPullRefreshState(
@@ -137,7 +138,7 @@ fun QuizScreen(
                         },
                         trailingContent = {
                             if (attempt.isNotFinished()) {
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = { onContinueAttempt(attempt.id) }) {
                                     Icon(Icons.Outlined.PlayArrow, null)
                                 }
                             }
@@ -198,6 +199,7 @@ private fun QuizScreenPreview() {
                     allowedAttempts = 5,
                     attempts = listOf(
                         QuizPassAttempt(
+                            id = UUID.randomUUID(),
                             startedAt = LocalDateTime.now(),
                             finishedAt = null,
                             accruedPoints = AccruedPoints(
@@ -206,6 +208,7 @@ private fun QuizScreenPreview() {
                             )
                         ),
                         QuizPassAttempt(
+                            id = UUID.randomUUID(),
                             startedAt = LocalDateTime.now(),
                             finishedAt = LocalDateTime.now().plusMinutes(35),
                             accruedPoints = AccruedPoints(
@@ -214,6 +217,7 @@ private fun QuizScreenPreview() {
                             )
                         ),
                         QuizPassAttempt(
+                            id = UUID.randomUUID(),
                             startedAt = LocalDateTime.now(),
                             finishedAt = LocalDateTime.now().plusMinutes(25),
                             accruedPoints = AccruedPoints(
@@ -224,7 +228,8 @@ private fun QuizScreenPreview() {
                     )
                 )
             ), onRefresh = {},
-            toggleDialog = {}
+            toggleDialog = {},
+            onContinueAttempt = {}
         )
     }
 }
