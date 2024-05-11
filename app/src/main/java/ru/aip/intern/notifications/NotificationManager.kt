@@ -17,7 +17,7 @@ class NotificationManager @Inject constructor(
 ) {
 
     fun createChannel(channel: ru.aip.intern.notifications.NotificationChannel) {
-        createChannel(channel.id, channel.channelName.asString(context))
+        createChannel(channel.id, channel.channelName.asString(context), channel.importance)
     }
 
     fun buildNotification(
@@ -50,8 +50,8 @@ class NotificationManager @Inject constructor(
         notificationManager.notify(id, notification)
     }
 
-    private fun createChannel(id: String, name: String) {
-        val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT)
+    private fun createChannel(id: String, name: String, importance: Int) {
+        val channel = NotificationChannel(id, name, importance)
         notificationManager.createNotificationChannel(channel)
     }
 
