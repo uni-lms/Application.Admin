@@ -1,7 +1,10 @@
 package ru.aip.intern.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -12,6 +15,7 @@ import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -31,13 +35,14 @@ import ru.aip.intern.domain.content.quiz.data.isFinished
 import ru.aip.intern.domain.content.quiz.data.isNotFinished
 import ru.aip.intern.domain.content.quiz.data.isTimed
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.dialogs.CommonDialog
+import ru.aip.intern.ui.components.dialogs.StartQuizPassAttemptTextProvider
+import ru.aip.intern.ui.components.dialogs.StartTimedQuizPassAttemptTextProvider
 import ru.aip.intern.ui.state.QuizState
 import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.format
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toJavaDuration
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -135,6 +140,17 @@ fun QuizScreen(
 
             }
 
+            if (state.quizInfo.allowedAttempts > state.quizInfo.attempts.count()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(onClick = { toggleDialog() }) {
+                        Text(text = stringResource(R.string.start_attempt))
+                    }
+                }
+            }
+
         }
 
         PullRefreshIndicator(
@@ -142,6 +158,19 @@ fun QuizScreen(
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
+
+        if (state.isStartAttemptDialogVisible) {
+            CommonDialog(
+                dialogText = if (state.quizInfo.isTimed()) {
+                    StartTimedQuizPassAttemptTextProvider()
+                } else {
+                    StartQuizPassAttemptTextProvider()
+                },
+                onDismiss = toggleDialog,
+                onConfirmation = { /*TODO*/ },
+                onCancel = toggleDialog
+            )
+        }
     }
 
 }
