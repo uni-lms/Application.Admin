@@ -1,15 +1,15 @@
 [versions]
 ackpineVersion = "0.5.5"
 activityCompose = "1.9.0"
-compose = "2.5.0"
+calendar = "2.5.0"
 composeBom = "2024.05.00"
 coreKtx = "1.13.1"
 datastorePreferences = "1.1.1"
-firebaseBom = "32.8.1"
-firebaseMessagingKtx = "23.4.1"
+firebaseBom = "33.0.0"
+firebaseMessagingKtx = "24.0.0"
 hiltAndroid = "2.51.1"
 hiltNavigationCompose = "1.2.0"
-ktorVersion = "2.3.9"
+ktorVersion = "2.3.10"
 lifecycleRuntimeKtx = "2.7.0"
 logbackAndroid = "3.0.0"
 navigationCompose = "2.7.7"
@@ -27,7 +27,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-kizitonwose-calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" }
+kizitonwose-calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "calendar" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
