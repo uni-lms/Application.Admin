@@ -86,4 +86,9 @@
     <string name="time_limit">Ограничение по времени</string>
     <string name="allowed_attempts">Разрешённых попыток</string>
     <string name="quiz_pass_attempts">Попытки выполнения теста</string>
+    <string name="start_attempt">Начать попытку</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="starting_quiz_pass_attempt_title">Начать попытку выполнения теста?</string>
+    <string name="starting_timed_quiz_pass_attempt_description">После начала попытки запустится таймер обратного отсчёта, который нельзя будет остановить. Вы уверены, что хотите начать прямо сейчас?</string>
+    <string name="starting_quiz_pass_attempt_description">Вы уверены, что хотите начать прямо сейчас?</string>
 </resources>
