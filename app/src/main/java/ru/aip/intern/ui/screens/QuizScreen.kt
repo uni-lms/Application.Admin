@@ -122,7 +122,14 @@ fun QuizScreen(
                                 Text(text = "${attempt.startedAt.format()} — …")
                             }
                         },
-                        headlineContent = { Text(text = "Попытка №${ind + 1}") },
+                        headlineContent = {
+                            Text(
+                                text = stringResource(
+                                    R.string.attempt_title,
+                                    ind + 1
+                                )
+                            )
+                        },
                         supportingContent = {
                             if (attempt.isFinished()) {
                                 Text(text = "${attempt.accruedPoints.accrued} / ${attempt.accruedPoints.max}")

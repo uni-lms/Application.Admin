@@ -87,4 +87,5 @@
     <string name="starting_quiz_pass_attempt_title">Start quiz pass attempt?</string>
     <string name="starting_timed_quiz_pass_attempt_description">After the attempt starts, a countdown timer will start, which cannot be stopped. Are you sure you want to start right now?</string>
     <string name="starting_quiz_pass_attempt_description">Are you sure you want to start right now?</string>
+    <string name="attempt_title">Attempt #%1$s</string>
 </resources>
