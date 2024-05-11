@@ -29,6 +29,7 @@ import ru.aip.intern.domain.content.quiz.data.QuizInfo
 import ru.aip.intern.domain.content.quiz.data.QuizPassAttempt
 import ru.aip.intern.domain.content.quiz.data.isFinished
 import ru.aip.intern.domain.content.quiz.data.isNotFinished
+import ru.aip.intern.domain.content.quiz.data.isTimed
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.state.QuizState
 import ru.aip.intern.ui.theme.AltenarInternshipTheme
@@ -73,17 +74,21 @@ fun QuizScreen(
                 }
             )
 
-            ListItem(
-                leadingContent = {
-                    Icon(Icons.Outlined.Timer, null)
-                },
-                headlineContent = {
-                    Text(text = stringResource(R.string.time_limit))
-                },
-                trailingContent = {
-                    Text(text = state.quizInfo.timeLimit.format())
-                }
-            )
+            if (state.quizInfo.isTimed()) {
+                ListItem(
+                    leadingContent = {
+                        Icon(Icons.Outlined.Timer, null)
+                    },
+                    headlineContent = {
+                        Text(text = stringResource(R.string.time_limit))
+                    },
+                    trailingContent = {
+
+                        Text(text = state.quizInfo.timeLimit!!)
+
+                    }
+                )
+            }
 
             ListItem(
                 leadingContent = {
