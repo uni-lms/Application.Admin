@@ -1,17 +1,21 @@
 package ru.aip.intern.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import ru.aip.intern.R
 import ru.aip.intern.ui.components.BaseScreen
-import ru.aip.intern.ui.components.Greeting
 import ru.aip.intern.ui.state.QuestionState
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -25,7 +29,25 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit) {
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            Greeting(name = stringResource(R.string.quiz_pass_attempt))
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                Row {
+                    (1..state.questionInfo.amountOfQuestions).forEach {
+                        FilterChip(
+                            selected = state.question == it,
+                            onClick = { /*TODO*/ },
+                            label = {
+                                Text(text = it.toString())
+                            }
+                        )
+                    }
+                }
+
+                Text(text = state.questionInfo.text, style = MaterialTheme.typography.titleMedium)
+
+            }
         }
         PullRefreshIndicator(
             state.isRefreshing,

@@ -93,4 +93,5 @@
     <string name="starting_quiz_pass_attempt_description">Вы уверены, что хотите начать прямо сейчас?</string>
     <string name="attempt_title">Попытка №%1$s</string>
     <string name="quiz_pass_attempt">Попытка выполнения теста</string>
+    <string name="question_title">Вопрос №%d</string>
 </resources>

@@ -89,4 +89,5 @@
     <string name="starting_quiz_pass_attempt_description">Are you sure you want to start right now?</string>
     <string name="attempt_title">Attempt #%1$s</string>
     <string name="quiz_pass_attempt">Quiz pass attempt</string>
+    <string name="question_title">Question #%d</string>
 </resources>
