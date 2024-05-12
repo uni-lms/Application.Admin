@@ -103,7 +103,7 @@ fun AipApp(
             topBar = {
                 TopBar(
                     canGoBack = navController.previousBackStackEntry != null && currentScreen.canGoBack,
-                    goUp = { navController.navigateUp() },
+                    goUp = navController::navigateUp,
                     title = title
                 )
             },
@@ -160,7 +160,7 @@ fun AipApp(
 
                         InternshipScreen(
                             state = internshipState,
-                            onRefresh = { internshipViewModel.refresh(uuid) },
+                            onRefresh = internshipViewModel::refresh,
                             onContentItemClick = { screen, id ->
                                 goToScreen(
                                     navController,
@@ -347,7 +347,7 @@ fun AipApp(
                         val internsAssessmentState by internsAssessmentViewModel.state.collectAsState()
                         InternsAssessmentScreen(
                             state = internsAssessmentState,
-                            onRefresh = { internsAssessmentViewModel.refresh(uuid) },
+                            onRefresh = internsAssessmentViewModel::refresh,
                             onInternClick = { id ->
                                 goToScreen(navController, Screen.InternAssessment, id)
                             }
@@ -366,9 +366,7 @@ fun AipApp(
                         val internAssessmentState by internAssessmentViewModel.state.collectAsState()
                         InternAssessmentScreen(
                             state = internAssessmentState,
-                            onRefresh = {
-                                internAssessmentViewModel.refresh(uuid)
-                            },
+                            onRefresh = internAssessmentViewModel::refresh,
                             onSaveButtonClick = { criterionId, newScore ->
                                 internAssessmentViewModel.updateScore(uuid, criterionId, newScore)
                             }
@@ -388,8 +386,8 @@ fun AipApp(
                         val quizState by quizViewModel.state.collectAsState()
                         QuizScreen(
                             state = quizState,
-                            onRefresh = { quizViewModel.refresh(uuid) },
-                            toggleDialog = { quizViewModel.toggleDialog() },
+                            onRefresh = quizViewModel::refresh,
+                            toggleDialog = quizViewModel::toggleDialog,
                             onContinueAttempt = {
                                 goToScreen(
                                     navController,
@@ -432,9 +430,7 @@ fun AipApp(
 
                         QuestionScreen(
                             state = questionState,
-                            onRefresh = {
-                                questionViewModel.refresh(uuid, question.toInt())
-                            },
+                            onRefresh = questionViewModel::refresh,
                             onQuestionChange = {
                                 goToScreen(
                                     navController,
@@ -446,7 +442,6 @@ fun AipApp(
                             }
                         )
                     }
-
                 }
             }
         }

@@ -36,10 +36,10 @@ class QuestionViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
 
     init {
-        refresh(attemptId, question)
+        refresh()
     }
 
-    fun refresh(attemptId: UUID, question: Int) {
+    fun refresh() {
         viewModelScope.launch {
 
             titleManager.update(UiText.StringResource(R.string.question_title, question))

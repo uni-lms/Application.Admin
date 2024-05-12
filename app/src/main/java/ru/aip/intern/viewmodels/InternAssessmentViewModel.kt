@@ -23,7 +23,7 @@ class InternAssessmentViewModel @AssistedInject constructor(
     private val assessmentService: AssessmentService,
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val titleManager: TitleManager,
-    @Assisted id: UUID
+    @Assisted private val id: UUID
 ) : ViewModel() {
 
     @AssistedFactory
@@ -38,10 +38,10 @@ class InternAssessmentViewModel @AssistedInject constructor(
         viewModelScope.launch {
             titleManager.update(UiText.StringResource(R.string.interns_assessment))
         }
-        refresh(id)
+        refresh()
     }
 
-    fun refresh(id: UUID) {
+    fun refresh() {
         viewModelScope.launch {
             _state.update {
                 it.copy(

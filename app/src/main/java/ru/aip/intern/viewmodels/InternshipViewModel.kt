@@ -39,10 +39,10 @@ class InternshipViewModel @AssistedInject constructor(
         viewModelScope.launch {
             titleManager.update(UiText.StringResource(R.string.internship))
         }
-        refresh(id)
+        refresh()
     }
 
-    fun refresh(id: UUID) {
+    fun refresh() {
 
         viewModelScope.launch {
             _state.update {
