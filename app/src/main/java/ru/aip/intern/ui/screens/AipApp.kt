@@ -415,18 +415,23 @@ fun AipApp(
                 }
                 composable("${Screen.Question.name}/{id}/{question}") {
                     val attemptId = backStackEntry?.arguments?.getString("id")
-                    val question = backStackEntry?.arguments?.getInt("question")
+                    val question = backStackEntry?.arguments?.getString("question")
 
                     if (attemptId != null && question != null) {
                         val uuid = UUID.fromString(attemptId)
                         val questionViewModel: QuestionViewModel =
                             hiltViewModel<QuestionViewModel, QuestionViewModel.Factory>(
-                                creationCallback = { factory -> factory.create(uuid, question) }
+                                creationCallback = { factory ->
+                                    factory.create(
+                                        uuid,
+                                        question.toInt()
+                                    )
+                                }
                             )
                         val questionState by questionViewModel.state.collectAsState()
 
                         QuestionScreen(state = questionState, onRefresh = {
-                            questionViewModel.refresh(uuid, question)
+                            questionViewModel.refresh(uuid, question.toInt())
                         })
                     }
 
