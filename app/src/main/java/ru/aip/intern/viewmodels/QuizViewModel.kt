@@ -82,4 +82,29 @@ class QuizViewModel @AssistedInject constructor(
         }
     }
 
+    fun startAttempt(quizId: UUID, afterSuccess: (UUID) -> Unit) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
+
+            val response = quizService.startAttempt(quizId)
+
+            if (response.isSuccess) {
+                afterSuccess(response.value!!.id)
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
+
+        }
+    }
+
 }

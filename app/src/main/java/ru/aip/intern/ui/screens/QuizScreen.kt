@@ -50,7 +50,8 @@ fun QuizScreen(
     state: QuizState,
     onRefresh: () -> Unit,
     toggleDialog: () -> Unit,
-    onContinueAttempt: (UUID) -> Unit
+    onContinueAttempt: (UUID) -> Unit,
+    onStartAttempt: () -> Unit
 ) {
 
     val pullRefreshState = rememberPullRefreshState(
@@ -175,7 +176,10 @@ fun QuizScreen(
                     StartQuizPassAttemptTextProvider()
                 },
                 onDismiss = toggleDialog,
-                onConfirmation = { /*TODO*/ },
+                onConfirmation = {
+                    toggleDialog()
+                    onStartAttempt()
+                },
                 onCancel = toggleDialog
             )
         }
@@ -227,9 +231,11 @@ private fun QuizScreenPreview() {
                         )
                     )
                 )
-            ), onRefresh = {},
+            ),
+            onRefresh = {},
             toggleDialog = {},
-            onContinueAttempt = {}
+            onContinueAttempt = {},
+            onStartAttempt = {},
         )
     }
 }

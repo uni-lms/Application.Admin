@@ -398,6 +398,17 @@ fun AipApp(
                                     false,
                                     1
                                 )
+                            },
+                            onStartAttempt = {
+                                quizViewModel.startAttempt(uuid) { attemptId ->
+                                    goToScreen(
+                                        navController,
+                                        Screen.Question,
+                                        attemptId,
+                                        false,
+                                        1
+                                    )
+                                }
                             }
                         )
                     }
