@@ -13,9 +13,11 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.form.SelectRadioOrCheck
 import ru.aip.intern.ui.state.QuestionState
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -26,6 +28,10 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange
         refreshing = state.isRefreshing,
         onRefresh = onRefresh
     )
+
+    val selectedChoices = state.questionInfo.choices
+        .filter { it.isSelected }
+        .toMutableStateList()
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
@@ -48,6 +54,12 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange
                 }
 
                 Text(text = state.questionInfo.text, style = MaterialTheme.typography.titleMedium)
+
+                SelectRadioOrCheck(
+                    selectedChoices = selectedChoices,
+                    isMultipleChoicesAllowed = state.questionInfo.isMultipleChoicesAllowed,
+                    choices = state.questionInfo.choices
+                )
 
             }
         }

@@ -10,5 +10,5 @@ data class Choice(
     val id: UUID = UUID.randomUUID(),
     val text: String = "",
     val amountOfPoints: Int = 0,
-    val isCorrect: Boolean = false,
+    var isSelected: Boolean = false,
 )
