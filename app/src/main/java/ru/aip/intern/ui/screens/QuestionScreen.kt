@@ -20,7 +20,7 @@ import ru.aip.intern.ui.state.QuestionState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit) {
+fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange: (Int) -> Unit) {
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
@@ -37,7 +37,9 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit) {
                     (1..state.questionInfo.amountOfQuestions).forEach {
                         FilterChip(
                             selected = state.question == it,
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                onQuestionChange(it)
+                            },
                             label = {
                                 Text(text = it.toString())
                             }

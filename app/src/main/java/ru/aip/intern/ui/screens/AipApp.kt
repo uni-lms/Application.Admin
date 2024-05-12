@@ -430,9 +430,21 @@ fun AipApp(
                             )
                         val questionState by questionViewModel.state.collectAsState()
 
-                        QuestionScreen(state = questionState, onRefresh = {
-                            questionViewModel.refresh(uuid, question.toInt())
-                        })
+                        QuestionScreen(
+                            state = questionState,
+                            onRefresh = {
+                                questionViewModel.refresh(uuid, question.toInt())
+                            },
+                            onQuestionChange = {
+                                goToScreen(
+                                    navController,
+                                    Screen.Question,
+                                    uuid,
+                                    false,
+                                    it
+                                )
+                            }
+                        )
                     }
 
                 }
