@@ -12,6 +12,7 @@ import ru.aip.intern.auth.AuthManager
 import ru.aip.intern.domain.common.IdModel
 import ru.aip.intern.domain.content.quiz.data.QuestionInfo
 import ru.aip.intern.domain.content.quiz.data.QuizInfo
+import ru.aip.intern.domain.content.quiz.data.SaveAnswerRequest
 import ru.aip.intern.domain.content.quiz.data.StartAttemptRequest
 import ru.aip.intern.networking.HttpClientFactory
 import ru.aip.intern.networking.Response
@@ -59,6 +60,27 @@ class QuizService @Inject constructor(
             method = HttpMethod.Get
             url("/quizzes/question/${attemptId}/${question}")
             accept(ContentType.Application.Json)
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
+
+    suspend fun saveAnswer(
+        attemptId: UUID,
+        questionId: UUID,
+        selectedChoices: List<UUID>
+    ): Response<IdModel> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Put
+            url("/quizzes/attempts/${attemptId}/save")
+            accept(ContentType.Application.Json)
+            contentType(ContentType.Application.Json)
+            setBody(
+                SaveAnswerRequest(questionId, selectedChoices)
+            )
             headers {
                 append(HttpHeaders.Authorization, authHeaderValue)
             }

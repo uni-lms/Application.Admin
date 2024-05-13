@@ -439,6 +439,11 @@ fun AipApp(
                                     false,
                                     it
                                 )
+                            },
+                            onSave = { selectedChoices ->
+                                questionViewModel.saveAnswer(selectedChoices, onSuccess = {
+
+                                })
                             }
                         )
                     }

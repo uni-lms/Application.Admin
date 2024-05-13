@@ -72,4 +72,29 @@ class QuestionViewModel @AssistedInject constructor(
         }
     }
 
+    fun saveAnswer(selectedChoices: List<UUID>, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isRefreshing = true,
+                )
+            }
+
+            val response =
+                quizService.saveAnswer(attemptId, _state.value.questionInfo.id, selectedChoices)
+
+            if (response.isSuccess) {
+                onSuccess()
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
+        }
+    }
+
 }

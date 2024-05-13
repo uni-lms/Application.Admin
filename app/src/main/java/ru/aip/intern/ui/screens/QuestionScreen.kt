@@ -32,10 +32,16 @@ import ru.aip.intern.R
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.form.SelectRadioOrCheck
 import ru.aip.intern.ui.state.QuestionState
+import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange: (Int) -> Unit) {
+fun QuestionScreen(
+    state: QuestionState,
+    onRefresh: () -> Unit,
+    onQuestionChange: (Int) -> Unit,
+    onSave: (List<UUID>) -> Unit
+) {
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
@@ -56,14 +62,15 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                (1..state.questionInfo.amountOfQuestions).forEach {
+                (1..state.questionInfo.amountOfQuestions).forEach { questionNumber ->
                     FilterChip(
-                        selected = state.question == it,
+                        selected = state.question == questionNumber,
                         onClick = {
-                            onQuestionChange(it)
+                            onSave(selectedChoices.map { it.id })
+                            onQuestionChange(questionNumber)
                         },
                         label = {
-                            Text(text = it.toString())
+                            Text(text = questionNumber.toString())
                         }
                     )
                 }
@@ -83,7 +90,10 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange
             ) {
                 FilledTonalButton(
                     enabled = state.question > 1,
-                    onClick = { onQuestionChange(state.question - 1) }
+                    onClick = {
+                        onSave(selectedChoices.map { it.id })
+                        onQuestionChange(state.question - 1)
+                    }
                 ) {
                     Icon(imageVector = Icons.Outlined.ChevronLeft, contentDescription = null)
                     Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
@@ -101,7 +111,10 @@ fun QuestionScreen(state: QuestionState, onRefresh: () -> Unit, onQuestionChange
                 } else {
                     FilledTonalButton(
                         enabled = state.question < state.questionInfo.amountOfQuestions,
-                        onClick = { onQuestionChange(state.question + 1) }
+                        onClick = {
+                            onSave(selectedChoices.map { it.id })
+                            onQuestionChange(state.question + 1)
+                        }
                     ) {
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
                         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
