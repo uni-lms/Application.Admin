@@ -90,4 +90,7 @@
     <string name="attempt_title">Attempt #%1$s</string>
     <string name="quiz_pass_attempt">Quiz pass attempt</string>
     <string name="question_title">Question #%d</string>
+    <string name="previous_question">Go back</string>
+    <string name="next_question">Go forward</string>
+    <string name="finish_attempt">Finish</string>
 </resources>

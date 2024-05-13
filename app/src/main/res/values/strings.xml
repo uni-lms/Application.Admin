@@ -94,4 +94,7 @@
     <string name="attempt_title">Попытка №%1$s</string>
     <string name="quiz_pass_attempt">Попытка выполнения теста</string>
     <string name="question_title">Вопрос №%d</string>
+    <string name="previous_question">Назад</string>
+    <string name="next_question">Вперёд</string>
+    <string name="finish_attempt">Завершить</string>
 </resources>
