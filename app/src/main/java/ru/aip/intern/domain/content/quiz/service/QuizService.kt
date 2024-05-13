@@ -86,4 +86,19 @@ class QuizService @Inject constructor(
             }
         }
     }
+
+    suspend fun finishAttempt(attemptId: UUID): Response<IdModel> {
+        val httpClient = HttpClientFactory.httpClient
+        val authHeaderValue = authManager.getAuthHeaderValue()
+        return httpClient.safeRequest {
+            method = HttpMethod.Patch
+            url("/quizzes/attempts/${attemptId}")
+            accept(ContentType.Application.Json)
+            contentType(ContentType.Application.Json)
+            setBody("{}")
+            headers {
+                append(HttpHeaders.Authorization, authHeaderValue)
+            }
+        }
+    }
 }

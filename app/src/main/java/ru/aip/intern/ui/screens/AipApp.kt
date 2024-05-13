@@ -444,6 +444,18 @@ fun AipApp(
                                 questionViewModel.saveAnswer(selectedChoices, onSuccess = {
 
                                 })
+                            },
+                            onDialogToggle = questionViewModel::toggleDialog,
+                            onFinishAttempt = {
+                                questionViewModel.finishAttempt(
+                                    onSuccess = {
+                                        goToScreen(
+                                            navController,
+                                            Screen.Quiz,
+                                            it,
+                                        )
+                                    }
+                                )
                             }
                         )
                     }

@@ -2,6 +2,7 @@ package ru.aip.intern.ui.components.dialogs
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Quiz
+import androidx.compose.material.icons.outlined.SportsScore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -62,6 +63,16 @@ interface DialogTextProvider {
 class StartTimedQuizPassAttemptTextProvider : StartQuizPassAttemptTextProvider() {
     override val description: UiText
         get() = UiText.StringResource(R.string.starting_timed_quiz_pass_attempt_description)
+
+}
+
+class FinishAttemptTextProvider : DialogTextProvider {
+    override val icon: ImageVector
+        get() = Icons.Outlined.SportsScore
+    override val title: UiText
+        get() = UiText.StringResource(R.string.finishing_quiz_pass_attempt_title)
+    override val description: UiText
+        get() = UiText.StringResource(R.string.finishing_quiz_pass_attempt_description)
 
 }
 

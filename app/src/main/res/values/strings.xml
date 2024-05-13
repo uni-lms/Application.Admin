@@ -97,4 +97,6 @@
     <string name="previous_question">Назад</string>
     <string name="next_question">Вперёд</string>
     <string name="finish_attempt">Завершить</string>
+    <string name="finishing_quiz_pass_attempt_title">Завершить попытку выполнения теста?</string>
+    <string name="finishing_quiz_pass_attempt_description">После завершения вы не сможете изменить ответы на вопросы теста</string>
 </resources>

@@ -97,4 +97,36 @@ class QuestionViewModel @AssistedInject constructor(
         }
     }
 
+    fun toggleDialog() {
+        _state.update {
+            it.copy(
+                isDialogVisible = !it.isDialogVisible
+            )
+        }
+    }
+
+    fun finishAttempt(onSuccess: (UUID) -> Unit) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isRefreshing = true,
+                )
+            }
+
+            val response = quizService.finishAttempt(attemptId)
+
+            if (response.isSuccess) {
+                onSuccess(response.value!!.id)
+            } else {
+                snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
+        }
+    }
+
 }

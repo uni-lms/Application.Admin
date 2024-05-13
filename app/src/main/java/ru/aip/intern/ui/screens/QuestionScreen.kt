@@ -30,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.aip.intern.R
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.components.dialogs.CommonDialog
+import ru.aip.intern.ui.components.dialogs.FinishAttemptTextProvider
 import ru.aip.intern.ui.components.form.SelectRadioOrCheck
 import ru.aip.intern.ui.state.QuestionState
 import java.util.UUID
@@ -40,7 +42,9 @@ fun QuestionScreen(
     state: QuestionState,
     onRefresh: () -> Unit,
     onQuestionChange: (Int) -> Unit,
-    onSave: (List<UUID>) -> Unit
+    onSave: (List<UUID>) -> Unit,
+    onDialogToggle: () -> Unit,
+    onFinishAttempt: () -> Unit
 ) {
 
     val pullRefreshState = rememberPullRefreshState(
@@ -102,7 +106,7 @@ fun QuestionScreen(
 
                 if (state.question == state.questionInfo.amountOfQuestions) {
                     FilledTonalButton(
-                        onClick = { }
+                        onClick = onDialogToggle
                     ) {
                         Icon(imageVector = Icons.Outlined.SportsScore, contentDescription = null)
                         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
@@ -128,5 +132,17 @@ fun QuestionScreen(
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
+
+        if (state.isDialogVisible) {
+            CommonDialog(
+                dialogText = FinishAttemptTextProvider(),
+                onDismiss = onDialogToggle,
+                onConfirmation = {
+                    onDialogToggle()
+                    onFinishAttempt()
+                },
+                onCancel = onDialogToggle
+            )
+        }
     }
 }

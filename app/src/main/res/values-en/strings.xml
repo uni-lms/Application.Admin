@@ -93,4 +93,6 @@
     <string name="previous_question">Go back</string>
     <string name="next_question">Go forward</string>
     <string name="finish_attempt">Finish</string>
+    <string name="finishing_quiz_pass_attempt_title">Finish the quiz pass attempt?</string>
+    <string name="finishing_quiz_pass_attempt_description">After finishing, you will not be able to change the answers to the quiz questions</string>
 </resources>
