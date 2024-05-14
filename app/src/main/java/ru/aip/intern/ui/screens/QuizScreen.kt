@@ -138,7 +138,6 @@ fun QuizScreen(
                                     text = stringResource(
                                         R.string.attempt_title_tutor,
                                         attempt.internName,
-                                        ind + 1
                                     )
                                 )
                             }
