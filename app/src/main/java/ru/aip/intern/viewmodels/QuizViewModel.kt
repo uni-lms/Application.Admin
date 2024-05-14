@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.aip.intern.R
 import ru.aip.intern.domain.content.quiz.service.QuizService
+import ru.aip.intern.domain.internships.service.InternshipsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
 import ru.aip.intern.ui.managers.TitleManager
 import ru.aip.intern.ui.state.QuizState
@@ -23,6 +24,7 @@ class QuizViewModel @AssistedInject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val titleManager: TitleManager,
     private val quizService: QuizService,
+    private val internshipsService: InternshipsService,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -64,6 +66,18 @@ class QuizViewModel @AssistedInject constructor(
 
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
+            }
+            val roleResponse = internshipsService.getRole(response.value!!.internshipId)
+
+            if (roleResponse.isSuccess) {
+                _state.update {
+                    it.copy(
+                        role = roleResponse.value!!.name
+                    )
+                }
+
+            } else {
+                snackbarMessageHandler.postMessage(roleResponse.errorMessage!!)
             }
 
             _state.update {

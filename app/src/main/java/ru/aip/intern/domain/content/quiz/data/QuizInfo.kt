@@ -10,6 +10,8 @@ import java.util.UUID
 data class QuizInfo(
     @Serializable(UuidSerializer::class)
     val id: UUID,
+    @Serializable(UuidSerializer::class)
+    val internshipId: UUID,
     val title: String,
     val description: String?,
     @Serializable(LocalDateTimeSerializer::class)

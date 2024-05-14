@@ -14,7 +14,8 @@ data class QuizPassAttempt(
     val startedAt: LocalDateTime,
     @Serializable(LocalDateTimeSerializer::class)
     val finishedAt: LocalDateTime?,
-    val accruedPoints: AccruedPoints
+    val accruedPoints: AccruedPoints,
+    val internName: String,
 )
 
 fun QuizPassAttempt.isFinished(): Boolean {

@@ -34,6 +34,7 @@ import ru.aip.intern.domain.content.quiz.data.QuizPassAttempt
 import ru.aip.intern.domain.content.quiz.data.isFinished
 import ru.aip.intern.domain.content.quiz.data.isNotFinished
 import ru.aip.intern.domain.content.quiz.data.isTimed
+import ru.aip.intern.domain.internships.data.UserRole
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.dialogs.CommonDialog
 import ru.aip.intern.ui.components.dialogs.StartQuizPassAttemptTextProvider
@@ -125,12 +126,22 @@ fun QuizScreen(
                             }
                         },
                         headlineContent = {
-                            Text(
-                                text = stringResource(
-                                    R.string.attempt_title,
-                                    ind + 1
+                            if (state.role == UserRole.Intern) {
+                                Text(
+                                    text = stringResource(
+                                        R.string.attempt_title,
+                                        ind + 1
+                                    )
                                 )
-                            )
+                            } else {
+                                Text(
+                                    text = stringResource(
+                                        R.string.attempt_title_tutor,
+                                        attempt.internName,
+                                        ind + 1
+                                    )
+                                )
+                            }
                         },
                         supportingContent = {
                             if (attempt.isFinished()) {
@@ -138,7 +149,7 @@ fun QuizScreen(
                             }
                         },
                         trailingContent = {
-                            if (attempt.isNotFinished()) {
+                            if (attempt.isNotFinished() && state.role == UserRole.Intern) {
                                 IconButton(onClick = { onContinueAttempt(attempt.id) }) {
                                     Icon(Icons.Outlined.PlayArrow, null)
                                 }
@@ -149,7 +160,7 @@ fun QuizScreen(
 
             }
 
-            if (state.quizInfo.allowedAttempts > state.quizInfo.attempts.count()) {
+            if (state.quizInfo.allowedAttempts > state.quizInfo.attempts.count() && state.role == UserRole.Intern) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -197,9 +208,10 @@ private fun QuizScreenPreview() {
                 quizInfo = QuizInfo(
                     id = UUID.randomUUID(),
                     title = "Тест 1",
-                    "Lorem ipsum dolor sit amet",
+                    description = "Lorem ipsum dolor sit amet",
                     availableUntil = LocalDateTime.now().plusDays(2),
                     timeLimit = "40 minutes",
+                    internshipId = UUID.randomUUID(),
                     allowedAttempts = 5,
                     attempts = listOf(
                         QuizPassAttempt(
@@ -209,7 +221,8 @@ private fun QuizScreenPreview() {
                             accruedPoints = AccruedPoints(
                                 accrued = 0,
                                 max = 10,
-                            )
+                            ),
+                            internName = ""
                         ),
                         QuizPassAttempt(
                             id = UUID.randomUUID(),
@@ -218,7 +231,8 @@ private fun QuizScreenPreview() {
                             accruedPoints = AccruedPoints(
                                 accrued = 9,
                                 max = 10,
-                            )
+                            ),
+                            internName = ""
                         ),
                         QuizPassAttempt(
                             id = UUID.randomUUID(),
@@ -227,7 +241,8 @@ private fun QuizScreenPreview() {
                             accruedPoints = AccruedPoints(
                                 accrued = 10,
                                 max = 10,
-                            )
+                            ),
+                            internName = ""
                         )
                     )
                 )

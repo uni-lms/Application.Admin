@@ -95,4 +95,5 @@
     <string name="finish_attempt">Finish</string>
     <string name="finishing_quiz_pass_attempt_title">Finish the quiz pass attempt?</string>
     <string name="finishing_quiz_pass_attempt_description">After finishing, you will not be able to change the answers to the quiz questions</string>
+    <string name="attempt_title_tutor">%1$s (Attempt №%2$s)</string>
 </resources>
