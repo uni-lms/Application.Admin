@@ -1,25 +1,28 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.events.data.CustomEvent
-import ru.aip.intern.domain.events.data.CustomEventType
+import ru.aip.intern.R
 import ru.aip.intern.domain.events.service.EventsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import java.time.LocalDateTime
+import ru.aip.intern.ui.managers.TitleManager
+import ru.aip.intern.ui.state.EventState
+import ru.aip.intern.util.UiText
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = EventViewModel.Factory::class)
 class EventViewModel @AssistedInject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val eventsService: EventsService,
+    private val titleManager: TitleManager,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -28,37 +31,46 @@ class EventViewModel @AssistedInject constructor(
         fun create(id: UUID): EventViewModel
     }
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    val defaultData = CustomEvent(
-        title = "",
-        startTimestamp = LocalDateTime.now(),
-        endTimestamp = LocalDateTime.now(),
-        link = null,
-        type = CustomEventType.Meeting
-    )
-
-    private val _data = MutableLiveData(defaultData)
-    val data: LiveData<CustomEvent> = _data
+    private val _state = MutableStateFlow(EventState())
+    val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.event))
+        }
         refresh()
     }
 
     fun refresh() {
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
 
             val response = eventsService.getEvent(id)
 
             if (response.isSuccess) {
-                _data.value = response.value!!
+                _state.update {
+                    it.copy(
+                        eventData = response.value!!
+                    )
+                }
+
+                if (response.value!!.title.isNotBlank()) {
+                    titleManager.update(UiText.DynamicText(response.value.title))
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 }

@@ -48,3 +48,12 @@ data class AssignmentContentItem(
 
     val title: String
 ) : BaseContentItem()
+
+@Serializable
+data class QuizContentItem(
+    @Serializable(UuidSerializer::class) val id: UUID,
+
+    override val contentType: ContentType = ContentType.Quiz,
+
+    val title: String
+) : BaseContentItem()

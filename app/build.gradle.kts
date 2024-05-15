@@ -11,12 +11,12 @@ fun Project.gitCommitCount(): Int {
 }
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
-    kotlin("kapt")
-    kotlin("plugin.serialization")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.android)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.gms.google.services)
+    alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 val majorVersion = 2
@@ -56,7 +56,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue(
+                "string",
+                "app_version",
+                "v${defaultConfig.versionName}-${defaultConfig.versionCode}"
+            )
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["appAuthority"] = "${defaultConfig.applicationId}.fileprovider"
             applicationVariants.all {
                 val variant = this
                 variant.outputs
@@ -77,6 +83,13 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
+            manifestPlaceholders["appAuthority"] =
+                "${defaultConfig.applicationId}${applicationIdSuffix}.fileprovider"
+            resValue(
+                "string",
+                "app_version",
+                "v${defaultConfig.versionName}-${defaultConfig.versionCode}"
+            )
         }
     }
     compileOptions {
@@ -101,46 +114,49 @@ android {
 
 dependencies {
 
-    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
-    val ktorVersion = "2.3.9"
+    implementation(libs.core.ktx)
 
-    implementation("androidx.core:core-ktx:1.13.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.material:material")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
 
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging.ktx)
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
-    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.datastore:datastore-preferences:1.1.0")
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation("com.kizitonwose.calendar:compose:2.5.0")
+    implementation(libs.kizitonwose.calendar.compose)
 
-    implementation("io.ktor:ktor-client-core:$ktorVersion") // Базовая клиентская библиотека
-    implementation("io.ktor:ktor-client-android:$ktorVersion") // Плагин для работы в Android
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion") // Плагины для парсинга JSON в модели и обратно
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion") // Плагин для логгирования
-    implementation("ch.qos.logback:logback-classic:1.2.11")  // Драйвер логгирования (последняя подддерживаемая в Android версия)
+    implementation(libs.ktor.client.core) // Базовая клиентская библиотека
+    implementation(libs.ktor.client.android) // Плагин для работы в Android
+    implementation(libs.ktor.client.content.negotiation) // Плагины для парсинга JSON в модели и обратно
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging) // Плагин для логгирования
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.slf4j.api)
+    implementation(libs.tony19.logback.android)  // Драйвер логгирования
+
+    implementation(libs.ackpine.core)
+    implementation(libs.ackpine.ktx)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 kapt {

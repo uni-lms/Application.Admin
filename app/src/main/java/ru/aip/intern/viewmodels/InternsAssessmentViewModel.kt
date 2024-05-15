@@ -1,21 +1,27 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.assessment.data.InternsComparison
+import ru.aip.intern.R
 import ru.aip.intern.domain.assessment.service.AssessmentService
+import ru.aip.intern.ui.managers.TitleManager
+import ru.aip.intern.ui.state.InternsAssessmentState
+import ru.aip.intern.util.UiText
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = InternsAssessmentViewModel.Factory::class)
 class InternsAssessmentViewModel @AssistedInject constructor(
     private val assessmentService: AssessmentService,
-    @Assisted id: UUID
+    private val titleManager: TitleManager,
+    @Assisted private val id: UUID
 ) : ViewModel() {
 
     @AssistedFactory
@@ -23,27 +29,39 @@ class InternsAssessmentViewModel @AssistedInject constructor(
         fun create(id: UUID): InternsAssessmentViewModel
     }
 
-
-    var isRefreshing = MutableLiveData(false)
-        private set
-    var internsData = MutableLiveData(InternsComparison(emptyList()))
-        private set
+    private val _state = MutableStateFlow(InternsAssessmentState())
+    val state = _state.asStateFlow()
 
     init {
-        refresh(id)
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.interns_assessment))
+        }
+        refresh()
     }
 
-    fun refresh(id: UUID) {
+    fun refresh() {
         viewModelScope.launch {
-            isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
 
             val response = assessmentService.getInternsComparison(id)
 
             if (response.isSuccess) {
-                internsData.value = response.value!!
+                _state.update {
+                    it.copy(
+                        assessmentsData = response.value!!
+                    )
+                }
             }
 
-            isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 

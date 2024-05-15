@@ -18,59 +18,37 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import ru.aip.intern.R
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.state.AssignmentState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.format
-import ru.aip.intern.viewmodels.AssignmentViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AssignmentScreen(
-    title: MutableState<String>,
-    assignmentId: UUID,
-    navigate: (Screen, UUID) -> Unit
+    state: AssignmentState,
+    onRefresh: () -> Unit,
+    onFileClick: () -> Unit,
+    onSolutionClick: (UUID) -> Unit
 ) {
-    val viewModel = hiltViewModel<AssignmentViewModel, AssignmentViewModel.Factory>(
-        creationCallback = { factory -> factory.create(assignmentId) }
-    )
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val assignmentData = viewModel.assignmentData.observeAsState(viewModel.defaultContent)
-    val solutionsData = viewModel.solutionsData.observeAsState(viewModel.defaultSolutions)
+
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
-        onRefresh = { viewModel.refresh() }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
-
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (assignmentData.value.title.isEmpty()) {
-            title.value = context.getString(R.string.assignment)
-        }
-    }
-
-    LaunchedEffect(assignmentData.value.title) {
-        if (assignmentData.value.title.isNotEmpty()) {
-            title.value = assignmentData.value.title
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
-            if (assignmentData.value.description != null) {
-                Text(text = assignmentData.value.description!!)
+            if (state.assignment.description != null) {
+                Text(text = state.assignment.description)
             }
             ListItem(
                 leadingContent = {
@@ -82,11 +60,11 @@ fun AssignmentScreen(
                 headlineContent = { Text(text = stringResource(R.string.deadline)) },
                 trailingContent = {
                     Text(
-                        text = assignmentData.value.deadline.format()
+                        text = state.assignment.deadline.format()
                     )
                 }
             )
-            if (assignmentData.value.fileId != null) {
+            if (state.assignment.fileId != null) {
                 ListItem(
                     leadingContent = {
                         Icon(
@@ -102,27 +80,33 @@ fun AssignmentScreen(
                         )
                     },
                     modifier = Modifier.clickable {
-                        navigate(Screen.File, assignmentData.value.fileId!!)
+                        onFileClick()
                     }
                 )
             }
 
-            if (solutionsData.value.solutions.isNotEmpty()) {
+            if (state.solutions.solutions.isNotEmpty()) {
                 Text(text = stringResource(R.string.solutions))
             }
 
-            solutionsData.value.solutions.forEachIndexed { ind, it ->
+            state.solutions.solutions.forEachIndexed { ind, it ->
                 ListItem(
                     modifier = Modifier.clickable {
-                        navigate(Screen.Solution, it.id)
+                        onSolutionClick(it.id)
                     },
                     headlineContent = {
-                        Text(
-                            text = stringResource(
-                                R.string.solution_attempt,
-                                ind + 1
+                        if (it.authorName == null) {
+                            Text(
+                                text = stringResource(
+                                    R.string.solution_attempt,
+                                    ind + 1
+                                )
                             )
-                        )
+                        } else {
+                            Text(
+                                text = it.authorName
+                            )
+                        }
                     },
                     supportingContent = {
                         Text(
@@ -162,9 +146,22 @@ fun AssignmentScreen(
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AssignmentScreenPreview() {
+    AltenarInternshipTheme {
+        AssignmentScreen(
+            state = AssignmentState(),
+            onRefresh = { },
+            onFileClick = { },
+            onSolutionClick = { }
         )
     }
 }

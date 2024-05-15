@@ -1,46 +1,62 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.notifications.data.NotificationsList
+import ru.aip.intern.R
 import ru.aip.intern.domain.notifications.service.NotificationsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
+import ru.aip.intern.ui.state.NotificationsState
+import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
-    private val notificationsService: NotificationsService
+    private val notificationsService: NotificationsService,
+    private val titleManager: TitleManager
 ) : ViewModel() {
 
-    var isRefreshing = MutableLiveData(false)
-        private set
-
-    val defaultContent = NotificationsList(emptyList())
-
-    var data = MutableLiveData(defaultContent)
-        private set
+    private val _state = MutableStateFlow(NotificationsState())
+    val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.notifications))
+        }
         refresh()
     }
 
     fun refresh() {
 
         viewModelScope.launch {
-            isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val response = notificationsService.getNotifications()
 
             if (response.isSuccess) {
-                data.value = response.value!!
+                _state.update {
+                    it.copy(
+                        notificationsData = response.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
 
-            isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 

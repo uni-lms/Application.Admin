@@ -21,6 +21,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -28,26 +29,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerLayoutType
+import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.domain.calendar.data.EventType
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.form.ComboBoxItem
 import ru.aip.intern.ui.components.form.DoubleValueDisplay
@@ -57,31 +54,37 @@ import ru.aip.intern.ui.components.form.SingleValueDisplay
 import ru.aip.intern.ui.components.form.TextField
 import ru.aip.intern.ui.components.form.TimePickerDialog
 import ru.aip.intern.ui.components.form.toComboBoxItemList
+import ru.aip.intern.ui.state.CreateEventState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.epochDateToNullableString
 import ru.aip.intern.util.formatTimeFromPair
 import ru.aip.intern.util.is24HourFormat
-import ru.aip.intern.viewmodels.CreateEventViewModel
+import java.time.ZoneId
 import java.util.TimeZone
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
-    title.value = stringResource(R.string.create_event)
+fun CreateEventScreen(
+    state: CreateEventState,
+    onRefresh: () -> Unit,
+    onTitleUpdate: (String) -> Unit,
+    onLinkUpdate: (String) -> Unit,
+    onInternshipsUpdate: (List<UUID>) -> Unit,
+    onUsersUpdate: (List<UUID>) -> Unit,
+    onEventTypeUpdate: (Int) -> Unit,
+    onEventCreate: (
+        datePickerState: DatePickerState,
+        startTimePickerState: TimePickerState,
+        endTimePickerState: TimePickerState,
+        userZoneId: ZoneId,
+    ) -> Unit
+) {
 
-    val viewModel: CreateEventViewModel = hiltViewModel()
-    val eventCreatingInfo by viewModel.eventCreatingInfo.observeAsState(viewModel.defaultEventCreatingInfo)
-    var eventTitle by rememberSaveable { mutableStateOf("") }
-    var eventLink by rememberSaveable { mutableStateOf("") }
-    val selectedInternships = remember { mutableStateListOf<UUID>() }
-    val selectedUsers = remember { mutableStateListOf<UUID>() }
-    val selectedEventType = rememberSaveable { mutableStateOf<Int?>(null) }
-
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
-        onRefresh = { viewModel.refresh() }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
 
     val datePickerState = rememberDatePickerState()
@@ -99,18 +102,16 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             TextField(
                 label = stringResource(R.string.event_title),
                 icon = Icons.Outlined.Edit,
-                value = eventTitle
-            ) {
-                eventTitle = it
-            }
+                value = state.formState.title,
+                onValueChange = onTitleUpdate
+            )
 
             TextField(
                 label = stringResource(R.string.event_link),
                 icon = Icons.Outlined.Link,
-                value = eventLink
-            ) {
-                eventLink = it
-            }
+                value = state.formState.link,
+                onValueChange = onLinkUpdate
+            )
 
             SingleValueDisplay(
                 icon = Icons.Outlined.CalendarMonth,
@@ -147,31 +148,28 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
             MultiSelectComboBox(
                 icon = Icons.Outlined.School,
                 title = stringResource(R.string.internships),
-                items = eventCreatingInfo.internships.toComboBoxItemList({ it.id }, { it.name })
-            ) {
-                selectedInternships.clear()
-                selectedInternships.addAll(it)
-            }
+                items = state.eventCreatingInfo.internships.toComboBoxItemList(
+                    { it.id },
+                    { it.name }),
+                onSelectionChange = onInternshipsUpdate
+            )
 
             MultiSelectComboBox(
                 icon = Icons.Outlined.PeopleOutline,
                 title = stringResource(R.string.tutors),
-                items = eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name })
-            ) {
-                selectedUsers.clear()
-                selectedUsers.addAll(it)
-            }
+                items = state.eventCreatingInfo.users.toComboBoxItemList({ it.id }, { it.name }),
+                onSelectionChange = onUsersUpdate
+            )
 
             SingleSelectComboBox(
                 icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
                 title = stringResource(R.string.event_type),
                 items = EventType.entries.filter { it.name != EventType.Deadline.name }
                     .mapIndexed { ind, item ->
-                    ComboBoxItem(ind + 1, item.label)
-                }
-            ) {
-                selectedEventType.value = it
-            }
+                        ComboBoxItem(ind + 1, item.label)
+                    },
+                onSelectionChange = onEventTypeUpdate
+            )
 
             Row(
                 Modifier
@@ -180,17 +178,12 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(onClick = {
-                    viewModel.createEvent(
-                        eventTitle,
-                        eventLink,
+                    onEventCreate(
                         datePickerState,
                         startTimePickerState,
                         endTimePickerState,
-                        selectedInternships,
-                        selectedUsers,
-                        selectedEventType.value,
                         TimeZone.getDefault().toZoneId()
-                    ) { screen, id -> navigate(screen, id) }
+                    )
                 }) {
                     Text(text = stringResource(R.string.create))
                 }
@@ -262,10 +255,30 @@ fun CreateEventScreen(title: MutableState<String>, navigate: (Screen, UUID) -> U
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun CreateEventScreenPreview() {
+    AltenarInternshipTheme {
+        CreateEventScreen(
+            state = CreateEventState(),
+            onRefresh = { },
+            onTitleUpdate = { },
+            onLinkUpdate = { },
+            onInternshipsUpdate = { },
+            onUsersUpdate = { },
+            onEventTypeUpdate = { },
+            onEventCreate = { _, _, _, _ ->
+
+            }
+        )
+    }
 }

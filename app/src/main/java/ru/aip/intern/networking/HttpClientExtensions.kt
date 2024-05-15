@@ -2,9 +2,12 @@ package ru.aip.intern.networking
 
 import android.util.Log
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.plugins.onDownload
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
@@ -45,6 +48,68 @@ suspend inline fun <reified T> HttpClient.safeRequest(block: HttpRequestBuilder.
             HttpStatusCode.NotFound -> Response(
                 isSuccess = false,
                 errorMessage = "Не найдено: ${response.parseBody<T>()!!.errors[0]}",
+                value = null
+            )
+
+            else -> {
+                Response(isSuccess = false, value = null, errorMessage = "Неизвестная ошибка")
+            }
+        }
+
+    } catch (e: ClientRequestException) {
+        Response(isSuccess = false, value = null, errorMessage = "Ошибка на клиенте")
+    } catch (e: ServerResponseException) {
+        Response(isSuccess = false, value = null, errorMessage = "Ошибка на сервере")
+    } catch (e: IOException) {
+        Response(isSuccess = false, value = null, errorMessage = "Ошибка сети")
+    } catch (e: SerializationException) {
+        Response(isSuccess = false, value = null, errorMessage = "Ошибка парсинга данных")
+    }
+}
+
+suspend inline fun HttpClient.safeDownload(
+    url: String,
+    crossinline progressListener: (Float) -> Unit,
+    block: HttpRequestBuilder.() -> Unit = {}
+): Response<ByteArray> {
+    return try {
+
+        val response = this.get(url) {
+            onDownload { bytesSentTotal, contentLength ->
+                val progress = when {
+                    contentLength <= 0L -> 0f
+                    bytesSentTotal == 0L -> 0f
+                    else -> (bytesSentTotal.toFloat() / contentLength).coerceIn(0f, 1f)
+                }
+
+                progressListener(progress)
+            }
+            block()
+        }
+
+        when (response.status) {
+            HttpStatusCode.OK -> Response(
+                isSuccess = true,
+                value = response.body<ByteArray>(),
+                errorMessage = null
+            )
+
+
+            HttpStatusCode.Unauthorized -> Response(
+                isSuccess = false,
+                errorMessage = response.headers["www-authenticate"] ?: "Не авторизован",
+                value = null
+            )
+
+            HttpStatusCode.Forbidden -> Response(
+                isSuccess = false,
+                errorMessage = "Доступ запрещён",
+                value = null
+            )
+
+            HttpStatusCode.NotFound -> Response(
+                isSuccess = false,
+                errorMessage = "Не найдено",
                 value = null
             )
 

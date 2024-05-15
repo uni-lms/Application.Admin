@@ -15,5 +15,6 @@ data class SolutionDto(
     @Serializable(LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
 
-    val amountOfComments: Int
+    val amountOfComments: Int,
+    val authorName: String?
 )

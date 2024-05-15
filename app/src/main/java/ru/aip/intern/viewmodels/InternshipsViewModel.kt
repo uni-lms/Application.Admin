@@ -1,31 +1,30 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.internships.data.Internship
+import ru.aip.intern.R
 import ru.aip.intern.domain.internships.service.InternshipsService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
+import ru.aip.intern.ui.managers.TitleManager
+import ru.aip.intern.ui.state.InternshipsState
+import ru.aip.intern.util.UiText
 import javax.inject.Inject
 
 @HiltViewModel
 class InternshipsViewModel @Inject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
-    private val internshipsService: InternshipsService
+    private val internshipsService: InternshipsService,
+    private val titleManager: TitleManager
 ) :
     ViewModel() {
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    private val _internshipData = MutableLiveData(emptyList<Internship>())
-    val enrolledInternshipData: LiveData<List<Internship>> = _internshipData
-
-    var ownedInternshipData = MutableLiveData(emptyList<Internship>())
-        private set
+    private val _state = MutableStateFlow(InternshipsState())
+    val state = _state.asStateFlow()
 
     init {
         refresh()
@@ -34,24 +33,43 @@ class InternshipsViewModel @Inject constructor(
     fun refresh() {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
+            titleManager.update(UiText.StringResource(R.string.internships))
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val enrolledResponse = internshipsService.getEnrolled()
 
             if (enrolledResponse.isSuccess) {
-                _internshipData.value = enrolledResponse.value!!
+                _state.update {
+                    it.copy(
+                        internships = enrolledResponse.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(enrolledResponse.errorMessage!!)
             }
 
-            val ownedResponse = internshipsService.getOwned()
+            if (_state.value.internships.isEmpty()) {
+                val ownedResponse = internshipsService.getOwned()
 
-            if (ownedResponse.isSuccess) {
-                _internshipData.value = ownedResponse.value!!
-            } else {
-                snackbarMessageHandler.postMessage(ownedResponse.errorMessage!!)
+                if (ownedResponse.isSuccess) {
+                    _state.update {
+                        it.copy(
+                            internships = ownedResponse.value!!
+                        )
+                    }
+                } else {
+                    snackbarMessageHandler.postMessage(ownedResponse.errorMessage!!)
+                }
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 

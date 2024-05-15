@@ -29,9 +29,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,37 +38,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
-import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.comments.CommentTree
 import ru.aip.intern.ui.components.content.FileContentCard
+import ru.aip.intern.ui.state.SolutionState
 import ru.aip.intern.util.format
-import ru.aip.intern.viewmodels.SolutionViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUID) -> Unit) {
+fun SolutionScreen(
+    state: SolutionState,
+    onRefresh: () -> Unit,
+    onFileClick: (UUID) -> Unit,
+    onCommentTextUpdate: (String) -> Unit,
+    onCommentCreate: (UUID?) -> Unit
+) {
 
-    title.value = stringResource(R.string.solution)
-
-    val viewModel = hiltViewModel<SolutionViewModel, SolutionViewModel.Factory>(
-        creationCallback = { factory -> factory.create(id) }
-    )
-
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val solutionInfo = viewModel.solutionData.observeAsState(viewModel.defaultSolution)
-    val commentText = viewModel.commentText.observeAsState("")
 
     val uriHandler = LocalUriHandler.current
     var showBottomSheet by remember { mutableStateOf(false) }
     var replyCommentId by remember { mutableStateOf<UUID?>(null) }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
-        onRefresh = { viewModel.refresh() }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
@@ -85,7 +78,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                 },
                 trailingContent = {
                     Text(
-                        text = solutionInfo.value.createdAt.format()
+                        text = state.solutionInfo.createdAt.format()
                     )
                 }
             )
@@ -97,10 +90,10 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                     Text(text = stringResource(R.string.author))
                 },
                 trailingContent = {
-                    Text(text = solutionInfo.value.author)
+                    Text(text = state.solutionInfo.author)
                 }
             )
-            if (solutionInfo.value.link != null) {
+            if (state.solutionInfo.link != null) {
                 ListItem(
                     leadingContent = {
                         Icon(imageVector = Icons.Outlined.Link, contentDescription = null)
@@ -112,24 +105,22 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                         Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
                     },
                     modifier = Modifier.clickable {
-                        uriHandler.openUri(solutionInfo.value.link!!)
+                        uriHandler.openUri(state.solutionInfo.link)
                     }
                 )
             }
 
-            if (solutionInfo.value.files.isNotEmpty()) {
+            if (state.solutionInfo.files.isNotEmpty()) {
                 Text(text = stringResource(R.string.solution_as_files))
             }
 
-            solutionInfo.value.files.forEach {
-                FileContentCard(content = it) { fileId ->
-                    navigate(Screen.File, fileId)
-                }
+            state.solutionInfo.files.forEach {
+                FileContentCard(content = it, navigate = onFileClick)
             }
 
             Text(text = stringResource(R.string.comments))
 
-            CommentTree(comments = solutionInfo.value.comments) { commentId ->
+            CommentTree(comments = state.solutionInfo.comments) { commentId ->
                 showBottomSheet = true
                 replyCommentId = commentId
             }
@@ -169,11 +160,11 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             TextField(
-                                value = commentText.value,
-                                onValueChange = { viewModel.updateCommentText(it) },
+                                value = state.commentText,
+                                onValueChange = onCommentTextUpdate,
                                 Modifier.fillMaxWidth(0.9f)
                             )
-                            IconButton(onClick = { viewModel.createComment(replyCommentId) }) {
+                            IconButton(onClick = { onCommentCreate(replyCommentId) }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Outlined.Send,
                                     contentDescription = null
@@ -186,7 +177,7 @@ fun SolutionScreen(title: MutableState<String>, id: UUID, navigate: (Screen, UUI
 
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

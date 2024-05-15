@@ -9,48 +9,42 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.navigation.Screen
 import ru.aip.intern.ui.components.BaseScreen
 import ru.aip.intern.ui.components.notifications.NotificationCard
-import ru.aip.intern.viewmodels.NotificationsViewModel
+import ru.aip.intern.ui.state.NotificationsState
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) -> Unit) {
-
-    title.value = stringResource(R.string.notifications)
-
-    val viewModel = hiltViewModel<NotificationsViewModel>()
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
-    val data = viewModel.data.observeAsState(viewModel.defaultContent)
-
-    val unreadNotifications = data.value.notifications.filter { !it.isRead }
-    val readNotifications = data.value.notifications.filter { it.isRead }
+fun NotificationsScreen(
+    state: NotificationsState,
+    onRefresh: () -> Unit,
+    onNotificationClick: (Screen, UUID) -> Unit
+) {
+    val unreadNotifications = state.notificationsData.notifications.filter { !it.isRead }
+    val readNotifications = state.notificationsData.notifications.filter { it.isRead }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
-        onRefresh = { viewModel.refresh() }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
 
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
 
-            if (data.value.notifications.isNotEmpty()) {
+            if (state.notificationsData.notifications.isNotEmpty()) {
                 Column {
                     if (unreadNotifications.isNotEmpty()) {
                         Text(text = stringResource(R.string.unread))
 
                         unreadNotifications.forEach {
-                            NotificationCard(notification = it, navigate)
+                            NotificationCard(notification = it, onNotificationClick)
                         }
                     }
 
@@ -60,14 +54,14 @@ fun NotificationsScreen(title: MutableState<String>, navigate: (Screen, UUID) ->
 
                     if (readNotifications.isNotEmpty()) {
                         readNotifications.forEach {
-                            NotificationCard(notification = it, navigate)
+                            NotificationCard(notification = it, onNotificationClick)
                         }
                     }
                 }
             }
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

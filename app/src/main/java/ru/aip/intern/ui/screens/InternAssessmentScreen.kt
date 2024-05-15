@@ -28,9 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,35 +42,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.aip.intern.R
 import ru.aip.intern.domain.assessment.data.Assessment
+import ru.aip.intern.ui.state.InternAssessmentState
 import ru.aip.intern.util.UiText
-import ru.aip.intern.viewmodels.InternAssessmentViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InternAssessmentScreen(
-    title: MutableState<String>,
-    internId: UUID
+    state: InternAssessmentState,
+    onRefresh: () -> Unit,
+    onSaveButtonClick: (UUID, Int) -> Unit
 ) {
-    title.value = stringResource(R.string.interns_assessment)
-
-    val viewModel: InternAssessmentViewModel =
-        hiltViewModel<InternAssessmentViewModel, InternAssessmentViewModel.Factory>(
-            creationCallback = { factory -> factory.create(internId) }
-        )
-    val isRefreshing by viewModel.isRefreshing.observeAsState(false)
-    val internData by viewModel.internData.observeAsState(viewModel.defaultContent)
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = { viewModel.refresh(internId) }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
 
     val isExpandedMap = remember {
-        List(internData.assessments.size) { index: Int -> index to false }
+        List(state.assessmentData.assessments.size) { index: Int -> index to false }
             .toMutableStateMap()
     }
 
@@ -85,23 +75,21 @@ fun InternAssessmentScreen(
                 .padding(28.dp)
         ) {
             LazyColumn {
-                internData.assessments.onEachIndexed { index, assessment ->
+                state.assessmentData.assessments.onEachIndexed { index, assessment ->
                     section(
                         data = assessment,
                         isExpanded = isExpandedMap[index] ?: false,
                         onHeaderClick = {
                             isExpandedMap[index] = !(isExpandedMap[index] ?: false)
                         },
-                        onSaveButtonClick = { criterionId, newScore ->
-                            viewModel.updateScore(internId, criterionId, newScore)
-                        }
+                        onSaveButtonClick = onSaveButtonClick
                     )
 
                 }
             }
         }
         PullRefreshIndicator(
-            isRefreshing,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )

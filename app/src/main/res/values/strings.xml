@@ -67,4 +67,37 @@
     <string name="save">Сохранить</string>
     <string name="score">Оценка</string>
     <string name="score_out_of_range">Оценка должна находиться в диапазоне 0..10</string>
+    <string name="quiz">Тест</string>
+    <string name="token_has_expired">Истёк срок действия токена</string>
+    <string name="meeting">Созвон</string>
+    <string name="update_succedeed">Успешно обновлено</string>
+    <string name="no_internet">Нет доступа к интернету</string>
+    <string name="document_type">Документ %1$s</string>
+    <string name="check_for_updates">Проверить наличие обновлений</string>
+    <string name="download_update">Скачать обновление</string>
+    <string name="already_latest">Уже установлена последняя версия</string>
+    <string name="download_file">Скачать файл</string>
+    <string name="open_file">Открыть файл</string>
+    <string name="install_update">Обновить</string>
+    <string name="channel_downloading">Загрузка файлов</string>
+    <string name="downloading_file">Скачивание файла</string>
+    <string name="downloaded_file">Файл скачан</string>
+    <string name="available_until">Доступно до</string>
+    <string name="time_limit">Ограничение по времени</string>
+    <string name="allowed_attempts">Разрешённых попыток</string>
+    <string name="quiz_pass_attempts">Попытки выполнения теста</string>
+    <string name="start_attempt">Начать попытку</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="starting_quiz_pass_attempt_title">Начать попытку выполнения теста?</string>
+    <string name="starting_timed_quiz_pass_attempt_description">После начала попытки запустится таймер обратного отсчёта, который нельзя будет остановить. Вы уверены, что хотите начать прямо сейчас?</string>
+    <string name="starting_quiz_pass_attempt_description">Вы уверены, что хотите начать прямо сейчас?</string>
+    <string name="attempt_title">Попытка №%1$s</string>
+    <string name="quiz_pass_attempt">Попытка выполнения теста</string>
+    <string name="question_title">Вопрос №%d</string>
+    <string name="previous_question">Назад</string>
+    <string name="next_question">Вперёд</string>
+    <string name="finish_attempt">Завершить</string>
+    <string name="finishing_quiz_pass_attempt_title">Завершить попытку выполнения теста?</string>
+    <string name="finishing_quiz_pass_attempt_description">После завершения вы не сможете изменить ответы на вопросы теста</string>
+    <string name="attempt_title_tutor" translatable="false">%1$s</string>
 </resources>

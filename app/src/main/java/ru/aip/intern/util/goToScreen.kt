@@ -8,13 +8,19 @@ fun goToScreen(
     navController: NavHostController,
     screen: Screen,
     id: UUID? = null,
-    saveEntry: Boolean = true
+    saveEntry: Boolean = true,
+    additionalId: Int? = null
 ) {
-    val route: String = if (id == null) {
+    var route: String = if (id == null) {
         screen.name
     } else {
         "${screen.name}/$id"
     }
+
+    if (additionalId != null) {
+        route += "/$additionalId"
+    }
+
     navController.navigate(route) {
         if (!saveEntry) {
             popUpTo(navController.currentDestination?.route ?: "") {

@@ -46,12 +46,12 @@ fun SingleValueDisplay(
                     )
                     .padding(16.dp)
                     .clickable { onButtonClick() }
-                    .weight(8f)
+                    .weight(7f)
             ) {
                 Text(text = if (value.isNullOrBlank()) stringResource(R.string.choose) else value)
             }
 
-            TextButton(onClick = onButtonClick, Modifier.weight(2f)) {
+            TextButton(onClick = onButtonClick, Modifier.weight(3f)) {
                 Text(text = stringResource(R.string.choose))
             }
 

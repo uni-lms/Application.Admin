@@ -1,25 +1,28 @@
 package ru.aip.intern.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.aip.intern.domain.content.assignment.data.AssignmentInfo
-import ru.aip.intern.domain.content.assignment.data.SolutionsList
+import ru.aip.intern.R
 import ru.aip.intern.domain.content.assignment.service.AssignmentService
 import ru.aip.intern.snackbar.SnackbarMessageHandler
-import java.time.LocalDateTime
+import ru.aip.intern.ui.managers.TitleManager
+import ru.aip.intern.ui.state.AssignmentState
+import ru.aip.intern.util.UiText
 import java.util.UUID
 
 @HiltViewModel(assistedFactory = AssignmentViewModel.Factory::class)
 class AssignmentViewModel @AssistedInject constructor(
     private val snackbarMessageHandler: SnackbarMessageHandler,
     private val assignmentService: AssignmentService,
+    private val titleManager: TitleManager,
     @Assisted private val id: UUID
 ) : ViewModel() {
 
@@ -28,37 +31,37 @@ class AssignmentViewModel @AssistedInject constructor(
         fun create(id: UUID): AssignmentViewModel
     }
 
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
-    val defaultContent = AssignmentInfo(
-        id = id,
-        title = "",
-        deadline = LocalDateTime.now(),
-        description = "",
-        fileId = id
-    )
-
-    val defaultSolutions = SolutionsList(emptyList())
-
-    private val _assignmentData = MutableLiveData(defaultContent)
-    val assignmentData: LiveData<AssignmentInfo> = _assignmentData
-
-    private val _solutionsData = MutableLiveData(defaultSolutions)
-    val solutionsData: LiveData<SolutionsList> = _solutionsData
+    private val _state = MutableStateFlow(AssignmentState())
+    val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            titleManager.update(UiText.StringResource(R.string.assignment))
+        }
         refresh()
     }
 
     fun refresh() {
 
         viewModelScope.launch {
-            _isRefreshing.value = true
+            _state.update {
+                it.copy(
+                    isRefreshing = true
+                )
+            }
             val response = assignmentService.getInfo(id)
 
             if (response.isSuccess) {
-                _assignmentData.value = response.value!!
+                _state.update {
+                    it.copy(
+                        assignment = response.value!!
+                    )
+                }
+
+                if (response.value!!.title.isNotBlank()) {
+                    titleManager.update(UiText.DynamicText(response.value.title))
+                }
+
             } else {
                 snackbarMessageHandler.postMessage(response.errorMessage!!)
             }
@@ -66,12 +69,20 @@ class AssignmentViewModel @AssistedInject constructor(
             val solutionsResponse = assignmentService.getSolutionsInfo(id)
 
             if (solutionsResponse.isSuccess) {
-                _solutionsData.value = solutionsResponse.value!!
+                _state.update {
+                    it.copy(
+                        solutions = solutionsResponse.value!!
+                    )
+                }
             } else {
                 snackbarMessageHandler.postMessage(solutionsResponse.errorMessage!!)
             }
 
-            _isRefreshing.value = false
+            _state.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 }

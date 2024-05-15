@@ -13,14 +13,14 @@ sealed class UiText {
     fun asString(): String {
         return when (this) {
             is DynamicText -> value
-            is StringResource -> stringResource(resId, args)
+            is StringResource -> stringResource(resId, *args)
         }
     }
 
     fun asString(context: Context): String {
         return when (this) {
             is DynamicText -> value
-            is StringResource -> context.getString(resId, args)
+            is StringResource -> context.getString(resId, *args)
         }
     }
 

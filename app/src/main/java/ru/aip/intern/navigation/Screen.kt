@@ -92,5 +92,18 @@ enum class Screen(
         canGoBack = true,
         icon = null,
         position = ScreenPosition.None
+    ),
+    Quiz(
+        title = UiText.StringResource(R.string.quiz),
+        canGoBack = true,
+        icon = null,
+        position = ScreenPosition.None
+    ),
+    Question(
+        title = UiText.StringResource(R.string.quiz_pass_attempt),
+        canGoBack = false,
+        icon = null,
+        position = ScreenPosition.None,
+        showBottomBar = false
     )
 }

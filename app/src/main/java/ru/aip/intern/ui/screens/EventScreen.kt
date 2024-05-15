@@ -16,81 +16,60 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import ru.aip.intern.R
 import ru.aip.intern.domain.events.data.CustomEventType
 import ru.aip.intern.ui.components.BaseScreen
+import ru.aip.intern.ui.state.EventState
+import ru.aip.intern.ui.theme.AltenarInternshipTheme
 import ru.aip.intern.util.formatDate
 import ru.aip.intern.util.formatTime
-import ru.aip.intern.viewmodels.EventViewModel
-import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EventScreen(
-    title: MutableState<String>,
-    id: UUID,
+    state: EventState,
+    onRefresh: () -> Unit
 ) {
 
-    val viewModel = hiltViewModel<EventViewModel, EventViewModel.Factory>(
-        creationCallback = { factory -> factory.create(id) }
-    )
-    val refreshing = viewModel.isRefreshing.observeAsState(false)
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing.value,
-        onRefresh = { viewModel.refresh() }
+        refreshing = state.isRefreshing,
+        onRefresh = onRefresh
     )
-
-    val data = viewModel.data.observeAsState(viewModel.defaultData)
 
     val uriHandler = LocalUriHandler.current
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (data.value.title.isEmpty()) {
-            title.value = context.getString(R.string.event)
-        }
-    }
-
-    LaunchedEffect(data.value.title) {
-        if (data.value.title.isNotEmpty()) {
-            title.value = data.value.title
-        }
-    }
 
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         BaseScreen {
             ListItem(
                 leadingContent = {
-                    if (data.value.type == CustomEventType.Meeting) {
-                        Icon(Icons.Outlined.Call, null)
+                    val icon = when (state.eventData.type) {
+                        CustomEventType.Meeting -> Icons.Outlined.Call
                     }
+
+                    Icon(icon, null)
                 },
                 headlineContent = { Text(text = stringResource(R.string.event_type)) },
-                trailingContent = { Text(data.value.type.title) }
+                trailingContent = { Text(state.eventData.type.title.asString()) }
             )
 
             ListItem(
                 leadingContent = {
                     Icon(Icons.Outlined.CalendarMonth, null)
                 },
-                headlineContent = { Text(text = "Дата") },
+                headlineContent = { Text(stringResource(R.string.event_date)) },
                 trailingContent = {
-                    if (data.value.startTimestamp.dayOfMonth == data.value.endTimestamp.dayOfMonth &&
-                        data.value.startTimestamp.monthValue == data.value.endTimestamp.monthValue &&
-                        data.value.startTimestamp.year == data.value.endTimestamp.year
+                    if (state.eventData.startTimestamp.dayOfMonth == state.eventData.endTimestamp.dayOfMonth &&
+                        state.eventData.startTimestamp.monthValue == state.eventData.endTimestamp.monthValue &&
+                        state.eventData.startTimestamp.year == state.eventData.endTimestamp.year
                     ) {
-                        Text(data.value.startTimestamp.formatDate())
+                        Text(state.eventData.startTimestamp.formatDate())
                     } else {
-                        Text("${data.value.startTimestamp.formatDate()} — ${data.value.endTimestamp.formatDate()}")
+                        Text("${state.eventData.startTimestamp.formatDate()} — ${state.eventData.endTimestamp.formatDate()}")
                     }
                 }
             )
@@ -103,11 +82,11 @@ fun EventScreen(
                     Text(text = stringResource(R.string.time))
                 },
                 trailingContent = {
-                    Text(text = "${data.value.startTimestamp.formatTime()} — ${data.value.endTimestamp.formatTime()}")
+                    Text(text = "${state.eventData.startTimestamp.formatTime()} — ${state.eventData.endTimestamp.formatTime()}")
                 }
             )
 
-            if (data.value.link?.isNotBlank() == true) {
+            if (state.eventData.link?.isNotBlank() == true) {
                 ListItem(
                     leadingContent = {
                         Icon(Icons.Outlined.Link, null)
@@ -119,16 +98,26 @@ fun EventScreen(
                         Icon(Icons.Outlined.ChevronRight, null)
                     },
                     modifier = Modifier.clickable {
-                        uriHandler.openUri(data.value.link!!)
+                        uriHandler.openUri(state.eventData.link)
                     }
                 )
             }
         }
         PullRefreshIndicator(
-            refreshing.value,
+            state.isRefreshing,
             pullRefreshState,
             Modifier.align(Alignment.TopCenter)
         )
     }
 
+}
+
+@Preview
+@Composable
+private fun EventScreenPreview() {
+    AltenarInternshipTheme {
+        EventScreen(state = EventState()) {
+
+        }
+    }
 }
