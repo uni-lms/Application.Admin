@@ -85,7 +85,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@master
         with:
-          draft: false
+          draft: true
           prerelease: false
           target_commitish: ${{env.GITHUB_REF}}
           generate_release_notes: true
