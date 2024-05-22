@@ -6,7 +6,7 @@ import ru.aip.intern.ui.managers.TitleManager
 import javax.inject.Inject
 
 @HiltViewModel
-class AipAppViewModel @Inject constructor(private val titleManager: TitleManager) : ViewModel() {
+class AipAppViewModel @Inject constructor(titleManager: TitleManager) : ViewModel() {
 
     val title = titleManager.title
 

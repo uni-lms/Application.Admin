@@ -18,6 +18,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.utils.io.errors.IOException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import ru.aip.intern.R
+import ru.aip.intern.util.UiText
 
 suspend inline fun <reified T> HttpClient.safeRequest(block: HttpRequestBuilder.() -> Unit): Response<T> {
     return try {
@@ -35,35 +37,61 @@ suspend inline fun <reified T> HttpClient.safeRequest(block: HttpRequestBuilder.
 
             HttpStatusCode.Unauthorized -> Response(
                 isSuccess = false,
-                errorMessage = response.headers["www-authenticate"] ?: "Не авторизован",
+                errorMessage = if (response.headers["www-authenticate"] != null) UiText.DynamicText(
+                    response.headers["www-authenticate"]!!
+                ) else
+                    UiText.StringResource(R.string.unauthorized),
                 value = null
             )
 
             HttpStatusCode.Forbidden -> Response(
                 isSuccess = false,
-                errorMessage = "Доступ запрещён",
+                errorMessage = UiText.StringResource(R.string.forbidden),
                 value = null
             )
 
             HttpStatusCode.NotFound -> Response(
                 isSuccess = false,
-                errorMessage = "Не найдено: ${response.parseBody<T>()!!.errors[0]}",
+                errorMessage = UiText.StringResource(
+                    R.string.not_found,
+                    response.parseBody<T>()!!.errors[0]
+                ),
                 value = null
             )
 
             else -> {
-                Response(isSuccess = false, value = null, errorMessage = "Неизвестная ошибка")
+                Response(
+                    isSuccess = false,
+                    value = null,
+                    errorMessage = UiText.StringResource(R.string.unknown_error)
+                )
             }
         }
 
     } catch (e: ClientRequestException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка на клиенте")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.client_error)
+        )
     } catch (e: ServerResponseException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка на сервере")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.server_error)
+        )
     } catch (e: IOException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка сети")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.network_error)
+        )
     } catch (e: SerializationException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка парсинга данных")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.parsing_error)
+        )
     }
 }
 
@@ -94,38 +122,62 @@ suspend inline fun HttpClient.safeDownload(
                 errorMessage = null
             )
 
-
             HttpStatusCode.Unauthorized -> Response(
                 isSuccess = false,
-                errorMessage = response.headers["www-authenticate"] ?: "Не авторизован",
+                errorMessage = if (response.headers["www-authenticate"] != null) UiText.DynamicText(
+                    response.headers["www-authenticate"]!!
+                ) else
+                    UiText.StringResource(R.string.unauthorized),
                 value = null
             )
 
             HttpStatusCode.Forbidden -> Response(
                 isSuccess = false,
-                errorMessage = "Доступ запрещён",
+                errorMessage = UiText.StringResource(R.string.forbidden),
                 value = null
             )
 
             HttpStatusCode.NotFound -> Response(
                 isSuccess = false,
-                errorMessage = "Не найдено",
+                errorMessage = UiText.StringResource(
+                    R.string.not_found,
+                ),
                 value = null
             )
 
             else -> {
-                Response(isSuccess = false, value = null, errorMessage = "Неизвестная ошибка")
+                Response(
+                    isSuccess = false,
+                    value = null,
+                    errorMessage = UiText.StringResource(R.string.unknown_error)
+                )
             }
         }
 
     } catch (e: ClientRequestException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка на клиенте")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.client_error)
+        )
     } catch (e: ServerResponseException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка на сервере")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.server_error)
+        )
     } catch (e: IOException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка сети")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.network_error)
+        )
     } catch (e: SerializationException) {
-        Response(isSuccess = false, value = null, errorMessage = "Ошибка парсинга данных")
+        Response(
+            isSuccess = false,
+            value = null,
+            errorMessage = UiText.StringResource(R.string.parsing_error)
+        )
     }
 }
 

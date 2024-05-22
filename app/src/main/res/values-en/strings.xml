@@ -3,7 +3,6 @@
     <string name="choose">Choose</string>
     <string name="choose_time">Choose time</string>
     <string name="tap_back_again_to_exit">Press back again to exit</string>
-    <string name="greeting">Hello %1$s</string>
     <string name="assignment">Assignment</string>
     <string name="deadline">Deadline</string>
     <string name="assingment_as_file">Assigment as file</string>
@@ -30,7 +29,15 @@
     <string name="link">Link</string>
     <string name="file_size">File size</string>
     <string name="file_type">File type</string>
-    <string name="file_download">Download file</string>
+    <string name="unauthorized">Not authorized</string>
+    <string name="forbidden">Access forbidden</string>
+    <string name="not_found">Not found: %1$s</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="client_error">Client error</string>
+    <string name="server_error">Server error</string>
+    <string name="network_error">Network error</string>
+    <string name="parsing_error">Serialization error</string>
+    <string name="no_internet_connection">No internet connection</string>
     <string name="internship">Internship</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
@@ -52,7 +59,6 @@
     <string name="password_must_not_be_empty">Password must not be empty</string>
     <string name="sending_notifications">Sending notifications</string>
     <string name="sending_notifications_description">The app can send notifications about upcoming events. Tap Allow to give permission to send notifications</string>
-    <string name="sending_notifications_description_if_permanently_declined">The app requires permission to send notifications to notify about upcoming events. Go to settings to give the permission manually</string>
     <string name="allow">Allow</string>
     <string name="decline">Decline</string>
     <string name="interns_assessment">Intern\'s assessment</string>
@@ -67,7 +73,6 @@
     <string name="token_has_expired">Token has expired</string>
     <string name="meeting">Meeting</string>
     <string name="update_succedeed">Update succeeded</string>
-    <string name="no_internet">No internet available</string>
     <string name="document_type">Document %1$s</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="download_update">Download the update</string>

@@ -166,7 +166,7 @@ fun CreateEventScreen(
                 title = stringResource(R.string.event_type),
                 items = EventType.entries.filter { it.name != EventType.Deadline.name }
                     .mapIndexed { ind, item ->
-                        ComboBoxItem(ind + 1, item.label)
+                        ComboBoxItem(ind + 1, item.label.asString())
                     },
                 onSelectionChange = onEventTypeUpdate
             )

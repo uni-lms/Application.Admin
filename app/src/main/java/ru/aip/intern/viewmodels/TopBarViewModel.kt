@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopBarViewModel @Inject constructor(
-    private val connectivityObserver: ConnectivityObserver
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     val networkState = connectivityObserver.observe()

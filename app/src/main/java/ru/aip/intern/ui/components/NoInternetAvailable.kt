@@ -17,7 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.aip.intern.R
 
 @Composable
 fun NoInternetAvailable() {
@@ -42,7 +44,7 @@ fun NoInternetAvailable() {
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = "Нет подключения к интернету",
+                text = stringResource(R.string.no_internet_connection),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onErrorContainer
             )

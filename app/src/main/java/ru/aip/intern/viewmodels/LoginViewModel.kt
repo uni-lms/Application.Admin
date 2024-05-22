@@ -73,14 +73,14 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun setAskedForNotificationPermission(value: Boolean) {
+    private fun setAskedForNotificationPermission() {
         _state.update {
             it.copy(
-                askedForNotificationPermission = value
+                askedForNotificationPermission = true
             )
         }
         viewModelScope.launch {
-            storage.saveAskedForNotificationPermissionStatus(value)
+            storage.saveAskedForNotificationPermissionStatus(true)
         }
     }
 
@@ -101,7 +101,7 @@ class LoginViewModel @Inject constructor(
             }
 
 
-            setAskedForNotificationPermission(true)
+            setAskedForNotificationPermission()
         }
     }
 

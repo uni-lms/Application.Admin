@@ -108,7 +108,7 @@ class FileViewModel @AssistedInject constructor(
     }
 
     private fun buildDownloadUrl(): String {
-        val url = "https://${HttpClientFactory.baseUrl}/content/file/${id}/download"
+        val url = "https://${HttpClientFactory.BASE_URL}/content/file/${id}/download"
         Log.d("downloadUrl", url)
         return url
     }

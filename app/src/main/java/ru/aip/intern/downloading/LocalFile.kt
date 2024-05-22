@@ -19,13 +19,9 @@ data class LocalFile(
 
 suspend fun LocalFile.installApplication(context: Context) {
 
-    if (this.mimeType != "application/vnd.android.package-archive") {
-        throw IllegalArgumentException("Only android application files are supported!")
-    }
-
-    if (!this.file.isFile && !this.file.exists()) {
-        throw IllegalArgumentException("Not a file or the file doesn't exist")
-    }
+    require(this.mimeType == "application/vnd.android.package-archive") { "Only android application files are supported!" }
+    require(this.file.isFile) { "Not a file!" }
+    require(this.file.exists()) { "The file doesn't exist!" }
 
     val authority = "${context.packageName}.fileprovider"
     val uri = FileProvider.getUriForFile(context, authority, this.file)
@@ -42,9 +38,8 @@ suspend fun LocalFile.installApplication(context: Context) {
 }
 
 fun LocalFile.open(context: Context) {
-    if (!this.file.isFile && !this.file.exists()) {
-        throw IllegalArgumentException("Not a file or the file doesn't exist")
-    }
+    require(this.file.isFile) { "Not a file!" }
+    require(this.file.exists()) { "The file doesn't exist!" }
 
 
     val authority = "${context.packageName}.fileprovider"

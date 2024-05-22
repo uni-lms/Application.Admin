@@ -12,8 +12,8 @@ import kotlinx.coroutines.cancel
 @AndroidEntryPoint
 class MessagingService : FirebaseMessagingService() {
 
-    //    @Inject
-//    lateinit var storage: DataStoreRepository
+    // @Inject
+    // lateinit var storage: DataStoreRepository
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onNewToken(token: String) {

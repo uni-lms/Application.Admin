@@ -20,18 +20,11 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
     private object PreferenceKeys {
         val apiKey = stringPreferencesKey("apiKey")
         val hasNotificationPermission = booleanPreferencesKey("hasNotificationsPermission")
-        val startScreen = stringPreferencesKey("startScreen")
     }
 
     suspend fun saveApiKey(key: String) {
         context.datastore.edit { prefs ->
             prefs[PreferenceKeys.apiKey] = key
-        }
-    }
-
-    suspend fun saveStartScreen(screen: String) {
-        context.datastore.edit { prefs ->
-            prefs[PreferenceKeys.startScreen] = screen
         }
     }
 
@@ -44,11 +37,6 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
     val apiKey: Flow<String?> = context.datastore.data
         .map { prefs ->
             prefs[PreferenceKeys.apiKey] ?: ""
-        }
-
-    val startScreen: Flow<String?> = context.datastore.data
-        .map { prefs ->
-            prefs[PreferenceKeys.startScreen] ?: ""
         }
 
     val askedForNotificationPermission: Flow<Boolean> = context.datastore.data

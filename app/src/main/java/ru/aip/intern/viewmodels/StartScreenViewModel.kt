@@ -1,8 +1,10 @@
 package ru.aip.intern.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class StartScreenViewModel @Inject constructor(
     private val authService: AuthService,
     private val snackbarMessageHandler: SnackbarMessageHandler,
+    @ApplicationContext private val context: Context
 ) :
     ViewModel() {
 
@@ -39,7 +42,7 @@ class StartScreenViewModel @Inject constructor(
 
             val determinedScreen = when {
                 response.isSuccess -> Screen.Internships
-                response.errorMessage?.contains("expired") == true -> {
+                response.errorMessage?.asString(context)?.contains("expired") == true -> {
                     snackbarMessageHandler.postMessage(
                         UiText.StringResource(R.string.token_has_expired)
                     )

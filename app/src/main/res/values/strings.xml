@@ -4,7 +4,6 @@
     <string name="choose">Выберите…</string>
     <string name="choose_time">Выберите время</string>
     <string name="tap_back_again_to_exit">Нажмите ещё раз чтобы выйти</string>
-    <string name="greeting">Привет %1$s!</string>
     <string name="assignment">Задание</string>
     <string name="deadline">Дедлайн</string>
     <string name="assingment_as_file">Задание файлом</string>
@@ -38,7 +37,6 @@
     <string name="link">Ссылка</string>
     <string name="file_size">Размер файла</string>
     <string name="file_type">Тип файла</string>
-    <string name="file_download">Скачать файл</string>
     <string name="internship">Стажировка</string>
     <string name="login">Вход в аккаунт</string>
     <string name="email">Электропочта</string>
@@ -60,7 +58,6 @@
     <string name="password_must_not_be_empty">Пароль не может быть пустым</string>
     <string name="sending_notifications">Отправка уведомлений</string>
     <string name="sending_notifications_description">Приложение может отправлять уведомления о предстоящих событиях. Нажмите разрешить, чтобы предоставить ему доступ к отправке уведомлений</string>
-    <string name="sending_notifications_description_if_permanently_declined">Приложению нужно разрешение для отправки уведомлений о предстоящих событиях. Перейдите в настройки, чтобы дать это разрешение вручную</string>
     <string name="allow">Разрешить</string>
     <string name="decline">Запретить</string>
     <string name="interns_assessment">Оценивание стажёров</string>
@@ -71,7 +68,6 @@
     <string name="token_has_expired">Истёк срок действия токена</string>
     <string name="meeting">Созвон</string>
     <string name="update_succedeed">Успешно обновлено</string>
-    <string name="no_internet">Нет доступа к интернету</string>
     <string name="document_type">Документ %1$s</string>
     <string name="check_for_updates">Проверить наличие обновлений</string>
     <string name="download_update">Скачать обновление</string>
@@ -100,4 +96,13 @@
     <string name="finishing_quiz_pass_attempt_title">Завершить попытку выполнения теста?</string>
     <string name="finishing_quiz_pass_attempt_description">После завершения вы не сможете изменить ответы на вопросы теста</string>
     <string name="attempt_title_tutor" translatable="false">%1$s</string>
+    <string name="unauthorized">Не авторизован</string>
+    <string name="forbidden">Доступ запрещён</string>
+    <string name="not_found">Не найдено: %1$s</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="client_error">Ошибка на клиенте</string>
+    <string name="server_error">Ошибка на сервере</string>
+    <string name="network_error">Ошибка сети</string>
+    <string name="parsing_error">Ошибка парсинга данных</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
 </resources>
