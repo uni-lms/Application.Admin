@@ -11,13 +11,13 @@ fun Project.gitCommitCount(): Int {
 }
 
 plugins {
-    alias(libs.plugins.kapt)
     alias(libs.plugins.android)
     alias(libs.plugins.kotlin)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 val majorVersion = 2
@@ -135,7 +135,7 @@ dependencies {
     implementation(libs.firebase.messaging.ktx)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -158,10 +158,6 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 task("printVersionName") {

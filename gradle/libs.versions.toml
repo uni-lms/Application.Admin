@@ -18,6 +18,7 @@ android = "8.4.1"
 kotlin = "2.0.0"
 googleServices = "4.4.1"
 slf4jApi = "2.0.13"
+ksp = "2.0.0-1.0.21"
 
 [libraries]
 ackpine-core = { module = "ru.solrudev.ackpine:ackpine-core", version.ref = "ackpineVersion" }
@@ -58,5 +59,5 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
