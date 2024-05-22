@@ -15,7 +15,7 @@ logbackAndroid = "3.0.0"
 navigationCompose = "2.7.7"
 
 android = "8.4.1"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 googleServices = "4.4.1"
 slf4jApi = "2.0.13"
 
@@ -59,3 +59,4 @@ gms-google-services = { id = "com.google.gms.google-services", version.ref = "go
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

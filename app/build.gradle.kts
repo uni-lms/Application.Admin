@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.compose)
 }
 
 val majorVersion = 2
